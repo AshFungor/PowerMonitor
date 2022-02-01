@@ -14,4 +14,22 @@
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.11" />
         <PackageReference Include="OxyPlot.Avalonia" Version="2.1.0-Preview1" />
     </ItemGroup>
+    <ItemGroup>
+      <Compile Update="models\Login.axaml.cs">
+        <DependentUpon>Login.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="models\Plot.axaml.cs">
+        <DependentUpon>Plot.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="models\AdminView.axaml.cs">
+        <DependentUpon>AdminView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="models\UserView.axaml.cs">
+        <DependentUpon>UserView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
 </Project>

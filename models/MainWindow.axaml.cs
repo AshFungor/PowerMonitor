@@ -1,6 +1,9 @@
+using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+
+using PowerMonitor.views;
 
 namespace PowerMonitor
 {
