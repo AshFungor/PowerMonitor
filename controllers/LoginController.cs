@@ -2,7 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.IO;
+using System.Threading;
 using System.Xml;
+using SimpleLogger;
+using SimpleLogger.Logging;
+using SimpleLogger.Logging.Handlers;
 
 namespace PowerMonitor.controllers;
 
@@ -13,10 +17,10 @@ public sealed class LoginController
 
     public sealed class UserInfo
     {
-        public string Name { get; set; }
+        public string? Name { get; }
         [XmlArrayAttribute]
-        public List<string> Restrictions { get; set; }
-        public string Password { get; set; }
+        public List<string>? Restrictions { get; set; }
+        public string? Password { get; set; }
 
         public UserInfo(string name, string password, List<string> rests)
         {
@@ -24,7 +28,13 @@ public sealed class LoginController
             Password = password;
             Restrictions = rests;
         }
-        public  UserInfo() {}
+
+        public UserInfo()
+        {
+            Name = null;
+            Restrictions = null;
+            Password = null;
+        }
     }
 
     public sealed class UserInfoCollection
@@ -35,40 +45,52 @@ public sealed class LoginController
 
     public LoginController()
     {
+       
+        Logger.Log<LoginController>("creating login controller instance, checking for logins file...");
+        XmlSerializer xmlSerializer = new XmlSerializer(typeof(UserInfoCollection));
+        
         if (File.Exists(App.SettingsPath + logins_file))
         {
-            StreamReader istream = new StreamReader(App.SettingsPath + logins_file);
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(UserInfoCollection));
-            UserInfoCollection user_coll = null;
+            Logger.Log<LoginController>("logins file found");
+            StreamReader stream = new StreamReader(App.SettingsPath + logins_file);
+            
+            UserInfoCollection? userColl = null;
+            Logger.Log<LoginController>("trying to parse logins file");
             try
             {
-                user_coll = xmlSerializer.Deserialize(istream) as UserInfoCollection;
+                userColl = xmlSerializer.Deserialize(stream) as UserInfoCollection;
             }
             catch (XmlException ex)
             {
-                System.Console.WriteLine(ex.Message);
+                Logger.Log<LoginController>(Logger.Level.Error,$"could not parse logins file: {ex.Message}, default session applied");
+                EnterDefault();
             }
-            Users = user_coll;
+            Users = userColl ?? new UserInfoCollection();
         }
         else
         {
-            StreamWriter ostream = new StreamWriter(App.SettingsPath + logins_file);
-            UserInfo admin = new UserInfo("admin", "password", new List<string>());
-            XmlSerializer xml_serializer = new XmlSerializer(typeof(UserInfoCollection));
-            UserInfoCollection user_coll = new UserInfoCollection() {UserInfoList = new[] {admin}};
-            xml_serializer.Serialize(ostream, user_coll);
-            Users = user_coll;
+            Logger.Log<LoginController>(Logger.Level.Error,"could not find logins file, default session applied");
+            EnterDefault();
         }
 
 
     }
 
+    private void EnterDefault()
+    {
+        UserInfo admin = new UserInfo("admin", "password", new List<string>());
+        UserInfoCollection userColl = new UserInfoCollection() {UserInfoList = new[] {admin}};
+        Users = userColl;
+    }
+
     public void UpdateLogins()
     {
-        File.Delete(App.SettingsPath + logins_file);
-        StreamWriter ostream = new StreamWriter(App.SettingsPath + logins_file);
+        Logger.Log<LoginController>("writing logins...");
+        
+        File.WriteAllText(App.SettingsPath + logins_file, String.Empty);
+        StreamWriter stream = new StreamWriter(App.SettingsPath + logins_file);
         XmlSerializer xmlSerializer = new XmlSerializer(typeof(UserInfoCollection));
-        xmlSerializer.Serialize(ostream, Users);
+        xmlSerializer.Serialize(stream, Users);
     }
 
 

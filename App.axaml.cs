@@ -6,9 +6,12 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using System;
+using System.IO;
 using Avalonia.Logging;
 using PowerMonitor.controllers;
-
+using SimpleLogger;
+using SimpleLogger.Logging;
+using SimpleLogger.Logging.Handlers;
 
 
 
@@ -28,6 +31,7 @@ namespace PowerMonitor
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
+            SimpleLogger.Logger.LoggerHandlerManager.AddHandler(new FileLoggerHandler("monitor.log", App.SettingsPath));
             LoginController = new LoginController();
         }
 
