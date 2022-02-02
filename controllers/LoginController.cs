@@ -64,8 +64,9 @@ public sealed class LoginController
             {
                 Logger.Log<LoginController>(Logger.Level.Error,$"could not parse logins file: {ex.Message}, default session applied");
                 EnterDefault();
+                return;
             }
-            Users = userColl ?? new UserInfoCollection();
+            Users = userColl;
         }
         else
         {

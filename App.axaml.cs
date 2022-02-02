@@ -9,10 +9,11 @@ using System;
 using System.IO;
 using Avalonia.Logging;
 using PowerMonitor.controllers;
+using PowerMonitor.views;
 using SimpleLogger;
 using SimpleLogger.Logging;
 using SimpleLogger.Logging.Handlers;
-
+using Logger = SimpleLogger.Logger;
 
 
 namespace PowerMonitor
@@ -32,6 +33,7 @@ namespace PowerMonitor
         {
             AvaloniaXamlLoader.Load(this);
             SimpleLogger.Logger.LoggerHandlerManager.AddHandler(new FileLoggerHandler("monitor.log", App.SettingsPath));
+            
             LoginController = new LoginController();
         }
 

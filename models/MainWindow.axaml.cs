@@ -12,6 +12,7 @@ namespace PowerMonitor
         public MainWindow()
         {
             InitializeComponent();
+            this.Content = new Login();
 #if DEBUG
             this.AttachDevTools();
 #endif

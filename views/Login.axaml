@@ -3,4 +3,57 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Class="PowerMonitor.views.Login">
+                <UserControl.Styles>
+                    <Style Selector="TextBox.Input">
+                        <Setter Property="AcceptsReturn" Value="False"></Setter>
+                    </Style>
+                </UserControl.Styles>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="2*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="4*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" x:Name="LoginInput" Classes="Input"
+                                 FontSize="24" MinHeight="26" MinWidth="100" MaxHeight="100">
+                            
+                        </TextBox>
+                        <Label Grid.Row="0" Grid.Column="1"
+                               FontSize="24" MinWidth="300"> Введите ваш логин: </Label>
+                    </Grid>
+                    <Grid Grid.Row="3" Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" x:Name="PasswordInput" Classes="Input"
+                                 FontSize="24" MinHeight="26" MinWidth="100" MaxHeight="100">
+                            
+                        </TextBox>
+                        <Label Grid.Row="0" Grid.Column="1"
+                               FontSize="24" MinWidth="300"> Введите ваш пароль: </Label>
+                    </Grid>
+                </Grid>
 </UserControl>
