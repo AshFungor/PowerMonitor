@@ -60,7 +60,7 @@ public sealed class LoginController
             {
                 userColl = xmlSerializer.Deserialize(stream) as UserInfoCollection;
             }
-            catch (XmlException ex)
+            catch (InvalidOperationException ex)
             {
                 Logger.Log<LoginController>(Logger.Level.Error,$"could not parse logins file: {ex.Message}, default session applied");
                 EnterDefault();
