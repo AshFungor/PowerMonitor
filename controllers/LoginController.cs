@@ -17,10 +17,10 @@ public sealed class LoginController
 
     public sealed class UserInfo
     {
-        public string? Name { get; }
         [XmlArrayAttribute]
         public List<string>? Restrictions { get; set; }
         public string? Password { get; set; }
+        public string? Name { get; set; }
 
         public UserInfo(string name, string password, List<string> rests)
         {

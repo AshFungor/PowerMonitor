@@ -1,4 +1,4 @@
-namespace PowerMonitor;
+namespace PowerMonitor.models;
 
 public class DBModel
 {

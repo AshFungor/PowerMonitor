@@ -1,41 +1,56 @@
 using System;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Markup.Xaml;
-using Avalonia.Media;
 using SimpleLogger;
-using Key = Avalonia.Remote.Protocol.Input.Key;
 
-namespace PowerMonitor.views;
+namespace PowerMonitor.models;
 
 public class Login : UserControl
 {
     private TextBox loginInput;
     private TextBox passwordInput;
+    private Button loginButton;
+    private Label logLabel;
     private string password = String.Empty;
+    private string login = String.Empty;
     public Login()
     {
+        Logger.Log<Login>("building login view");
         InitializeComponent();
         loginInput = this.FindControl<TextBox>("LoginInput");
         passwordInput = this.FindControl<TextBox>("PasswordInput");
+        loginButton = this.FindControl<Button>("LoginButton");
+        logLabel = this.FindControl<Label>("LogLabel");
         
-
-        passwordInput.KeyDown += BlurPassword;
+        loginButton.Click += TryLogin;
         passwordInput.PasswordChar = '*';
         passwordInput.RevealPassword = false;
 
-
+        Logger.Log<Login>("built login view");
     }
 
-    private void BlurPassword(object? sender, KeyEventArgs args)
+    private void TryLogin(object? sender, EventArgs args)
     {
-        if (args.Key.ToString().Length == 1 && (Char.IsLetter(Convert.ToChar(args.Key.ToString())) ||
-                                                Char.IsNumber(Convert.ToChar(args.Key.ToString()))))
+        password = passwordInput.Text;
+        login = loginInput.Text;
+        Logger.Log<Login>($"Attempting to log with ps = {password} and login = {login}");
+        foreach (var match in Shared.LoginController.Users.UserInfoList)
         {
-            password += args.Key.ToString();
-            Logger.Log<Login>($"password updated: {password}");
+            Logger.Log<Login>($"checking {match.Name} with pas = {match.Password}");
+            if (match.Password != null && match.Name != null && match.Name.Equals(login) && match.Password.Equals(password))
+            {
+                if (login.Equals("admin"))
+                    Shared.MainWin.Content = new AdminView();
+                else
+                    Shared.MainWin.Content = new UserView();
+                Logger.Log<Login>("Attempt successful");
+                return;
+            }
         }
+        
+        Logger.Log<Login>(Logger.Level.Error,"Attempt unsuccessful");
+        logLabel.Content = "auf is failed";
+
     }
     
 

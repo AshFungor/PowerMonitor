@@ -1,11 +1,9 @@
-using System.Collections.Generic;
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-using PowerMonitor.views;
-
-namespace PowerMonitor
+namespace PowerMonitor.models
 {
     public partial class MainWindow : Window
     {
@@ -13,6 +11,11 @@ namespace PowerMonitor
         {
             InitializeComponent();
             this.Content = new Login();
+            Shared.MainWin ??= this;
+            Closed += (object? sender, EventArgs args) =>
+            {
+                Shared.LoginController.UpdateLogins();
+            };
 #if DEBUG
             this.AttachDevTools();
 #endif

@@ -9,7 +9,7 @@ using System;
 using System.IO;
 using Avalonia.Logging;
 using PowerMonitor.controllers;
-using PowerMonitor.views;
+using PowerMonitor.models;
 using SimpleLogger;
 using SimpleLogger.Logging;
 using SimpleLogger.Logging.Handlers;
@@ -18,6 +18,11 @@ using Logger = SimpleLogger.Logger;
 
 namespace PowerMonitor
 {
+    public class Shared
+    {
+        public static LoginController? LoginController = null;
+        public static MainWindow MainWin = null;
+    }
     public class App : Application
     {
         #if LINUX && !DEBUG
@@ -26,15 +31,16 @@ namespace PowerMonitor
         // change path to your local resources
         public static string SettingsPath => $"/home/{Environment.UserName}/Documents/";
         #endif
-        public LoginController LoginController;
+        
 
 
         public override void Initialize()
         {
+            // method loads twice, careful adding init
             AvaloniaXamlLoader.Load(this);
-            SimpleLogger.Logger.LoggerHandlerManager.AddHandler(new FileLoggerHandler("monitor.log", App.SettingsPath));
+            Logger.LoggerHandlerManager.AddHandler(new FileLoggerHandler("monitor.log", App.SettingsPath));
             
-            LoginController = new LoginController();
+            Shared.LoginController ??= new LoginController();
         }
 
         public override void OnFrameworkInitializationCompleted()
