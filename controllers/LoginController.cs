@@ -2,11 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.IO;
-using System.Threading;
-using System.Xml;
 using SimpleLogger;
-using SimpleLogger.Logging;
-using SimpleLogger.Logging.Handlers;
 
 namespace PowerMonitor.controllers;
 
@@ -32,15 +28,15 @@ public sealed class LoginController
         public UserInfo()
         {
             Name = null;
-            Restrictions = null;
             Password = null;
+            Restrictions = null;
         }
     }
 
     public sealed class UserInfoCollection
     {
         [XmlArrayAttribute]
-        public UserInfo[] UserInfoList { get; set; }
+        public UserInfo[]? UserInfoList { get; set; }
     }
 
     public LoginController()

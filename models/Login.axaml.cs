@@ -9,17 +9,16 @@ public class Login : UserControl
 {
     private TextBox loginInput;
     private TextBox passwordInput;
-    private Button loginButton;
     private Label logLabel;
-    private string password = String.Empty;
-    private string login = String.Empty;
+    private string _password = String.Empty;
+    private string _login = String.Empty;
     public Login()
     {
         Logger.Log<Login>("building login view");
         InitializeComponent();
         loginInput = this.FindControl<TextBox>("LoginInput");
         passwordInput = this.FindControl<TextBox>("PasswordInput");
-        loginButton = this.FindControl<Button>("LoginButton");
+        var loginButton = this.FindControl<Button>("LoginButton");
         logLabel = this.FindControl<Label>("LogLabel");
         
         loginButton.Click += TryLogin;
@@ -31,15 +30,15 @@ public class Login : UserControl
 
     private void TryLogin(object? sender, EventArgs args)
     {
-        password = passwordInput.Text;
-        login = loginInput.Text;
-        Logger.Log<Login>($"Attempting to log with ps = {password} and login = {login}");
+        _password = passwordInput.Text;
+        _login = loginInput.Text;
+        Logger.Log<Login>($"Attempting to log with ps = {_password} and login = {_login}");
         foreach (var match in Shared.LoginController.Users.UserInfoList)
         {
             Logger.Log<Login>($"checking {match.Name} with pas = {match.Password}");
-            if (match.Password != null && match.Name != null && match.Name.Equals(login) && match.Password.Equals(password))
+            if (match.Password != null && match.Name != null && match.Name.Equals(_login) && match.Password.Equals(_password))
             {
-                if (login.Equals("admin"))
+                if (_login.Equals("admin"))
                     Shared.MainWin.Content = new AdminView();
                 else
                     Shared.MainWin.Content = new UserView();
@@ -49,7 +48,7 @@ public class Login : UserControl
         }
         
         Logger.Log<Login>(Logger.Level.Error,"Attempt unsuccessful");
-        logLabel.Content = "auf is failed";
+        logLabel.Content = "try again";
 
     }
     

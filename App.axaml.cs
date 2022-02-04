@@ -7,11 +7,8 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using System;
 using System.IO;
-using Avalonia.Logging;
 using PowerMonitor.controllers;
 using PowerMonitor.models;
-using SimpleLogger;
-using SimpleLogger.Logging;
 using SimpleLogger.Logging.Handlers;
 using Logger = SimpleLogger.Logger;
 
@@ -20,8 +17,9 @@ namespace PowerMonitor
 {
     public class Shared
     {
-        public static LoginController? LoginController = null;
-        public static MainWindow MainWin = null;
+        public static LoginController? LoginController;
+        public static DbController? DbController;
+        public static MainWindow? MainWin = null;
     }
     public class App : Application
     {
@@ -38,9 +36,11 @@ namespace PowerMonitor
         {
             // method loads twice, careful adding init
             AvaloniaXamlLoader.Load(this);
+            File.WriteAllText(SettingsPath + "monitor.log", String.Empty);
             Logger.LoggerHandlerManager.AddHandler(new FileLoggerHandler("monitor.log", App.SettingsPath));
             
             Shared.LoginController ??= new LoginController();
+            Shared.DbController ??= new DbController();
         }
 
         public override void OnFrameworkInitializationCompleted()
