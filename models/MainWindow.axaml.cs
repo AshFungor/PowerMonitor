@@ -14,6 +14,8 @@ namespace PowerMonitor.models
             Content = new Login();
             Shared.MainWin = this;
             Closed += OnClose;
+            Width = MinWidth;
+            Height = MinHeight;
 
 #if DEBUG
             this.AttachDevTools();

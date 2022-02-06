@@ -5,7 +5,7 @@
         xmlns:avalonia="http://oxyplot.org/avalonia"
         x:Class="PowerMonitor.models.MainWindow"
         Title="PowerMonitor"
-        MinHeight="900"
-        MinWidth="1444">
+        MinHeight="1080"
+        MinWidth="1920">
         
 </Window>
