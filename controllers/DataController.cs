@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Net;
 using CsvHelper;
 using SimpleLogger;
@@ -14,6 +15,11 @@ public sealed class DataController
     {
         
         
+    }
+
+    public async void GetData(DateTime date)
+    {
+
     }
     
     

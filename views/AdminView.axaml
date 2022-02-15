@@ -3,4 +3,41 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Class="PowerMonitor.models.AdminView">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.25*"></ColumnDefinition>
+            <ColumnDefinition Width="5*"></ColumnDefinition>
+            <ColumnDefinition Width="0.25*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TabControl Grid.Row="1" Grid.Column="1">
+            <TabItem Header="plots">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <UserControl Grid.ColumnSpan="3" Grid.Row="0" Grid.Column="0" x:Name="PlotItem"></UserControl>
+                    <DatePicker Grid.Column="1" Grid.Row="1" FontSize="24" YearVisible="False"></DatePicker>
+                    <Button Grid.Row="1" Grid.Column="0" MaxHeight="50" MaxWidth="250"></Button>
+                </Grid>
+            </TabItem>
+            <TabItem Header="admin actions">
+                
+            </TabItem>
+        </TabControl>
+        
+        
+    </Grid>
+    
+    
 </UserControl>
