@@ -12,12 +12,13 @@ namespace PowerMonitor.models;
 public class Plot : UserControl
 {
     private OxyPlot.Avalonia.Plot _plot;
+
     public Plot()
     {
         InitializeComponent();
         _plot = this.FindControl<OxyPlot.Avalonia.Plot>("Plot");
         _plot.Title = "Plot";
-        DataPoint start = new DataPoint(0, 0);
+        var start = new DataPoint(0, 0);
         _plot.Annotations.Add(new ArrowAnnotation()
         {
             StartPoint = start,
@@ -32,13 +33,12 @@ public class Plot : UserControl
         });
 
 #if DEBUG
-        Random rand = new Random();
-        OxyPlot.Series.LineSeries line = new OxyPlot.Series.LineSeries();
-        for (int i = 0; i < 24; ++i)
+        var rand = new Random();
+        var line = new OxyPlot.Series.LineSeries();
+        for (var i = 0; i < 24; ++i)
             line.Points.Add(new DataPoint(i, rand.Next(0, 100)));
         _plot.ActualModel.Series.Add(line);
 #endif
-
     }
 
     private void InitializeComponent()

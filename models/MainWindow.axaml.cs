@@ -4,33 +4,32 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using SimpleLogger;
 
-namespace PowerMonitor.models
+namespace PowerMonitor.models;
+
+public partial class MainWindow : Window
 {
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-            Content = new Login();
-            Shared.MainWin = this;
-            Closed += OnClose;
-            Width = MinWidth;
-            Height = MinHeight;
+        InitializeComponent();
+        Content = new Login();
+        Shared.MainWin = this;
+        Closed += OnClose;
+        Width = MinWidth;
+        Height = MinHeight;
 
 #if DEBUG
-            this.AttachDevTools();
+        this.AttachDevTools();
 #endif
-        }
+    }
 
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
+    }
 
-        private void OnClose(object? sender, EventArgs args)
-        {
-            Logger.Log<MainWindow>("closing main window");
-            Shared.LoginController.UpdateLogins();
-        }
+    private void OnClose(object? sender, EventArgs args)
+    {
+        Logger.Log<MainWindow>("closing main window");
+        Shared.LoginController.UpdateLogins();
     }
 }

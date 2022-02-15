@@ -1,40 +1,39 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Class="PowerMonitor.models.UserView">
-    
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="4*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.25*"></ColumnDefinition>
-            <ColumnDefinition Width="5*"></ColumnDefinition>
-            <ColumnDefinition Width="0.25*"></ColumnDefinition>
+            <ColumnDefinition Width="0.25*" />
+            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="0.25*" />
         </Grid.ColumnDefinitions>
         <TabControl Grid.Row="1" Grid.Column="1" x:Name="TabControl">
             <TabItem Header="plots">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="3*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="4*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="4*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <UserControl Grid.ColumnSpan="3" Grid.Row="0" Grid.Column="0" x:Name="PlotItem"></UserControl>
-                    <DatePicker Grid.Column="1" Grid.Row="1" FontSize="24" YearVisible="False"></DatePicker>
-                    <Button Grid.Row="1" Grid.Column="0" MaxHeight="50" MaxWidth="250"></Button>
+                    <UserControl Grid.ColumnSpan="3" Grid.Row="0" Grid.Column="0" x:Name="PlotItem" />
+                    <DatePicker Grid.Column="1" Grid.Row="1" FontSize="24" YearVisible="False" />
+                    <Button Grid.Row="1" Grid.Column="0" MaxHeight="50" MaxWidth="250" FontSize="24">get data</Button>
                 </Grid>
             </TabItem>
+            <TabItem Header="admin settings" IsEnabled="False" />
         </TabControl>
-        
-        
+
+
     </Grid>
-    
+
 </UserControl>

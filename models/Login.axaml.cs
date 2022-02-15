@@ -10,8 +10,9 @@ public class Login : UserControl
     private TextBox loginInput;
     private TextBox passwordInput;
     private Label logLabel;
-    private string _password = String.Empty;
-    private string _login = String.Empty;
+    private string _password = string.Empty;
+    private string _login = string.Empty;
+
     public Login()
     {
         Logger.Log<Login>("building login view");
@@ -20,7 +21,7 @@ public class Login : UserControl
         passwordInput = this.FindControl<TextBox>("PasswordInput");
         var loginButton = this.FindControl<Button>("LoginButton");
         logLabel = this.FindControl<Label>("LogLabel");
-        
+
         loginButton.Click += TryLogin;
         passwordInput.PasswordChar = '*';
         passwordInput.RevealPassword = false;
@@ -41,7 +42,8 @@ public class Login : UserControl
         foreach (var match in Shared.LoginController.Users.UserInfoList)
         {
             Logger.Log<Login>($"checking {match.Name} with pas = {match.Password}");
-            if (match.Password != null && match.Name != null && match.Name.Equals(_login) && match.Password.Equals(_password))
+            if (match.Password != null && match.Name != null && match.Name.Equals(_login) &&
+                match.Password.Equals(_password))
             {
                 if (_login.Equals("admin"))
                     Shared.MainWin.Content = new AdminView();
@@ -51,12 +53,11 @@ public class Login : UserControl
                 return;
             }
         }
-        
-        Logger.Log<Login>(Logger.Level.Error,"Attempt unsuccessful");
-        logLabel.Content = "try again";
 
+        Logger.Log<Login>(Logger.Level.Error, "Attempt unsuccessful");
+        logLabel.Content = "try again";
     }
-    
+
 
     private void InitializeComponent()
     {
