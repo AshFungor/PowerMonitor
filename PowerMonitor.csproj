@@ -5,9 +5,6 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
-        <None Remove=".gitignore" />
-    </ItemGroup>
-    <ItemGroup>
         <PackageReference Include="Avalonia" Version="0.10.12" />
         <PackageReference Include="Avalonia.Desktop" Version="0.10.12" />
         <PackageReference Include="Avalonia.Diagnostics" Version="0.10.12" />
@@ -26,7 +23,7 @@
         <DependentUpon>Plot.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="models\AdminView.axaml.cs">
+      <Compile Update="models\AdminView.cs">
         <DependentUpon>AdminView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
@@ -34,5 +31,12 @@
         <DependentUpon>UserView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="models\AdminSettingsTab.axaml.cs">
+        <DependentUpon>AdminSettingsTab.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove=".gitignore" />
     </ItemGroup>
 </Project>
