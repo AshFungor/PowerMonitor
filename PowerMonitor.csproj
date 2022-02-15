@@ -5,15 +5,13 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
-        <None Remove=".gitignore" />
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.11" />
-        <PackageReference Include="Avalonia.Desktop" Version="0.10.11" />
+        <PackageReference Include="Avalonia" Version="0.10.12" />
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.12" />
+        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.12" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.11" />
-        <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.1" />
+        <PackageReference Include="CsvHelper" Version="27.2.1" />
         <PackageReference Include="OxyPlot.Avalonia" Version="2.1.0-Preview1" />
+        <PackageReference Include="OxyPlot.Core" Version="2.1.0" />
         <PackageReference Include="SimpleLogger" Version="1.0.0" />
     </ItemGroup>
     <ItemGroup>
@@ -25,7 +23,7 @@
         <DependentUpon>Plot.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="models\AdminView.axaml.cs">
+      <Compile Update="models\AdminView.cs">
         <DependentUpon>AdminView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
@@ -33,5 +31,13 @@
         <DependentUpon>UserView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="models\AdminSettingsTab.axaml.cs">
+        <DependentUpon>AdminSettingsTab.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove=".gitignore" />
+      <None Remove="token.txt" />
     </ItemGroup>
 </Project>
