@@ -1,11 +1,12 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace PowerMonitor.models;
+namespace PowerMonitor.views;
 
-public class AdminView : UserControl
+public partial class AdminSettingsTab : UserControl
 {
-    public AdminView()
+    public AdminSettingsTab()
     {
         InitializeComponent();
     }

@@ -25,6 +25,11 @@ public class Login : UserControl
         passwordInput.PasswordChar = '*';
         passwordInput.RevealPassword = false;
 
+#if DEBUG
+        passwordInput.Text = "password";
+        loginInput.Text = "admin";
+#endif
+
         Logger.Log<Login>("built login view");
     }
 

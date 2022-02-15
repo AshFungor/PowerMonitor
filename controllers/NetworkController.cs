@@ -1,6 +1,6 @@
 namespace PowerMonitor.controllers;
 
-public class PlotController
+public class NetworkController
 {
     
 }

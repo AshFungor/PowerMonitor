@@ -18,7 +18,7 @@ namespace PowerMonitor
     public class Shared
     {
         public static LoginController? LoginController;
-        public static DbController? DbController;
+        public static DataController? DataController;
         public static MainWindow? MainWin = null;
     }
     public class App : Application
@@ -40,7 +40,7 @@ namespace PowerMonitor
             Logger.LoggerHandlerManager.AddHandler(new FileLoggerHandler("monitor.log", App.SettingsPath));
             
             Shared.LoginController ??= new LoginController();
-            Shared.DbController ??= new DbController();
+            Shared.DataController ??= new DataController();
         }
 
         public override void OnFrameworkInitializationCompleted()
