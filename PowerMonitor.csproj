@@ -36,8 +36,4 @@
             <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
-    <ItemGroup>
-        <None Remove=".gitignore"/>
-        <None Remove="token.txt"/>
-    </ItemGroup>
 </Project>
