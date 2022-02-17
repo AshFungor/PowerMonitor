@@ -4,5 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="PowerMonitor.views.AdminSettingsTab">
-
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="3*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Panel Grid.Row="0" x:Name="ButtonPanel">
+                    <Button x:Name="RemoveButton"></Button>
+                    <Button x:Name="AddButton"></Button>
+                </Panel>
+                <ListBox Grid.Row="1" x:Name="UserInfoListBox" FontSize="24"></ListBox>
+            </Grid>
+            
 </UserControl>

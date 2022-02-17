@@ -6,7 +6,9 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using PowerMonitor.controllers;
 using PowerMonitor.models;
 using SimpleLogger.Logging.Handlers;
@@ -20,6 +22,18 @@ public class Shared
     public static LoginController? LoginController;
     public static DataController? DataController;
     public static MainWindow? MainWin = null;
+
+    public static string ParseRestrictions(List<string> source)
+    {
+        var res = string.Empty;
+        foreach (var rest in source)
+        {
+            res = res + ' ' + rest;
+        }
+
+        return res.Remove(0, 1);
+        
+    } 
 }
 
 public class App : Application
