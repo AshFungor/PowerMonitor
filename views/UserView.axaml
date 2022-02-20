@@ -26,7 +26,13 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <UserControl Grid.ColumnSpan="3" Grid.Row="0" Grid.Column="0" x:Name="PlotItem" />
-                    <DatePicker Grid.Column="1" Grid.Row="1" FontSize="24" YearVisible="False" />
+                    <DatePicker Grid.Column="1" Grid.Row="1" FontSize="24" YearVisible="False">
+                        <DatePicker.Styles>
+                            <Style Selector="Calendar">
+                                <Setter Property="DisplayMode" Value="Month"></Setter>
+                            </Style>
+                        </DatePicker.Styles>
+                    </DatePicker>
                     <Button Grid.Row="1" Grid.Column="0" MaxHeight="50" MaxWidth="250" FontSize="24">get data</Button>
                 </Grid>
             </TabItem>

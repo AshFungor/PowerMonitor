@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
@@ -31,6 +32,7 @@ public class Plot : UserControl
             EndPoint = new DataPoint(24, 0),
             Color = new Color(255, 0, 0, 0)
         });
+        
 
 #if DEBUG
         var rand = new Random();
