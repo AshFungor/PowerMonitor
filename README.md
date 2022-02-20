@@ -25,8 +25,13 @@ support for iOS, Android and in early stages support for browser via WASM.
 - [OxyPlot.Avalonia](https://www.nuget.org/packages/OxyPlot.Avalonia) и [OxyPlot.Core](https://www.nuget.org/packages/OxyPlot.Core) (работа с графиками)
 - [SimpleLogger](https://www.nuget.org/packages/SimpleLogger) (логирование)
 
+В основу серверной части лёг язык [Python](https://www.python.org) и микрофреймворк [Flask](https://flask.palletsprojects.com/en/2.0.x/).
+
+В качестве СУБД использовалась [SQLite](https://www.sqlite.org/index.html).
+
 Выбор на эти пакеты пал в основном благодаря простоте работы с ними
 и их популярности.
+
 ***
 ## - Структурная и функциональная схемы серверной и клиентской части -
 ### структурная схема клиента:
@@ -41,8 +46,6 @@ _(commented by Ash_Fungor)_
 ***
 ## - Схема базы данных -
 ![](github/database-schema.png "база данных")
-
-_(commented by Urmomus)_
 ***
 ## - Скриншоты - 
 ![](github/plot-view-screenshot.png "графики")
