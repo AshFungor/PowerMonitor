@@ -39,6 +39,11 @@ support for iOS, Android and in early stages support for browser via WASM.
 
 _(commented by Ash_Fungor)_
 ***
+## - Схема базы данных -
+![](github/database-schema.png "база данных")
+
+_(commented by Urmomus)_
+***
 ## - Скриншоты - 
 ![](github/plot-view-screenshot.png "графики")
 ![](github/login-screenshot.png "вход")
