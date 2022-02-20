@@ -19,6 +19,7 @@ public class Shared
 {
     public static LoginController? LoginController;
     public static DataController? DataController;
+    public static ConfigController? ConfigController;
     public static MainWindow? MainWin = null;
 }
 
@@ -38,9 +39,11 @@ public class App : Application
         AvaloniaXamlLoader.Load(this);
         File.WriteAllText(SettingsPath + "monitor.log", string.Empty);
         Logger.LoggerHandlerManager.AddHandler(new FileLoggerHandler("monitor.log", SettingsPath));
-
+        
+        Shared.ConfigController ??= new ConfigController();
         Shared.LoginController ??= new LoginController();
         Shared.DataController ??= new DataController();
+
     }
 
     public override void OnFrameworkInitializationCompleted()

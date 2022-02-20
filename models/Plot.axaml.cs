@@ -32,15 +32,16 @@ public class Plot : UserControl
             EndPoint = new DataPoint(24, 0),
             Color = new Color(255, 0, 0, 0)
         });
-        
 
-#if DEBUG
-        var rand = new Random();
-        var line = new OxyPlot.Series.LineSeries();
-        for (var i = 0; i < 24; ++i)
-            line.Points.Add(new DataPoint(i, rand.Next(0, 100)));
-        _plot.ActualModel.Series.Add(line);
-#endif
+
+        if (Shared.ConfigController.AppConfig.LocalPlotData)
+        {
+            var rand = new Random();
+            var line = new OxyPlot.Series.LineSeries();
+            for (var i = 0; i < 24; ++i)
+                line.Points.Add(new DataPoint(i, rand.Next(0, 100)));
+            _plot.ActualModel.Series.Add(line);
+        }
     }
 
     private void InitializeComponent()

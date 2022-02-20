@@ -39,34 +39,41 @@ public sealed class LoginController
 
     public LoginController()
     {
-        Logger.Log<LoginController>("creating login controller instance, checking for logins file...");
-        var xmlSerializer = new XmlSerializer(typeof(UserInfoCollection));
-
-        if (File.Exists(App.SettingsPath + logins_file))
+        if (Shared.ConfigController.AppConfig.LocalLoginCheck)
         {
-            Logger.Log<LoginController>("logins file found");
-            var stream = new StreamReader(App.SettingsPath + logins_file);
+            Logger.Log<LoginController>("creating login controller instance, checking for logins file...");
+            var xmlSerializer = new XmlSerializer(typeof(UserInfoCollection));
 
-            UserInfoCollection? userColl = null;
-            Logger.Log<LoginController>("trying to parse logins file");
-            try
+            if (File.Exists(App.SettingsPath + logins_file))
             {
-                userColl = xmlSerializer.Deserialize(stream) as UserInfoCollection;
+                Logger.Log<LoginController>("logins file found");
+                var stream = new StreamReader(App.SettingsPath + logins_file);
+
+                UserInfoCollection? userColl = null;
+                Logger.Log<LoginController>("trying to parse logins file");
+                try
+                {
+                    userColl = xmlSerializer.Deserialize(stream) as UserInfoCollection;
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Logger.Log<LoginController>(Logger.Level.Error,
+                        $"could not parse logins file: {ex.Message}, default session applied");
+                    EnterDefault();
+                    return;
+                }
+
+                Users = userColl;
             }
-            catch (InvalidOperationException ex)
+            else
             {
-                Logger.Log<LoginController>(Logger.Level.Error,
-                    $"could not parse logins file: {ex.Message}, default session applied");
+                Logger.Log<LoginController>(Logger.Level.Error, "could not find logins file, default session applied");
                 EnterDefault();
-                return;
             }
-
-            Users = userColl;
         }
         else
         {
-            Logger.Log<LoginController>(Logger.Level.Error, "could not find logins file, default session applied");
-            EnterDefault();
+            // some server calling functionality
         }
     }
 
