@@ -30,6 +30,6 @@ public partial class MainWindow : Window
     private void OnClose(object? sender, EventArgs args)
     {
         Logger.Log<MainWindow>("closing main window");
-        Shared.LoginController.UpdateLogins();
+        Shared.LoginController!.UpdateLogins();
     }
 }

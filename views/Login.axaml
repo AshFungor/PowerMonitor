@@ -46,7 +46,7 @@
             </Grid.ColumnDefinitions>
             <TextBox Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" x:Name="PasswordInput" Classes="Input"
                      FontSize="24" MinHeight="26" MinWidth="300" MaxHeight="100" />
-            <Label Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0" 
+            <Label Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0"
                    FontSize="24" MinWidth="300" HorizontalAlignment="Left" VerticalAlignment="Bottom">
                 Enter your password:
             </Label>

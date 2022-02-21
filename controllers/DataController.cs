@@ -11,6 +11,7 @@ namespace PowerMonitor.controllers;
 
 public sealed class DataController
 {
+    // this will change a lot in the future
     private string _serverRequest = string.Empty;
     private static string _dataFileLocation = App.SettingsPath + "response.csv";
     private static string _feedTemplateReq = "localhost:5000/{0}/{1}";
@@ -23,19 +24,19 @@ public sealed class DataController
 
     public async void GetData(DateTime date)
     {
-        HttpRequestMessage msg =
+        var msg =
             new HttpRequestMessage(HttpMethod.Get, new Uri(string.Format(_feedTemplateReq, date)));
-        
+
         Logger.Log<DataController>(Logger.Level.Info, $"sending ({msg}), awaiting...");
         var response = await _localClient.SendAsync(msg);
-        Logger.Log<DataController>(Logger.Level.Info, $"received: {response.StatusCode}, {response.Headers}, waiting for reading...");
+        Logger.Log<DataController>(Logger.Level.Info,
+            $"received: {response.StatusCode}, {response.Headers}, waiting for reading...");
         try
         {
-            StreamReader inputStream = new StreamReader(await response.Content.ReadAsStreamAsync());
-            StreamWriter outputStream = new StreamWriter(_dataFileLocation);
+            var inputStream = new StreamReader(await response.Content.ReadAsStreamAsync());
+            var outputStream = new StreamWriter(_dataFileLocation);
             while (!inputStream.EndOfStream)
                 await outputStream.WriteLineAsync(await inputStream.ReadLineAsync());
-            
         }
         catch (Exception e)
         {

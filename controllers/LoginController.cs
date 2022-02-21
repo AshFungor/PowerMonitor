@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.IO;
+using System.Threading.Tasks;
 using SimpleLogger;
 
 namespace PowerMonitor.controllers;
@@ -9,8 +9,10 @@ namespace PowerMonitor.controllers;
 public sealed class LoginController
 {
     private static string logins_file = ".logins.xml";
-    public UserInfoCollection Users { get; set; }
 
+    public UserInfoCollection? Users { get; set; }
+
+    // classes for parsing
     public sealed class UserInfo
     {
         [XmlArrayAttribute] public List<string>? Restrictions { get; set; }
@@ -39,44 +41,67 @@ public sealed class LoginController
 
     public LoginController()
     {
-        if (Shared.ConfigController.AppConfig.LocalLoginCheck)
+        // if no server validation is present.
+        // this differs in build stage, so 
+        // this is more like a debugging way
+#if !SERVER
+        Logger.Log<LoginController>("creating login controller instance, checking for logins file...");
+
+        if (File.Exists(App.SettingsPath + logins_file))
         {
-            Logger.Log<LoginController>("creating login controller instance, checking for logins file...");
-            var xmlSerializer = new XmlSerializer(typeof(UserInfoCollection));
+            Logger.Log<LoginController>("logins file found");
+            var stream = new StreamReader(App.SettingsPath + logins_file);
 
-            if (File.Exists(App.SettingsPath + logins_file))
-            {
-                Logger.Log<LoginController>("logins file found");
-                var stream = new StreamReader(App.SettingsPath + logins_file);
-
-                UserInfoCollection? userColl = null;
-                Logger.Log<LoginController>("trying to parse logins file");
-                try
-                {
-                    userColl = xmlSerializer.Deserialize(stream) as UserInfoCollection;
-                }
-                catch (InvalidOperationException ex)
-                {
-                    Logger.Log<LoginController>(Logger.Level.Error,
-                        $"could not parse logins file: {ex.Message}, default session applied");
-                    EnterDefault();
-                    return;
-                }
-
-                Users = userColl;
-            }
-            else
-            {
-                Logger.Log<LoginController>(Logger.Level.Error, "could not find logins file, default session applied");
-                EnterDefault();
-            }
+            Logger.Log<LoginController>("trying to parse logins file");
+            ParseHandler(stream.BaseStream, false);
         }
         else
         {
-            // some server calling functionality
+            Logger.Log<LoginController>(Logger.Level.Error, "could not find logins file, default session applied");
+            EnterDefault();
         }
+#endif
     }
 
+    // handling for async parsing
+    private async void ParseHandler(Stream callingStream, bool write)
+    {
+        var res = await ParseLoginsAsync(callingStream, write);
+        if (res)
+        {
+            Logger.Log<LoginController>("parse successful");
+            return;
+        }
+
+        Logger.Log<LoginController>("parse unsuccessful");
+        Logger.Log<LoginController>("entering default session");
+        EnterDefault();
+    }
+
+    // async parsing
+    private async Task<bool> ParseLoginsAsync(Stream stream, bool write = false)
+    {
+        var xmlSerializer = new XmlSerializer(typeof(UserInfoCollection));
+        // parsing is done in a separate thread in case of huge
+        // logins.xml file size, though in normal use this
+        // would be obsolete.
+        if (!write)
+        {
+            if (!stream.CanRead)
+                return false;
+            var readTask = Task.Run(() => Users = xmlSerializer.Deserialize(stream) as UserInfoCollection);
+            await readTask;
+            return readTask.IsCompleted;
+        }
+
+        if (!stream.CanWrite)
+            return false;
+        var writeTask = Task.Run(() => xmlSerializer.Serialize(stream, Users));
+        await writeTask;
+        return writeTask.IsCompleted;
+    }
+
+    // not to break app on every parse fail, there always should be a way out
     private void EnterDefault()
     {
         var admin = new UserInfo("admin", "password", new List<string>());
@@ -84,13 +109,13 @@ public sealed class LoginController
         Users = userColl;
     }
 
+    // update logins file
     public void UpdateLogins()
     {
         Logger.Log<LoginController>("writing logins...");
 
         File.WriteAllText(App.SettingsPath + logins_file, string.Empty);
         var stream = new StreamWriter(App.SettingsPath + logins_file);
-        var xmlSerializer = new XmlSerializer(typeof(UserInfoCollection));
-        xmlSerializer.Serialize(stream, Users);
+        ParseHandler(stream.BaseStream, true);
     }
 }

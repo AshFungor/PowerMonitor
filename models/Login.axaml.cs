@@ -7,9 +7,9 @@ namespace PowerMonitor.models;
 
 public class Login : UserControl
 {
-    private TextBox loginInput;
-    private TextBox passwordInput;
-    private Label logLabel;
+    private readonly TextBox loginInput;
+    private readonly TextBox passwordInput;
+    private readonly Label logLabel;
     private string _password = string.Empty;
     private string _login = string.Empty;
 
@@ -26,7 +26,7 @@ public class Login : UserControl
         passwordInput.PasswordChar = '*';
         passwordInput.RevealPassword = false;
 
-#if DEBUG
+#if DEBUG && !SERVER
         passwordInput.Text = "password";
         loginInput.Text = "admin";
 #endif
@@ -36,19 +36,17 @@ public class Login : UserControl
 
     private void TryLogin(object? sender, EventArgs args)
     {
+#if !SERVER
         _password = passwordInput.Text;
         _login = loginInput.Text;
         Logger.Log<Login>($"Attempting to log with ps = {_password} and login = {_login}");
-        foreach (var match in Shared.LoginController.Users.UserInfoList)
+        foreach (var match in Shared.LoginController!.Users!.UserInfoList!)
         {
             Logger.Log<Login>($"checking {match.Name} with pas = {match.Password}");
             if (match.Password != null && match.Name != null && match.Name.Equals(_login) &&
                 match.Password.Equals(_password))
             {
-                if (_login.Equals("admin"))
-                    Shared.MainWin.Content = new AdminView();
-                else
-                    Shared.MainWin.Content = new UserView();
+                Shared.MainWin!.Content = _login.Equals("admin") ? new AdminView() : new UserView();
                 Logger.Log<Login>("Attempt successful");
                 return;
             }
@@ -56,6 +54,7 @@ public class Login : UserControl
 
         Logger.Log<Login>(Logger.Level.Error, "Attempt unsuccessful");
         logLabel.Content = "try again";
+#endif
     }
 
 

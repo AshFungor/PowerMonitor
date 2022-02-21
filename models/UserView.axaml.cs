@@ -19,19 +19,18 @@ public class UserView : UserControl
         _tabControl = this.Find<TabControl>("TabControl");
         _targetDevListBox = this.Find<ListBox>("TargetDevListBox");
 
-        if (Shared.ConfigController.AppConfig.LocalPlotData)
-        {
-            List<ListBoxItem> list = new List<ListBoxItem>();
-            list.Add(new ListBoxItem()
-                {Content = "choose me"});
-            list.Add(new ListBoxItem()
-                {Content = "choose me"});
-            list.Add(new ListBoxItem()
-                {Content = "choose me"});
-            list.Add(new ListBoxItem()
-                {Content = "choose me"});
-            _targetDevListBox.Items = list;
-        }
+#if DEBUG && !SERVER
+        var list = new List<ListBoxItem>();
+        list.Add(new ListBoxItem()
+            {Content = "choose me"});
+        list.Add(new ListBoxItem()
+            {Content = "choose me"});
+        list.Add(new ListBoxItem()
+            {Content = "choose me"});
+        list.Add(new ListBoxItem()
+            {Content = "choose me"});
+        _targetDevListBox.Items = list;
+#endif
     }
 
     private void InitializeComponent()
