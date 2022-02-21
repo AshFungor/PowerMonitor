@@ -18,21 +18,22 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="4*" />
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="0.5*" />
+                        <RowDefinition Height="0.5*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <UserControl Grid.Row="0" Grid.Column="0" x:Name="PlotItem" />
-                    <DockPanel Grid.Row="1" LastChildFill="True">
-                        <Button Classes="base" HorizontalAlignment="Left" Margin="0 5 20 5">get data</Button>
-                        <ComboBox HorizontalAlignment="Left" Margin="10 5 20 5"
-                                  FontSize="24" MinWidth="300" MinHeight="50"
-                                  MaxHeight="70" x:Name="TargetDevComboBox" />
-                        <DatePicker Margin="10 5 20 0"
-                                    FontSize="24" YearVisible="False" HorizontalAlignment="Left" x:Name="DatePicker"
-                                    MinHeight="60" />
-                        <Label FontSize="24" MaxHeight="50" MinHeight="26" x:Name="LogLabel"
+                    <DockPanel Grid.Row="1" LastChildFill="True" MaxHeight="50">
+                        <Button Classes="base" HorizontalAlignment="Left" Margin="0 0 20 0">get data</Button>
+                        <ComboBox HorizontalAlignment="Left" Margin="10 0 20 0"
+                                  FontSize="24" MinWidth="300" x:Name="TargetDevComboBox" />
+                        <Label FontSize="24" MinHeight="26" x:Name="LogLabel"
                                HorizontalAlignment="Center" />
                     </DockPanel>
+                    <DatePicker Grid.Row="2" FontSize="24" YearVisible="False" HorizontalAlignment="Left" x:Name="DatePicker"
+                                MinHeight="50" />
                 </Grid>
+                
+                
             </TabItem>
             <TabItem Header="admin settings" IsEnabled="False" />
         </TabControl>
