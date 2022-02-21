@@ -4,8 +4,6 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using OxyPlot;
 using OxyPlot.Avalonia;
-using OxyPlot.Series;
-using LineSeries = OxyPlot.Avalonia.LineSeries;
 
 namespace PowerMonitor.models;
 
@@ -21,18 +19,15 @@ public class Plot : UserControl
         var start = new DataPoint(0, 0);
         _plot.Annotations.Add(new ArrowAnnotation()
         {
-            StartPoint = start,
-            EndPoint = new DataPoint(0, 100),
-            Color = new Color(255, 0, 0, 0)
+            StartPoint = start, EndPoint = new DataPoint(0, 100), Color = new Color(255, 0, 0, 0)
         });
         _plot.Annotations.Add(new ArrowAnnotation()
         {
-            StartPoint = start,
-            EndPoint = new DataPoint(24, 0),
-            Color = new Color(255, 0, 0, 0)
+            StartPoint = start, EndPoint = new DataPoint(24, 0), Color = new Color(255, 0, 0, 0)
         });
 
-#if DEBUG
+
+#if !SERVER && DEBUG
         var rand = new Random();
         var line = new OxyPlot.Series.LineSeries();
         for (var i = 0; i < 24; ++i)

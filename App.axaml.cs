@@ -1,7 +1,3 @@
-#define DEBUG
-#define LINUX
-
-
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;

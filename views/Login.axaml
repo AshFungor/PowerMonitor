@@ -2,8 +2,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="PowerMonitor.models.Login">
     <UserControl.Styles>
-        <Style Selector="TextBox.Input">
+        <Style Selector="TextBox.input">
             <Setter Property="AcceptsReturn" Value="False" />
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontFamily" Value="Free Sans" />
+            <Setter Property="MinHeight" Value="26" />
+            <Setter Property="MinWidth" Value="300" />
+            <Setter Property="MaxHeight" Value="50" />
+        </Style>
+        <Style Selector="Label.label_base">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontFamily" Value="Free Sans" />
+            <Setter Property="MinHeight" Value="50" />
+            <Setter Property="MinWidth" Value="300" />
+            <Setter Property="MaxHeight" Value="70" />
+            <Setter Property="MaxWidth" Value="500" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Bottom" />
         </Style>
     </UserControl.Styles>
     <Grid>
@@ -15,9 +30,9 @@
             <RowDefinition Height="4*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
@@ -28,12 +43,8 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" x:Name="LoginInput" Classes="Input"
-                     FontSize="24" MinHeight="26" MinWidth="300" MaxHeight="100" />
-            <Label Grid.Row="0" Grid.Column="1"
-                   FontSize="24" MinWidth="300">
-                Enter your login:
-            </Label>
+            <TextBox Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" x:Name="LoginInput" Classes="input" />
+            <Label Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0" Classes="label_base">Enter your login:</Label>
         </Grid>
         <Grid Grid.Row="2" Grid.Column="1">
             <Grid.RowDefinitions>
@@ -44,12 +55,9 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" x:Name="PasswordInput" Classes="Input"
-                     FontSize="24" MinHeight="26" MinWidth="300" MaxHeight="100" />
-            <Label Grid.Row="0" Grid.Column="1"
-                   FontSize="24" MinWidth="300">
-                Enter your password:
-            </Label>
+            <TextBox Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" x:Name="PasswordInput" Classes="input"
+                     PasswordChar="*" RevealPassword="False" />
+            <Label Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0" Classes="label_base">Enter your password:</Label>
         </Grid>
         <Grid Grid.Row="3" Grid.Column="1">
             <Grid.ColumnDefinitions>
@@ -61,8 +69,8 @@
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <Label Grid.Row="1" Grid.Column="2" x:Name="LogLabel" FontSize="28" MinWidth="300" />
-            <Button Grid.Row="1" Grid.Column="0" x:Name="LoginButton" FontSize="28">Continue</Button>
+            <Label Grid.Row="1" Grid.Column="2" x:Name="LogLabel" Classes="label_base" />
+            <Button Grid.Row="1" Grid.Column="0" Classes="base" Click="TryLogin" HorizontalAlignment="Left">Continue</Button>
         </Grid>
     </Grid>
 </UserControl>

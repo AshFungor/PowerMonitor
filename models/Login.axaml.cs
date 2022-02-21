@@ -1,5 +1,6 @@
 using System;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using SimpleLogger;
 
@@ -7,9 +8,9 @@ namespace PowerMonitor.models;
 
 public class Login : UserControl
 {
-    private TextBox loginInput;
-    private TextBox passwordInput;
-    private Label logLabel;
+    private readonly TextBox _loginInput;
+    private readonly TextBox _passwordInput;
+    private readonly Label _logLabel;
     private string _password = string.Empty;
     private string _login = string.Empty;
 
@@ -17,45 +18,39 @@ public class Login : UserControl
     {
         Logger.Log<Login>("building login view");
         InitializeComponent();
-        loginInput = this.FindControl<TextBox>("LoginInput");
-        passwordInput = this.FindControl<TextBox>("PasswordInput");
-        var loginButton = this.FindControl<Button>("LoginButton");
-        logLabel = this.FindControl<Label>("LogLabel");
+        _loginInput = this.FindControl<TextBox>("LoginInput");
+        _passwordInput = this.FindControl<TextBox>("PasswordInput");
+        _logLabel = this.FindControl<Label>("LogLabel");
 
-        loginButton.Click += TryLogin;
-        passwordInput.PasswordChar = '*';
-        passwordInput.RevealPassword = false;
-
-#if DEBUG
-        passwordInput.Text = "password";
-        loginInput.Text = "admin";
+#if DEBUG && !SERVER
+        _passwordInput.Text = "password";
+        _loginInput.Text = "admin";
 #endif
 
         Logger.Log<Login>("built login view");
     }
 
-    private void TryLogin(object? sender, EventArgs args)
+    private void TryLogin(object? sender, RoutedEventArgs args)
     {
-        _password = passwordInput.Text;
-        _login = loginInput.Text;
+#if !SERVER
+        _password = _passwordInput.Text;
+        _login = _loginInput.Text;
         Logger.Log<Login>($"Attempting to log with ps = {_password} and login = {_login}");
-        foreach (var match in Shared.LoginController.Users.UserInfoList)
+        foreach (var match in Shared.LoginController!.Users!.UserInfoList!)
         {
             Logger.Log<Login>($"checking {match.Name} with pas = {match.Password}");
             if (match.Password != null && match.Name != null && match.Name.Equals(_login) &&
                 match.Password.Equals(_password))
             {
-                if (_login.Equals("admin"))
-                    Shared.MainWin.Content = new AdminView();
-                else
-                    Shared.MainWin.Content = new UserView();
+                Shared.MainWin!.Content = _login.Equals("admin") ? new AdminView() : new UserView();
                 Logger.Log<Login>("Attempt successful");
                 return;
             }
         }
 
         Logger.Log<Login>(Logger.Level.Error, "Attempt unsuccessful");
-        logLabel.Content = "try again";
+        _logLabel.Content = "try again";
+#endif
     }
 
 
