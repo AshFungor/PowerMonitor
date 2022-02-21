@@ -27,7 +27,8 @@
   и [OxyPlot.Core](https://www.nuget.org/packages/OxyPlot.Core) (работа с графиками)
 - [SimpleLogger](https://www.nuget.org/packages/SimpleLogger) (логирование)
 
-В основу серверной части лёг язык [Python](https://www.python.org) и микрофреймворк [Flask](https://flask.palletsprojects.com/en/2.0.x/).
+В основу серверной части лёг язык [Python](https://www.python.org) и
+микрофреймворк [Flask](https://flask.palletsprojects.com/en/2.0.x/).
 
 В качестве СУБД использовалась [SQLite](https://www.sqlite.org/index.html).
 
@@ -50,7 +51,9 @@
 
 _(commented by Ash_Fungor)_
 ***
+
 ## - Схема базы данных -
+
 ![](github/database-schema.png "база данных")
 ***
 

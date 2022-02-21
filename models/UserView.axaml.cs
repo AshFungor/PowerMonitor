@@ -7,9 +7,10 @@ namespace PowerMonitor.models;
 
 public class UserView : UserControl
 {
-    private UserControl _plotControl;
+    private readonly UserControl _plotControl;
     protected readonly TabControl _tabControl;
-    private ListBox _targetDevListBox;
+    private readonly DatePicker _datePicker;
+    private readonly ComboBox _targetDevComboBox;
 
     public UserView()
     {
@@ -17,19 +18,20 @@ public class UserView : UserControl
         _plotControl = this.Find<UserControl>("PlotItem");
         _plotControl.Content = new Plot();
         _tabControl = this.Find<TabControl>("TabControl");
-        _targetDevListBox = this.Find<ListBox>("TargetDevListBox");
+        _targetDevComboBox = this.Find<ComboBox>("TargetDevComboBox");
+        _datePicker = this.Find<DatePicker>("DatePicker");
 
 #if DEBUG && !SERVER
-        var list = new List<ListBoxItem>();
-        list.Add(new ListBoxItem()
+        var list = new List<ComboBoxItem>();
+        list.Add(new ComboBoxItem()
             {Content = "choose me"});
-        list.Add(new ListBoxItem()
+        list.Add(new ComboBoxItem()
             {Content = "choose me"});
-        list.Add(new ListBoxItem()
+        list.Add(new ComboBoxItem()
             {Content = "choose me"});
-        list.Add(new ListBoxItem()
+        list.Add(new ComboBoxItem()
             {Content = "choose me"});
-        _targetDevListBox.Items = list;
+        _targetDevComboBox.Items = list;
 #endif
     }
 

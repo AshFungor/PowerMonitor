@@ -15,32 +15,23 @@
         <TabControl Grid.Row="1" Grid.Column="1" x:Name="TabControl">
             <TabItem Header="plots">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="3*" />
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="4*" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <UserControl Grid.ColumnSpan="3" Grid.Row="0" Grid.Column="0" x:Name="PlotItem" />
-                    <DatePicker Grid.Column="1" Grid.Row="1" FontSize="24" YearVisible="False"
-                                HorizontalAlignment="Left">
-                        <DatePicker.Styles>
-                            <Style Selector="Calendar">
-                                <Setter Property="DisplayMode" Value="Month" />
-                            </Style>
-                        </DatePicker.Styles>
-                    </DatePicker>
-                    <Button Grid.Row="1" Grid.Column="0" MaxHeight="50" MaxWidth="250" FontSize="24"
-                            HorizontalAlignment="Left">
-                        get data
-                    </Button>
-                    <ListBox Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                             FontSize="24" MinWidth="600" MinHeight="100"
-                             MaxHeight="120" x:Name="TargetDevListBox" />
+                    <UserControl Grid.Row="0" Grid.Column="0" x:Name="PlotItem" />
+                    <DockPanel Grid.Row="1" LastChildFill="True">
+                        <Button Classes="base" HorizontalAlignment="Left" Margin="0 5 20 5">get data</Button>
+                        <ComboBox HorizontalAlignment="Left" Margin="10 5 20 5"
+                                  FontSize="24" MinWidth="300" MinHeight="50"
+                                  MaxHeight="70" x:Name="TargetDevComboBox" />
+                        <DatePicker Margin="10 5 20 0"
+                                    FontSize="24" YearVisible="False" HorizontalAlignment="Left" x:Name="DatePicker"
+                                    MinHeight="60" />
+                        <Label FontSize="24" MaxHeight="50" MinHeight="26" x:Name="LogLabel"
+                               HorizontalAlignment="Center" />
+                    </DockPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="admin settings" IsEnabled="False" />

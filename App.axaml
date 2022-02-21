@@ -7,5 +7,15 @@
 
         <!-- Add the line below to get OxyPlot UI theme applied. -->
         <StyleInclude Source="resm:OxyPlot.Avalonia.Themes.Default.xaml?assembly=OxyPlot.Avalonia" />
+
+        <Style Selector="Button.base">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontFamily" Value="Free Sans" />
+            <Setter Property="MinHeight" Value="50" />
+            <Setter Property="MinWidth" Value="250" />
+            <Setter Property="MaxHeight" Value="70" />
+            <Setter Property="MaxWidth" Value="300" />
+        </Style>
     </Application.Styles>
+
 </Application>
