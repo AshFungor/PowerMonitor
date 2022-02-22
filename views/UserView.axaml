@@ -23,7 +23,7 @@
                     </Grid.RowDefinitions>
                     <UserControl Grid.Row="0" Grid.Column="0" x:Name="PlotItem" />
                     <DockPanel Grid.Row="1" LastChildFill="True" MaxHeight="50">
-                        <Button Classes="base" HorizontalAlignment="Left" Margin="0 0 20 0">get data</Button>
+                        <Button Classes="base" HorizontalAlignment="Left" Margin="0 0 20 0" Click="Call">get data</Button>
                         <ComboBox HorizontalAlignment="Left" Margin="10 0 20 0"
                                   FontSize="24" MinWidth="300" x:Name="TargetDevComboBox" />
                         <Label FontSize="24" MinHeight="26" x:Name="LogLabel"

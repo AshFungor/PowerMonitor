@@ -18,6 +18,7 @@ public class Shared
     public static LoginController? LoginController;
     public static DataController? DataController;
     public static MainWindow? MainWin = null;
+    public static Plot? Plot;
 
     public static string ParseRestrictions(List<string> source)
     {

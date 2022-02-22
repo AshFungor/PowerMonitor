@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 
 namespace PowerMonitor.models;
@@ -33,6 +35,12 @@ public class UserView : UserControl
             {Content = "choose me"});
         _targetDevComboBox.Items = list;
 #endif
+    }
+
+    private async void Call(object? sender, RoutedEventArgs args)
+    {
+        var data = await Shared.DataController!.ReadData(new DateTime(2020, 1, 1, 0, 0, 0));
+        Shared.Plot!.AddSeries(data);
     }
 
     private void InitializeComponent()
