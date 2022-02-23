@@ -1,7 +1,5 @@
 # Мониторинг комплекса энергоснабжения
 
-***
-
 ## - Анализ технических требований -
 
 В техническом задании указана модель клиент-серверного приложения. Клиент должен уметь соединятся с сервером, принимать
@@ -26,13 +24,14 @@
 - [OxyPlot.Avalonia](https://www.nuget.org/packages/OxyPlot.Avalonia)
   и [OxyPlot.Core](https://www.nuget.org/packages/OxyPlot.Core) (работа с графиками)
 - [SimpleLogger](https://www.nuget.org/packages/SimpleLogger) (логирование)
+- [GemBox.Spreadsheet](https://www.nuget.org/packages/GemBox.Spreadsheet) (выгрузка данных в таблицу)
+
+Выбор на эти пакеты пал в основном благодаря простоте работы с ними и их популярности.
 
 В основу серверной части лёг язык [Python](https://www.python.org) и
 микрофреймворк [Flask](https://flask.palletsprojects.com/en/2.0.x/).
 
 В качестве СУБД использовалась [SQLite](https://www.sqlite.org/index.html).
-
-Выбор на эти пакеты пал в основном благодаря простоте работы с ними и их популярности.
 
 ***
 
