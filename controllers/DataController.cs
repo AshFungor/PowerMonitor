@@ -21,6 +21,7 @@ public sealed class DataController
 
     private static readonly List<PropertyInfo> SavingProperties =
         typeof(DevInfo).GetProperties().Where(el => !(el.Name.Contains("N") || el.Name.Contains("Voltage"))).ToList();
+
     private CsvConfiguration _csvConfig;
 
     public class DevInfo
@@ -52,8 +53,6 @@ public sealed class DataController
         [Index(24)] public double UCosB { get; set; }
         [Index(25)] public double UCosC { get; set; }
         [Index(26)] public int N { get; set; }
-        
-        
     }
 
     public DataController()
@@ -75,9 +74,9 @@ public sealed class DataController
     public async Task<List<(double, double)>> EvaluateDataAsync(DateTime day)
     {
         var records = await ReadResponseAsync();
-        List<(double, double)> results = new List<(double, double)>();
-        
-        
+        var results = new List<(double, double)>();
+
+
         var enumerator = records.GetEnumerator();
         while (enumerator.MoveNext())
         {
@@ -85,23 +84,27 @@ public sealed class DataController
             {
                 DateTime start = Convert.ToDateTime(record.Begin), finish = Convert.ToDateTime(record.End);
                 day =
-                    day.AddSeconds(start.Second - day.Second).AddMinutes(start.Minute - day.Minute).AddHours(start.Hour - day.Hour);
-                
-                
-                double sumUPower = record.UActivePowerA + record.UActivePowerB + record.UActivePowerC;
+                    day.AddSeconds(start.Second - day.Second).AddMinutes(start.Minute - day.Minute)
+                        .AddHours(start.Hour - day.Hour);
+
+
+                var sumUPower = record.UActivePowerA + record.UActivePowerB + record.UActivePowerC;
                 if (sumUPower == 0)
                 {
                     results.Add((100, (day.Hour * 60 + day.Minute) / 60));
                     if (start != finish)
                     {
                         day =
-                            day.AddSeconds(finish.Second - day.Second).AddMinutes(finish.Minute - day.Minute).AddHours(finish.Hour - day.Hour);
+                            day.AddSeconds(finish.Second - day.Second).AddMinutes(finish.Minute - day.Minute)
+                                .AddHours(finish.Hour - day.Hour);
                         results.Add((100, (day.Hour * 60 + day.Minute) / 60));
                     }
+
                     continue;
                 }
-                double effectiveness =
-                    (sumUPower - (record.ActivePowerA + record.ActivePowerB + record.ActivePowerC)) / (sumUPower) * 100;
+
+                var effectiveness =
+                    (sumUPower - (record.ActivePowerA + record.ActivePowerB + record.ActivePowerC)) / sumUPower * 100;
                 results.Add((effectiveness, (day.Hour * 60 + day.Minute) / 60));
                 if (start != finish)
                 {
@@ -112,10 +115,10 @@ public sealed class DataController
                 }
             }
         }
+
         enumerator.Dispose();
 
         return results;
-
     }
 
     public async Task<bool> LoadIntoSpreadsheetAsync()
@@ -123,18 +126,19 @@ public sealed class DataController
         var data = await ReadResponseAsync();
 
         var workBook = new ExcelFile();
-        ExcelWorksheet sheet = workBook.Worksheets.Add("parsed data");
-        
-        int column = 1;
-        
-        
+        var sheet = workBook.Worksheets.Add("parsed data");
+
+        var column = 1;
+
+
         foreach (var property in SavingProperties)
         {
             sheet.Cells[column, 1].Value = property.Name;
             ++column;
         }
+
         sheet.Cells[column, 1].Value = "Effectiveness";
-        int row = 2;
+        var row = 2;
         var enumerator = data.GetEnumerator();
         while (enumerator.MoveNext())
         {
@@ -149,24 +153,25 @@ public sealed class DataController
                     sheet.Cells[column, row].Value = (double) fieldData;
                 ++column;
             }
-            double sumUPower = record.UActivePowerA + record.UActivePowerB + record.UActivePowerC;
+
+            var sumUPower = record.UActivePowerA + record.UActivePowerB + record.UActivePowerC;
             if (sumUPower == 0)
                 sheet.Cells[column, row].Value = 100;
             else
-                sheet.Cells[column, row].Value = (sumUPower - (record.ActivePowerA + record.ActivePowerB + record.ActivePowerC)) / (sumUPower) * 100;
+                sheet.Cells[column, row].Value =
+                    (sumUPower - (record.ActivePowerA + record.ActivePowerB + record.ActivePowerC)) / sumUPower * 100;
             ++row;
-
         }
+
         enumerator.Dispose();
 
-        string acceptableName = SpreadsheetFileBase;
-        int fileIndex = 1;
+        var acceptableName = SpreadsheetFileBase;
+        var fileIndex = 1;
         while (File.Exists(acceptableName + fileIndex + ".ods"))
             ++fileIndex;
-        
+
         workBook.Save(acceptableName + fileIndex + ".ods");
 
         return true;
-
     }
 }

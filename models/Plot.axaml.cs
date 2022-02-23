@@ -29,7 +29,6 @@ public class Plot : UserControl
         Shared.Plot ??= this;
 
 
-
 #if !SERVER && DEBUG
         var rand = new Random();
         var line = new OxyPlot.Series.LineSeries();
@@ -43,14 +42,10 @@ public class Plot : UserControl
     public void AddSeries(List<(double, double)> source)
     {
         var line = new OxyPlot.Series.LineSeries();
-        foreach (var dot in source)
-        {
-            line.Points.Add(new DataPoint(dot.Item2, dot.Item1));
-        }
+        foreach (var dot in source) line.Points.Add(new DataPoint(dot.Item2, dot.Item1));
         _plot.ActualModel.Series.Clear();
         _plot.ActualModel.Series.Add(line);
         _plot.InvalidatePlot();
-
     }
 
     private void InitializeComponent()

@@ -24,14 +24,10 @@ public class Shared
     public static string ParseRestrictions(List<string> source)
     {
         var res = string.Empty;
-        foreach (var rest in source)
-        {
-            res = res + ' ' + rest;
-        }
+        foreach (var rest in source) res = res + ' ' + rest;
 
         return res.Remove(0, 1);
-        
-    } 
+    }
 }
 
 public class App : Application
@@ -53,7 +49,7 @@ public class App : Application
 
         Shared.LoginController ??= new LoginController();
         Shared.DataController ??= new DataController();
-        
+
         SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
     }
 

@@ -19,7 +19,7 @@
                         <RowDefinition Height="4*" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="0.5*" />
-                        <RowDefinition Height="0.5*"></RowDefinition>
+                        <RowDefinition Height="0.5*" />
                     </Grid.RowDefinitions>
                     <UserControl Grid.Row="0" Grid.Column="0" x:Name="PlotItem" />
                     <DockPanel Grid.Row="1" LastChildFill="True" MaxHeight="50">
@@ -29,11 +29,12 @@
                         <Label FontSize="24" MinHeight="26" x:Name="LogLabel"
                                HorizontalAlignment="Center" />
                     </DockPanel>
-                    <DatePicker Grid.Row="2" FontSize="24" YearVisible="False" HorizontalAlignment="Left" x:Name="DatePicker"
+                    <DatePicker Grid.Row="2" FontSize="24" YearVisible="False" HorizontalAlignment="Left"
+                                x:Name="DatePicker"
                                 MinHeight="50" />
                 </Grid>
-                
-                
+
+
             </TabItem>
             <TabItem Header="admin settings" IsEnabled="False" />
         </TabControl>
