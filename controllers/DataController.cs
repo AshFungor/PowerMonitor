@@ -1,21 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing.Printing;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
 using SimpleLogger;
+using Independentsoft.Office.Odf;
 
 namespace PowerMonitor.controllers;
 
 public sealed class DataController
 {
     // this will change a lot in the future
-    private static string _dataFileLocation = App.SettingsPath + "response.csv";
+    private static readonly string ResponseDataFileLocation = App.SettingsPath + "response.csv";
+    private static readonly string SpreadsheetFileBase = App.SettingsPath + "data";
     private CsvConfiguration _csvConfig;
 
     public class DevInfo
@@ -59,19 +59,24 @@ public sealed class DataController
         };
     }
 
-    public Task<List<(double, double)>> ReadData(DateTime day)
+    private Task<IEnumerable<DevInfo>> ReadResponseAsync()
     {
-        var stream = new StreamReader(_dataFileLocation);
+        var stream = new StreamReader(ResponseDataFileLocation);
         var csvReader = new CsvReader(stream, _csvConfig);
         var records = csvReader.GetRecords<DevInfo>();
+        return Task.FromResult(records);
+    }
+
+    public async Task<List<(double, double)>> EvaluateDataAsync(DateTime day)
+    {
+        var records = await ReadResponseAsync();
         List<(double, double)> results = new List<(double, double)>();
         
         
         var enumerator = records.GetEnumerator();
         while (enumerator.MoveNext())
         {
-            var record = enumerator.Current; 
-            if (record is not null)
+            var record = enumerator.Current;
             {
                 DateTime start = Convert.ToDateTime(record.Begin), finish = Convert.ToDateTime(record.End);
                 day =
@@ -104,7 +109,33 @@ public sealed class DataController
         }
         enumerator.Dispose();
 
-        return Task.FromResult(results);
+        return results;
+
+    }
+
+    public Task<bool> LoadIntoSpreadsheet(ref IEnumerable<DevInfo> data)
+    {
+        Table table = new Table();
+        int column = 1;
+        
+        
+        foreach (var field in typeof(DevInfo).GetFields())
+        {
+            table[column, 1] = new Cell(field.Name);
+            ++column;
+        }
+
+        Spreadsheet sheet = new Spreadsheet();
+        sheet.Tables.Add(table);
+
+        string acceptableName = SpreadsheetFileBase;
+        int fileIndex = 1;
+        while (File.Exists(acceptableName + fileIndex + ".ods"))
+            ++fileIndex;
+        
+        sheet.Save(acceptableName + fileIndex + ".ods");
+
+        return Task.FromResult(true);
 
     }
 }

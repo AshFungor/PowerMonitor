@@ -13,6 +13,7 @@
         <PackageReference Include="Avalonia.Diagnostics" Version="0.10.12" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Include="CsvHelper" Version="27.2.1" />
+        <PackageReference Include="Independentsoft.Office.Odf" Version="2.0.670" />
         <PackageReference Include="OxyPlot.Avalonia" Version="2.1.0-Preview1" />
         <PackageReference Include="OxyPlot.Core" Version="2.1.0" />
         <PackageReference Include="SimpleLogger" Version="1.0.0" />

@@ -39,7 +39,7 @@ public class UserView : UserControl
 
     private async void Call(object? sender, RoutedEventArgs args)
     {
-        var data = await Shared.DataController!.ReadData(new DateTime(2020, 1, 1, 0, 0, 0));
+        var data = await Shared.DataController!.EvaluateDataAsync(new DateTime(2020, 1, 1, 0, 0, 0));
         Shared.Plot!.AddSeries(data);
     }
 
