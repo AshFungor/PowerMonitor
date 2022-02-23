@@ -128,22 +128,22 @@ public sealed class DataController
         var workBook = new ExcelFile();
         var sheet = workBook.Worksheets.Add("parsed data");
 
-        var column = 1;
+        var column = 0;
 
 
         foreach (var property in SavingProperties)
         {
-            sheet.Cells[column, 1].Value = property.Name;
+            sheet.Cells[column, 0].Value = property.Name;
             ++column;
         }
 
-        sheet.Cells[column, 1].Value = "Effectiveness";
-        var row = 2;
+        sheet.Cells[column, 0].Value = "Effectiveness";
+        var row = 1;
         var enumerator = data.GetEnumerator();
         while (enumerator.MoveNext())
         {
             var record = enumerator.Current;
-            column = 1;
+            column = 0;
             foreach (var property in SavingProperties)
             {
                 var fieldData = property.GetValue(record);
