@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -16,6 +18,9 @@ public sealed class DataController
     // this will change a lot in the future
     private static readonly string ResponseDataFileLocation = App.SettingsPath + "response.csv";
     private static readonly string SpreadsheetFileBase = App.SettingsPath + "data";
+
+    private static readonly List<PropertyInfo> SavingProperties =
+        typeof(DevInfo).GetProperties().Where(el => !(el.Name.Contains("N") || el.Name.Contains("Voltage"))).ToList();
     private CsvConfiguration _csvConfig;
 
     public class DevInfo
@@ -113,17 +118,44 @@ public sealed class DataController
 
     }
 
-    public Task<bool> LoadIntoSpreadsheet(ref IEnumerable<DevInfo> data)
+    public async Task<bool> LoadIntoSpreadsheetAsync()
     {
+        var data = await ReadResponseAsync();
+        
         Table table = new Table();
         int column = 1;
         
         
-        foreach (var field in typeof(DevInfo).GetFields())
+        foreach (var property in SavingProperties)
         {
-            table[column, 1] = new Cell(field.Name);
+            table[column, 1] = new Cell(property.Name);
             ++column;
         }
+        table[column, 1] = new Cell("Effectiveness");
+        int row = 2;
+        var enumerator = data.GetEnumerator();
+        while (enumerator.MoveNext())
+        {
+            var record = enumerator.Current;
+            column = 1;
+            foreach (var property in SavingProperties)
+            {
+                var fieldData = property.GetValue(record);
+                if (property.Name.Equals("Begin") || property.Name.Equals("End"))
+                    table[column, row] = new Cell((string) fieldData);
+                else
+                    table[column, row] = new Cell((double) fieldData);
+                ++column;
+            }
+            double sumUPower = record.UActivePowerA + record.UActivePowerB + record.UActivePowerC;
+            if (sumUPower == 0)
+                table[column, row] = new Cell(100);
+            else
+                table[column, row] = new Cell((sumUPower - (record.ActivePowerA + record.ActivePowerB + record.ActivePowerC)) / (sumUPower) * 100);
+            ++row;
+
+        }
+        enumerator.Dispose();
 
         Spreadsheet sheet = new Spreadsheet();
         sheet.Tables.Add(table);
@@ -135,7 +167,7 @@ public sealed class DataController
         
         sheet.Save(acceptableName + fileIndex + ".ods");
 
-        return Task.FromResult(true);
+        return true;
 
     }
 }
