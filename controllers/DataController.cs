@@ -9,7 +9,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
 using SimpleLogger;
-using Independentsoft.Office.Odf;
+using GemBox.Spreadsheet;
 
 namespace PowerMonitor.controllers;
 
@@ -121,17 +121,19 @@ public sealed class DataController
     public async Task<bool> LoadIntoSpreadsheetAsync()
     {
         var data = await ReadResponseAsync();
+
+        var workBook = new ExcelFile();
+        ExcelWorksheet sheet = workBook.Worksheets.Add("parsed data");
         
-        Table table = new Table();
         int column = 1;
         
         
         foreach (var property in SavingProperties)
         {
-            table[column, 1] = new Cell(property.Name);
+            sheet.Cells[column, 1].Value = property.Name;
             ++column;
         }
-        table[column, 1] = new Cell("Effectiveness");
+        sheet.Cells[column, 1].Value = "Effectiveness";
         int row = 2;
         var enumerator = data.GetEnumerator();
         while (enumerator.MoveNext())
@@ -142,30 +144,27 @@ public sealed class DataController
             {
                 var fieldData = property.GetValue(record);
                 if (property.Name.Equals("Begin") || property.Name.Equals("End"))
-                    table[column, row] = new Cell((string) fieldData);
+                    sheet.Cells[column, row].Value = (string) fieldData;
                 else
-                    table[column, row] = new Cell((double) fieldData);
+                    sheet.Cells[column, row].Value = (double) fieldData;
                 ++column;
             }
             double sumUPower = record.UActivePowerA + record.UActivePowerB + record.UActivePowerC;
             if (sumUPower == 0)
-                table[column, row] = new Cell(100);
+                sheet.Cells[column, row].Value = 100;
             else
-                table[column, row] = new Cell((sumUPower - (record.ActivePowerA + record.ActivePowerB + record.ActivePowerC)) / (sumUPower) * 100);
+                sheet.Cells[column, row].Value = (sumUPower - (record.ActivePowerA + record.ActivePowerB + record.ActivePowerC)) / (sumUPower) * 100;
             ++row;
 
         }
         enumerator.Dispose();
-
-        Spreadsheet sheet = new Spreadsheet();
-        sheet.Tables.Add(table);
 
         string acceptableName = SpreadsheetFileBase;
         int fileIndex = 1;
         while (File.Exists(acceptableName + fileIndex + ".ods"))
             ++fileIndex;
         
-        sheet.Save(acceptableName + fileIndex + ".ods");
+        workBook.Save(acceptableName + fileIndex + ".ods");
 
         return true;
 

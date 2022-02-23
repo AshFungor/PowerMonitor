@@ -9,6 +9,7 @@ using PowerMonitor.controllers;
 using PowerMonitor.models;
 using SimpleLogger.Logging.Handlers;
 using Logger = SimpleLogger.Logger;
+using GemBox.Spreadsheet;
 
 
 namespace PowerMonitor;
@@ -52,6 +53,8 @@ public class App : Application
 
         Shared.LoginController ??= new LoginController();
         Shared.DataController ??= new DataController();
+        
+        SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
     }
 
     public override void OnFrameworkInitializationCompleted()
