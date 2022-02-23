@@ -14,20 +14,12 @@ using GemBox.Spreadsheet;
 
 namespace PowerMonitor;
 
-public class Shared
+public static class Shared
 {
     public static LoginController? LoginController;
     public static DataController? DataController;
     public static MainWindow? MainWin = null;
     public static Plot? Plot;
-
-    public static string ParseRestrictions(List<string> source)
-    {
-        var res = string.Empty;
-        foreach (var rest in source) res = res + ' ' + rest;
-
-        return res.Remove(0, 1);
-    }
 }
 
 public class App : Application
@@ -37,6 +29,8 @@ public class App : Application
 #elif LINUX && DEBUG
     // change path to your local resources
     public static string SettingsPath => $"/home/{Environment.UserName}/Documents/";
+#elif WINDOWS && DEBUG
+    public static string SettingsPath => $"C:/Users/Environment.UserName}/Documents/"
 #endif
 
 
