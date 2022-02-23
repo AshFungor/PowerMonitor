@@ -28,19 +28,25 @@ public sealed class DataController
         [Index(5)] public double ActivePowerA { get; set; }
         [Index(6)] public double ActivePowerB { get; set; }
         [Index(7)] public double ActivePowerC { get; set; }
-        [Index(8)] public double CosA { get; set; }
-        [Index(9)] public double CosB { get; set; }
-        [Index(10)] public double CosC { get; set; }
-        [Index(11)] public double UReactivePowerA { get; set; }
-        [Index(12)] public double UReactivePowerB { get; set; }
-        [Index(13)] public double UReactivePowerC { get; set; }
-        [Index(14)] public double UActivePowerA { get; set; }
-        [Index(15)] public double UActivePowerB { get; set; }
-        [Index(16)] public double UActivePowerC { get; set; }
-        [Index(17)] public double UCosA { get; set; }
-        [Index(18)] public double UCosB { get; set; }
-        [Index(19)] public double UCosC { get; set; }
-        [Index(20)] public int N { get; set; }
+        [Index(8)] public double VoltageA { get; set; }
+        [Index(9)] public double VoltageB { get; set; }
+        [Index(10)] public double VoltageC { get; set; }
+        [Index(11)] public double CosA { get; set; }
+        [Index(12)] public double CosB { get; set; }
+        [Index(13)] public double CosC { get; set; }
+        [Index(14)] public double UReactivePowerA { get; set; }
+        [Index(15)] public double UReactivePowerB { get; set; }
+        [Index(16)] public double UReactivePowerC { get; set; }
+        [Index(17)] public double UActivePowerA { get; set; }
+        [Index(18)] public double UActivePowerB { get; set; }
+        [Index(19)] public double UActivePowerC { get; set; }
+        [Index(20)] public double UVoltageA { get; set; }
+        [Index(21)] public double UVoltageB { get; set; }
+        [Index(22)] public double UVoltageC { get; set; }
+        [Index(23)] public double UCosA { get; set; }
+        [Index(24)] public double UCosB { get; set; }
+        [Index(25)] public double UCosC { get; set; }
+        [Index(26)] public int N { get; set; }
         
         
     }
