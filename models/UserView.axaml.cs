@@ -13,6 +13,7 @@ public class UserView : UserControl
     protected readonly TabControl _tabControl;
     private readonly DatePicker _datePicker;
     private readonly ComboBox _targetDevComboBox;
+    private bool _downloadingProcessOnline = false;
 
     public UserView()
     {
@@ -39,9 +40,18 @@ public class UserView : UserControl
 
     private async void Call(object? sender, RoutedEventArgs args)
     {
+        _downloadingProcessOnline = true;
         var data = await Shared.DataController!.EvaluateDataAsync(new DateTime(2020, 1, 1, 0, 0, 0));
-        await Shared.DataController!.LoadIntoSpreadsheetAsync();
         Shared.Plot!.AddSeries(data);
+        _downloadingProcessOnline = false;
+    }
+
+    private async void LoadToSpreadsheet(object? sender, RoutedEventArgs args)
+    {
+        if (!_downloadingProcessOnline)
+        {
+            await Shared.DataController!.LoadIntoSpreadsheetAsync();
+        }
     }
 
     private void InitializeComponent()
