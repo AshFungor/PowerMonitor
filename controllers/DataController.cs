@@ -174,4 +174,7 @@ public sealed class DataController
 
         return true;
     }
+
+    public bool CheckResponse() => File.Exists(ResponseDataFileLocation);
+    
 }
