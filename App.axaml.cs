@@ -24,14 +24,17 @@ public static class Shared
 
 public class App : Application
 {
+    public static string SettingsPath
 #if LINUX && !DEBUG
-        public static string SettingsPath => $"/home/{Environment.UserName}/.config/PowerMonitor";
+        => $"/home/{Environment.UserName}/.config/PowerMonitor";
 #elif LINUX && DEBUG
     // change path to your local resources
-    public static string SettingsPath => $"/home/{Environment.UserName}/Documents/";
+        => $"/home/{Environment.UserName}/Documents/";
 #elif WINDOWS && DEBUG
-    public static string SettingsPath => $"C:/Users/Environment.UserName}/Documents/"
-#endif
+        => $"C:/Users/Environment.UserName}/Documents/";
+#else
+        => string.Empty;
+#endif 
 
 
     public override void Initialize()
