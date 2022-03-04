@@ -23,7 +23,7 @@
 - [CsvHelper](https://www.nuget.org/packages/CsvHelper) (работа с *.csv файлами)
 - [OxyPlot.Avalonia](https://www.nuget.org/packages/OxyPlot.Avalonia)
   и [OxyPlot.Core](https://www.nuget.org/packages/OxyPlot.Core) (работа с графиками)
-- [SimpleLogger](https://www.nuget.org/packages/SimpleLogger) (логирование)
+- [ExtremelySimpleLogger](https://www.nuget.org/packages/ExtremelySimpleLogger) (логирование)
 - [GemBox.Spreadsheet](https://www.nuget.org/packages/GemBox.Spreadsheet) (выгрузка данных в таблицу)
 
 Выбор на эти пакеты пал в основном благодаря простоте работы с ними и их популярности.
