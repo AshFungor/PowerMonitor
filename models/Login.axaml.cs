@@ -2,7 +2,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using SimpleLogger;
+using ExtremelySimpleLogger;
 
 namespace PowerMonitor.models;
 
@@ -16,7 +16,7 @@ public class Login : UserControl
 
     public Login()
     {
-        Logger.Log<Login>("building login view");
+        Shared.Logger!.Log(LogLevel.Info, "building login view");
         InitializeComponent();
         _loginInput = this.FindControl<TextBox>("LoginInput");
         _passwordInput = this.FindControl<TextBox>("PasswordInput");
@@ -27,7 +27,7 @@ public class Login : UserControl
         _loginInput.Text = "admin";
 #endif
 
-        Logger.Log<Login>("built login view");
+        Shared.Logger!.Log(LogLevel.Info, "built login view");
     }
 
     private void TryLogin(object? sender, RoutedEventArgs args)
@@ -35,20 +35,20 @@ public class Login : UserControl
 #if !SERVER
         _password = _passwordInput.Text;
         _login = _loginInput.Text;
-        Logger.Log<Login>($"Attempting to log with ps = {_password} and login = {_login}");
+        Shared.Logger!.Log(LogLevel.Info, $"Attempting to log with ps = {_password} and login = {_login}");
         foreach (var match in Shared.LoginController!.Users!.UserInfoList!)
         {
-            Logger.Log<Login>($"checking {match.Name} with pas = {match.Password}");
+            Shared.Logger!.Log(LogLevel.Info, $"checking {match.Name} with pas = {match.Password}");
             if (match.Password != null && match.Name != null && match.Name.Equals(_login) &&
                 match.Password.Equals(_password))
             {
                 Shared.MainWin!.Content = _login.Equals("admin") ? new AdminView() : new UserView();
-                Logger.Log<Login>("Attempt successful");
+                Shared.Logger!.Log(LogLevel.Warn, "Attempt successful");
                 return;
             }
         }
 
-        Logger.Log<Login>(Logger.Level.Error, "Attempt unsuccessful");
+        Shared.Logger!.Log(LogLevel.Error, "Attempt unsuccessful");
         _logLabel.Content = "try again";
 #endif
     }

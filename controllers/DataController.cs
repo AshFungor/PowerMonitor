@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
-using SimpleLogger;
+using ExtremelySimpleLogger;
 using GemBox.Spreadsheet;
 
 namespace PowerMonitor.controllers;
@@ -175,6 +175,8 @@ public sealed class DataController
         return true;
     }
 
-    public bool CheckResponse() => File.Exists(ResponseDataFileLocation);
-    
+    public bool CheckResponse()
+    {
+        return File.Exists(ResponseDataFileLocation);
+    }
 }

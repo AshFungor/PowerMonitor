@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.IO;
 using System.Threading.Tasks;
-using SimpleLogger;
+using ExtremelySimpleLogger;
 
 namespace PowerMonitor.controllers;
 
@@ -45,19 +45,19 @@ public sealed class LoginController
         // this differs in build stage, so 
         // this is more like a debugging way
 #if !SERVER
-        Logger.Log<LoginController>("creating login controller instance, checking for logins file...");
+        Shared.Logger!.Log(LogLevel.Info, "creating login controller instance, checking for logins file...");
 
         if (File.Exists(App.SettingsPath + logins_file))
         {
-            Logger.Log<LoginController>("logins file found");
+            Shared.Logger!.Log(LogLevel.Info, "logins file found");
             var stream = new StreamReader(App.SettingsPath + logins_file);
 
-            Logger.Log<LoginController>("trying to parse logins file");
+            Shared.Logger!.Log(LogLevel.Info, "trying to parse logins file");
             ParseHandler(stream.BaseStream, false);
         }
         else
         {
-            Logger.Log<LoginController>(Logger.Level.Error, "could not find logins file, default session applied");
+            Shared.Logger!.Log(LogLevel.Error, "could not find logins file, default session applied");
             EnterDefault();
         }
 #endif
@@ -69,12 +69,12 @@ public sealed class LoginController
         var res = await ParseLoginsAsync(callingStream, write);
         if (res)
         {
-            Logger.Log<LoginController>("parse successful");
+            Shared.Logger!.Log(LogLevel.Info, "parse successful");
             return;
         }
 
-        Logger.Log<LoginController>("parse unsuccessful");
-        Logger.Log<LoginController>("entering default session");
+        Shared.Logger!.Log(LogLevel.Warn, "parse unsuccessful");
+        Shared.Logger!.Log(LogLevel.Warn, "entering default session");
         EnterDefault();
     }
 
@@ -112,7 +112,7 @@ public sealed class LoginController
     // update logins file
     public void UpdateLogins()
     {
-        Logger.Log<LoginController>("writing logins...");
+        Shared.Logger!.Log(LogLevel.Info, "writing logins...");
 
         File.WriteAllText(App.SettingsPath + logins_file, string.Empty);
         var stream = new StreamWriter(App.SettingsPath + logins_file);

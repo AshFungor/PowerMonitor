@@ -4,7 +4,7 @@ using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using SimpleLogger;
+using ExtremelySimpleLogger;
 
 namespace PowerMonitor.models;
 
@@ -55,18 +55,21 @@ public class UserView : UserControl
 
     private async void LoadToSpreadsheet(object? sender, RoutedEventArgs args)
     {
-        Logger.Log<UserView>("sending data to spreadsheet...");
+        Shared.Logger!.Log(LogLevel.Info, "sending data to spreadsheet...");
 
         if (!_downloadingProcessOnline)
         {
             if (Shared.DataController!.CheckResponse())
+            {
                 await Shared.DataController!.LoadIntoSpreadsheetAsync();
+            }
             else
             {
                 _logLabel.Content = "you must first specify time and device and then push \"get data\" button.";
                 return;
             }
         }
+
         _logLabel.Content = "data uploaded. check your file.";
     }
 
