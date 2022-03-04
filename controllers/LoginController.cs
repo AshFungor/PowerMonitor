@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.IO;
@@ -89,9 +90,17 @@ public sealed class LoginController
         {
             if (!stream.CanRead)
                 return false;
-            var readTask = Task.Run(() => Users = xmlSerializer.Deserialize(stream) as UserInfoCollection);
-            await readTask;
-            return readTask.IsCompleted;
+            try 
+            {
+                var readTask = Task.Run(() => Users = xmlSerializer.Deserialize(stream) as UserInfoCollection);
+                await readTask;
+                return readTask.IsCompleted; 
+            }
+            catch (Exception e)
+            {
+                Shared.Logger!.Log(LogLevel.Error, e.Message);
+                return false;
+            } 
         }
 
         if (!stream.CanWrite)

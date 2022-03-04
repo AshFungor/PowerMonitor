@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
@@ -31,5 +32,6 @@ public partial class MainWindow : Window
     {
         Shared.Logger!.Log(LogLevel.Info, "closing main window");
         Shared.LoginController!.UpdateLogins();
+        Thread.Sleep(100);
     }
 }
