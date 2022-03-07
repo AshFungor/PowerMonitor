@@ -7,11 +7,14 @@
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <DefineConstants>TRACE, LINUX, DEBUG</DefineConstants>
     </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)' == 'LinuxRelease' ">
+    <PropertyGroup Condition=" '$(Configuration)' == 'release-linux' ">
         <DefineConstants>LINUX, RELEASE, SERVER</DefineConstants>
     </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <DefineConstants>TRACE, LINUX</DefineConstants>
+    <PropertyGroup Condition=" '$(Configuration)' == 'release' ">
+        <DefineConstants>RELEASE, SERVER</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'release-win' ">
+        <DefineConstants>RELEASE, WIN, SERVER</DefineConstants>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="0.10.12"/>
