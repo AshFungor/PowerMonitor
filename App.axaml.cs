@@ -1,35 +1,38 @@
-#define DEBUG
-#define LINUX
-
-
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using PowerMonitor.controllers;
 using PowerMonitor.models;
-using SimpleLogger.Logging.Handlers;
-using Logger = SimpleLogger.Logger;
+using ExtremelySimpleLogger;
+using GemBox.Spreadsheet;
 
 
 namespace PowerMonitor;
 
-public class Shared
+public static class Shared
 {
     public static LoginController? LoginController;
     public static DataController? DataController;
-    public static ConfigController? ConfigController;
     public static MainWindow? MainWin = null;
+    public static Plot? Plot;
+    public static Logger? Logger;
 }
 
 public class App : Application
 {
+    public static string SettingsPath
 #if LINUX && !DEBUG
-        public static string SettingsPath => $"/home/{Environment.UserName}/.config/PowerMonitor";
+        => $"/home/{Environment.UserName}/.config/PowerMonitor";
 #elif LINUX && DEBUG
-    // change path to your local resources
-    public static string SettingsPath => $"/home/{Environment.UserName}/Documents/";
+        // change path to your local resources
+        => $"/home/{Environment.UserName}/Documents/";
+#elif WINDOWS && DEBUG
+        => $"C:/Users/Environment.UserName}/Documents/";
+#else
+        => string.Empty;
 #endif
 
 
@@ -38,12 +41,13 @@ public class App : Application
         // method loads twice, careful adding init
         AvaloniaXamlLoader.Load(this);
         File.WriteAllText(SettingsPath + "monitor.log", string.Empty);
-        Logger.LoggerHandlerManager.AddHandler(new FileLoggerHandler("monitor.log", SettingsPath));
-        
-        Shared.ConfigController ??= new ConfigController();
+
+        Shared.Logger = new Logger()
+            {Sinks = {new FileSink(SettingsPath + "monitor.log", true)}};
         Shared.LoginController ??= new LoginController();
         Shared.DataController ??= new DataController();
 
+        SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
     }
 
     public override void OnFrameworkInitializationCompleted()

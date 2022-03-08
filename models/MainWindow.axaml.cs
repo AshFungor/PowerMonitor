@@ -1,8 +1,9 @@
 using System;
+using System.Threading;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using SimpleLogger;
+using ExtremelySimpleLogger;
 
 namespace PowerMonitor.models;
 
@@ -29,7 +30,8 @@ public partial class MainWindow : Window
 
     private void OnClose(object? sender, EventArgs args)
     {
-        Logger.Log<MainWindow>("closing main window");
-        Shared.LoginController.UpdateLogins();
+        Shared.Logger!.Log(LogLevel.Info, "closing main window");
+        Shared.LoginController!.UpdateLogins();
+        Thread.Sleep(100);
     }
 }

@@ -6,7 +6,7 @@
     <oxy:Plot x:Name="Plot" Background="#C0C0D0" BorderBrush="#909090" BorderThickness="5">
         <oxy:Plot.Axes>
             <oxy:LinearAxis Position="Bottom" Maximum="24" Minimum="0" Title="hour" FontSize="24" />
-            <oxy:LinearAxis Position="Left" Maximum="100" Minimum="0" Title="effectiveness" FontSize="24" />
+            <oxy:LinearAxis Position="Left" Maximum="110" Minimum="0" Title="effectiveness" FontSize="24" />
         </oxy:Plot.Axes>
     </oxy:Plot>
 
