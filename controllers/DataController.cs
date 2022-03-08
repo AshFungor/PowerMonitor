@@ -148,9 +148,9 @@ public sealed class DataController
             {
                 var fieldData = property.GetValue(record);
                 if (property.Name.Equals("Begin") || property.Name.Equals("End"))
-                    sheet.Cells[column, row].Value = (string) fieldData;
+                    sheet.Cells[column, row].Value = (string) (fieldData ?? "NO_DATA");
                 else
-                    sheet.Cells[column, row].Value = (double) fieldData;
+                    sheet.Cells[column, row].Value = (double) (fieldData ?? 0);
                 ++column;
             }
 
