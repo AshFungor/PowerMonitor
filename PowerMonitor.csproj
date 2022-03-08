@@ -27,6 +27,7 @@
         <PackageReference Include="ExtremelySimpleLogger" Version="1.2.5"/>
     </ItemGroup>
     <ItemGroup>
+        <AvaloniaResource Include="Assets/**" />
         <Compile Update="models\Login.axaml.cs">
             <DependentUpon>Login.axaml</DependentUpon>
             <SubType>Code</SubType>

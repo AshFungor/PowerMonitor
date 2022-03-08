@@ -28,6 +28,8 @@
 
 Выбор на эти пакеты пал в основном благодаря простоте работы с ними и их популярности.
 
+Ассеты для GUI клиентской части были взяты из [Tela circle icon theme](https://github.com/vinceliuice/Tela-circle-icon-theme).
+
 В основу серверной части лёг язык [Python](https://www.python.org) и
 микрофреймворк [Flask](https://flask.palletsprojects.com/en/2.0.x/).
 
