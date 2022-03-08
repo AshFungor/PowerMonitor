@@ -11,7 +11,7 @@ public class AdminView : UserView
         enumerator.MoveNext();
         enumerator.MoveNext();
         var adminTab = enumerator.Current as TabItem;
-        adminTab.IsEnabled = true;
-        adminTab.Content = new AdminSettingsTab();
+        adminTab!.IsEnabled = true;
+        adminTab!.Content = new AdminSettingsTab();
     }
 }
