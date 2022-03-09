@@ -83,13 +83,13 @@ class Database:
         """
         self.execute(sql, parameters=(login, password, is_admin), commit=True)
 
-    def add_telemetry(self, serial_number: int, path_to_file: str, period: str):
+    def add_telemetry(self, serial_number, path_to_file, period):
         sql = """
                 INSERT INTO telemetry(serial_number, path_to_file, period) VALUES(%s, %s, %s)
                 """
         self.execute(sql, parameters=(serial_number, path_to_file, period), commit=True)
 
-    def add_complex(self, serial_number: int, user_id: int):
+    def add_complex(self, serial_number, user_id):
         sql = """
                 INSERT INTO complexes(serial_number, users) VALUES(%s, %s)
                 """
