@@ -19,11 +19,17 @@
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="1" Grid.Column="1" Margin="0 0 0 10" LastChildFill="False">
-            <Button Margin="0 0 10 0" />
-            <Button Margin="10 0 10 0" />
-            <Button Margin="10 0 10 0" />
+            <Button Margin="0 0 10 0"  x:Name="AddButton" MaxHeight="50" MaxWidth="50">
+                <Svg Path="../assets/add.svg"/>
+            </Button>
+            <Button Margin="10 0 10 0" x:Name="RemoveButton" MaxHeight="50" MaxWidth="50">
+                <Svg Path="../assets/remove.svg"/>
+            </Button>
+            <Button Margin="10 0 10 0" x:Name="EditButton" MaxHeight="50" MaxWidth="50">
+                <Svg Path="../assets/edit.svg"/>
+            </Button>
         </DockPanel>
-        <ListBox Grid.Row="2" Grid.Column="1" />
+        <ListBox Grid.Row="2" Grid.Column="1" x:Name="EntitiesListBox" />
     </Grid>
 
 </UserControl>

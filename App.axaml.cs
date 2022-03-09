@@ -16,6 +16,7 @@ public static class Shared
 {
     public static LoginController? LoginController;
     public static DataController? DataController;
+    public static NetworkController? NetworkController;
     public static MainWindow? MainWin = null;
     public static Plot? Plot;
     public static Logger? Logger;
@@ -46,6 +47,7 @@ public class App : Application
             {Sinks = {new FileSink(SettingsPath + "monitor.log", true)}};
         Shared.LoginController ??= new LoginController();
         Shared.DataController ??= new DataController();
+        Shared.NetworkController ??= new NetworkController();
 
         SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
     }
