@@ -1,10 +1,9 @@
-from typing import Union
 from werkzeug.security import generate_password_hash
 import psycopg2
 
 
 class Database:
-    def __init__(self, dbname: str, user: str, password: str, host: str):
+    def __init__(self, dbname, user, password, host):
         self.name = dbname
         self.user = user
         self.password = password
@@ -19,7 +18,7 @@ class Database:
             host=self.host
         )
 
-    def execute(self, sql: str, parameters: Union[tuple, dict, list] = None, fetchone=False, fetchall=False, commit=False):
+    def execute(self, sql, parameters, fetchone, fetchall, commit):
         parameters = tuple() if parameters is None else parameters
         connection = self.connection
         with connection.cursor() as cursor:
@@ -77,7 +76,7 @@ class Database:
         self.create_table_complexes()
         self.create_table_telemetry()
 
-    def add_user(self, login: str, password: str, is_admin: bool):
+    def add_user(self, login, password, is_admin):
         password = generate_password_hash(password)
         sql = """
         INSERT INTO users(login, password, is_admin) VALUES(%s, %s, %s)
@@ -96,7 +95,7 @@ class Database:
                 """
         self.execute(sql, parameters=(serial_number, user_id), commit=True)
 
-    def select_user_by_login(self, login: str) -> tuple:
+    def select_user_by_login(self, login):
         sql = """
         SELECT * FROM users
         WHERE login = %s
@@ -106,4 +105,3 @@ class Database:
     def select_all_users(self):
         sql = "SELECT * FROM users"
         return self.execute(sql, fetchall=True)
-
