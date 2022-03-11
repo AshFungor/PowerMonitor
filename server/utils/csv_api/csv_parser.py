@@ -12,15 +12,14 @@ def parse_date(date):
 
 
 def parse_row(row):
-    record = row.strip().split(';')
+    record = row.decode('utf-8').strip().split(';')
     converting_functions = [parse_date] * 2 + [float] * 24 + [int]
     record = [function(value) if value != '' else None
               for value, function in zip(record, converting_functions)]
     return record
 
 
-def parse_csv(path):
+def parse_csv(csv_file):
     """declare the path to csv file in to convert csv-readable format into database-readable format"""
-    with open(path, newline='') as csv_file:
-        table = [parse_row(row) for row in csv_file]
+    table = [parse_row(row) for row in csv_file.readlines()]
     return table
