@@ -1,4 +1,4 @@
-from flask import Flask, make_response, send_file, request
+from flask import Flask, make_response, request
 
 from server.utils.database_api.database import Database
 from server.data.config import NAME, USER, PASSWORD, HOST
@@ -12,17 +12,18 @@ database = Database(NAME, USER, PASSWORD, HOST)
 
 @app.route('/get-data', methods=['GET'])
 def get_data():
-    json = request.json
-    request_ = parse_user_info(json)
-    user = User(*request_)
-    response = make_response(send_file(r'C:\Users\Zero\PycharmProjects\postgra\files\1607582294.csv'))
-    response.headers["Content-type"] = "text/csv"
-    response.status_code = 200
-    return response
+    ...
+    # json = request.json
+    # request_ = parse_user_info(json)
+    # user = User(*request_)
+    # response = make_response(send_file(''))
+    # response.headers["Content-type"] = "text/csv"
+    # response.status_code = 200
+    # return response
 
 
 @app.route('/create-user', methods=['POST'])
-def create_user():  # login: str, password: str, is_admin: bool
+def create_user():
     request_ = parse_user_info(request.json)
     user = User(*request_['user'])
     for serial_number in request_['complexes']:
@@ -36,7 +37,6 @@ def create_user():  # login: str, password: str, is_admin: bool
 
 @app.route('/send-telemetry/<int:serial_number>', methods=['POST'])
 def send_telemetry(serial_number: int):
-    print(serial_number)
     request_ = request.files['table']
     csv_file = request_
     table = parse_csv(csv_file)
