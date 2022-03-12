@@ -1,5 +1,5 @@
 from typing import Union, Optional, Tuple
-from server.utils.database_api.tables import User, Complex, Telemetry
+from utils.database_api.tables import User, Complex, Telemetry
 
 
 class Database:

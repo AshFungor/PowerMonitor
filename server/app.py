@@ -1,10 +1,10 @@
 from flask import Flask, make_response, request
 
-from server.utils.database_api.database import Database
-from server.data.config import NAME, USER, PASSWORD, HOST
-from server.utils.csv_api.csv_parser import parse_csv
-from server.utils.request_parser import parse_user_info
-from server.utils.database_api.tables import User, Telemetry, Complex
+from data.config import NAME, USER, PASSWORD, HOST
+from utils.database_api.database import Database
+from utils.csv_api.csv_parser import parse_csv
+from utils.request_parser import parse_user_info
+from utils.database_api.tables import User, Telemetry, Complex
 
 app = Flask(__name__)
 database = Database(NAME, USER, PASSWORD, HOST)

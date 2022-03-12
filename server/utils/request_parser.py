@@ -1,4 +1,4 @@
-from typing import Dict, Tuple, Union, List, Optional, Any
+from typing import Dict, Tuple, Union, List, Optional
 
 
 UserData = Dict[str, Union[str, bool, List[Optional[int]]]]
