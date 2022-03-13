@@ -10,35 +10,46 @@ namespace PowerMonitor.models;
 
 public class AdminSettingsTab : UserControl
 {
+    private readonly ListBox _entities;
     public AdminSettingsTab()
     {
         InitializeComponent();
 
         var entities = this.Find<ListBox>("EntitiesListBox");
+        _entities = entities;
         entities.SelectionMode = SelectionMode.Single;
         var items = new List<Grid>();
+        int index = 0;
         foreach (var entity in Shared.LoginController!.Users!.UserInfoList!)
         {
             if (entity.Restrictions is null) entity.Restrictions = new List<string>();
             var item = new Grid
             {
                 ColumnDefinitions = new ColumnDefinitions(),
-                RowDefinitions = new RowDefinitions()
+                RowDefinitions = new RowDefinitions(),
+                Name = $"item-{index++}"
             };
 
             var name = new TextBox
             {
                 IsReadOnly = true, Height = 50, Text = entity.Name, FontSize = 24,
                 Margin = Thickness.Parse("0 0 10 0"), Background = Brushes.Transparent,
-                BorderThickness = Thickness.Parse("0")
+                BorderThickness = Thickness.Parse("0"), Name = item.Name + "-name"
             };
             var password = new TextBox
             {
                 IsReadOnly = true, Height = 50, Text = entity.Password, FontSize = 24,
                 Margin = Thickness.Parse("10 0 10 0"), Background = Brushes.Transparent,
-                BorderThickness = Thickness.Parse("0")
+                BorderThickness = Thickness.Parse("0"), Name = item.Name + "-password"
+            };
+            var isAdmin = new CheckBox()
+            {
+                FontSize = 30,
+                Margin = Thickness.Parse("10 0 10 0"), Background = Brushes.Transparent,
+                Name = item.Name + "-isAdmin"
             };
 
+            item.ColumnDefinitions.Add(new ColumnDefinition());
             item.ColumnDefinitions.Add(new ColumnDefinition());
             item.ColumnDefinitions.Add(new ColumnDefinition());
             item.ColumnDefinitions.Add(new ColumnDefinition(2, GridUnitType.Star));
@@ -47,8 +58,10 @@ public class AdminSettingsTab : UserControl
 
             item.Children.Add(name);
             item.Children.Add(password);
+            item.Children.Add(isAdmin);
             Grid.SetColumn(name, 0);
             Grid.SetColumn(password, 1);
+            Grid.SetColumn(isAdmin, 2);
 
             item.PointerEnter += MouseOver;
             item.PointerLeave += MouseLeft;
@@ -78,12 +91,12 @@ public class AdminSettingsTab : UserControl
                 ++row;
             }
 
-            var expander = new Expander {FontSize = 24, BorderThickness = Thickness.Parse("0")};
+            var expander = new Expander {FontSize = 24, BorderThickness = Thickness.Parse("0"), Name = entities.Name + "-expander"};
             expander.Header = "Restrictions";
             expander.HorizontalAlignment = HorizontalAlignment.Center;
             expander.Content = contents;
             item.Children.Add(expander);
-            Grid.SetColumn(expander, 3);
+            Grid.SetColumn(expander, 4);
             items.Add(item);
         }
 
@@ -98,7 +111,9 @@ public class AdminSettingsTab : UserControl
     private void MouseOver(object? sender, EventArgs args)
     {
         var element = sender as Grid;
-        element!.Background = new SolidColorBrush(Color.Parse("#1c226c"));
+        var activeElement = _entities.SelectedItem as Grid;
+        if (element!.Name != (activeElement?.Name ?? string.Empty))
+            element!.Background = new SolidColorBrush(Color.Parse("#1c226c"));
     }
 
     private void MouseLeft(object? sender, EventArgs args)
@@ -106,4 +121,5 @@ public class AdminSettingsTab : UserControl
         var element = sender as Grid;
         element!.Background = Brushes.Transparent;
     }
+
 }
