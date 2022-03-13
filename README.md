@@ -25,6 +25,7 @@
   и [OxyPlot.Core](https://www.nuget.org/packages/OxyPlot.Core) (работа с графиками)
 - [ExtremelySimpleLogger](https://www.nuget.org/packages/ExtremelySimpleLogger) (логирование)
 - [GemBox.Spreadsheet](https://www.nuget.org/packages/GemBox.Spreadsheet) (выгрузка данных в таблицу)
+- [Avalonia.Svg.Skia](https://www.nuget.org/packages/Avalonia.Svg) (отображение .svg изображений)
 
 Выбор на эти пакеты пал в основном благодаря простоте работы с ними и их популярности.
 
@@ -63,7 +64,8 @@ _(commented by Ash_Fungor)_
 
 ![](github/plot-view-screenshot.png "графики")
 ![](github/login-screenshot.png "вход")
-> скриншоты ранней версии, основной клиент еще в разработке
+![](github/admin-tab-screenshot.png "вкладка администратора")
+> возможны небольшие изменения в GUi клиента
 
 _(commented by Ash_Fungor)_
 ***
