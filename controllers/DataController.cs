@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
-using ExtremelySimpleLogger;
 using GemBox.Spreadsheet;
 
 namespace PowerMonitor.controllers;
@@ -22,38 +21,7 @@ public sealed class DataController
     private static readonly List<PropertyInfo> SavingProperties =
         typeof(DevInfo).GetProperties().Where(el => !(el.Name.Contains("N") || el.Name.Contains("Voltage"))).ToList();
 
-    private CsvConfiguration _csvConfig;
-
-    public class DevInfo
-    {
-        [Index(0)] public string? Begin { get; set; }
-        [Index(1)] public string? End { get; set; }
-        [Index(2)] public double ReactivePowerA { get; set; }
-        [Index(3)] public double ReactivePowerB { get; set; }
-        [Index(4)] public double ReactivePowerC { get; set; }
-        [Index(5)] public double ActivePowerA { get; set; }
-        [Index(6)] public double ActivePowerB { get; set; }
-        [Index(7)] public double ActivePowerC { get; set; }
-        [Index(8)] public double VoltageA { get; set; }
-        [Index(9)] public double VoltageB { get; set; }
-        [Index(10)] public double VoltageC { get; set; }
-        [Index(11)] public double CosA { get; set; }
-        [Index(12)] public double CosB { get; set; }
-        [Index(13)] public double CosC { get; set; }
-        [Index(14)] public double UReactivePowerA { get; set; }
-        [Index(15)] public double UReactivePowerB { get; set; }
-        [Index(16)] public double UReactivePowerC { get; set; }
-        [Index(17)] public double UActivePowerA { get; set; }
-        [Index(18)] public double UActivePowerB { get; set; }
-        [Index(19)] public double UActivePowerC { get; set; }
-        [Index(20)] public double UVoltageA { get; set; }
-        [Index(21)] public double UVoltageB { get; set; }
-        [Index(22)] public double UVoltageC { get; set; }
-        [Index(23)] public double UCosA { get; set; }
-        [Index(24)] public double UCosB { get; set; }
-        [Index(25)] public double UCosC { get; set; }
-        [Index(26)] public int N { get; set; }
-    }
+    private readonly CsvConfiguration _csvConfig;
 
     public DataController()
     {
@@ -178,5 +146,36 @@ public sealed class DataController
     public bool CheckResponse()
     {
         return File.Exists(ResponseDataFileLocation);
+    }
+
+    public class DevInfo
+    {
+        [Index(0)] public string? Begin { get; set; }
+        [Index(1)] public string? End { get; set; }
+        [Index(2)] public double ReactivePowerA { get; set; }
+        [Index(3)] public double ReactivePowerB { get; set; }
+        [Index(4)] public double ReactivePowerC { get; set; }
+        [Index(5)] public double ActivePowerA { get; set; }
+        [Index(6)] public double ActivePowerB { get; set; }
+        [Index(7)] public double ActivePowerC { get; set; }
+        [Index(8)] public double VoltageA { get; set; }
+        [Index(9)] public double VoltageB { get; set; }
+        [Index(10)] public double VoltageC { get; set; }
+        [Index(11)] public double CosA { get; set; }
+        [Index(12)] public double CosB { get; set; }
+        [Index(13)] public double CosC { get; set; }
+        [Index(14)] public double UReactivePowerA { get; set; }
+        [Index(15)] public double UReactivePowerB { get; set; }
+        [Index(16)] public double UReactivePowerC { get; set; }
+        [Index(17)] public double UActivePowerA { get; set; }
+        [Index(18)] public double UActivePowerB { get; set; }
+        [Index(19)] public double UActivePowerC { get; set; }
+        [Index(20)] public double UVoltageA { get; set; }
+        [Index(21)] public double UVoltageB { get; set; }
+        [Index(22)] public double UVoltageC { get; set; }
+        [Index(23)] public double UCosA { get; set; }
+        [Index(24)] public double UCosB { get; set; }
+        [Index(25)] public double UCosC { get; set; }
+        [Index(26)] public int N { get; set; }
     }
 }

@@ -1,18 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
-using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media;
 
 namespace PowerMonitor.models;
 
-public partial class AdminSettingsTab : UserControl
+public class AdminSettingsTab : UserControl
 {
     public AdminSettingsTab()
     {
@@ -20,7 +16,7 @@ public partial class AdminSettingsTab : UserControl
 
         var entities = this.Find<ListBox>("EntitiesListBox");
         entities.SelectionMode = SelectionMode.Single;
-        List<Grid> items = new List<Grid>();
+        var items = new List<Grid>();
         foreach (var entity in Shared.LoginController!.Users!.UserInfoList!)
         {
             if (entity.Restrictions is null) entity.Restrictions = new List<string>();
@@ -30,19 +26,25 @@ public partial class AdminSettingsTab : UserControl
                 RowDefinitions = new RowDefinitions()
             };
 
-            TextBox name = new TextBox()
-            { IsReadOnly = true, Height = 50, Text = entity.Name, FontSize = 24, 
-                Margin = Thickness.Parse("0 0 10 0"), Background = Brushes.Transparent, BorderThickness = Thickness.Parse("0") };
-            TextBox password = new TextBox() 
-            { IsReadOnly = true, Height = 50, Text = entity.Password, FontSize = 24, 
-                Margin = Thickness.Parse("10 0 10 0"), Background = Brushes.Transparent, BorderThickness = Thickness.Parse("0") };
+            var name = new TextBox
+            {
+                IsReadOnly = true, Height = 50, Text = entity.Name, FontSize = 24,
+                Margin = Thickness.Parse("0 0 10 0"), Background = Brushes.Transparent,
+                BorderThickness = Thickness.Parse("0")
+            };
+            var password = new TextBox
+            {
+                IsReadOnly = true, Height = 50, Text = entity.Password, FontSize = 24,
+                Margin = Thickness.Parse("10 0 10 0"), Background = Brushes.Transparent,
+                BorderThickness = Thickness.Parse("0")
+            };
 
             item.ColumnDefinitions.Add(new ColumnDefinition());
             item.ColumnDefinitions.Add(new ColumnDefinition());
             item.ColumnDefinitions.Add(new ColumnDefinition(2, GridUnitType.Star));
             item.ColumnDefinitions.Add(new ColumnDefinition());
-            
-            
+
+
             item.Children.Add(name);
             item.Children.Add(password);
             Grid.SetColumn(name, 0);
@@ -51,20 +53,20 @@ public partial class AdminSettingsTab : UserControl
             item.PointerEnter += MouseOver;
             item.PointerLeave += MouseLeft;
 
-            Grid contents = new Grid()
+            var contents = new Grid
             {
                 ColumnDefinitions = new ColumnDefinitions(),
                 RowDefinitions = new RowDefinitions()
             };
             contents.ColumnDefinitions.Add(new ColumnDefinition());
             contents.ColumnDefinitions.Add(new ColumnDefinition());
-            int row = 0;
-            
+            var row = 0;
+
             foreach (var dev in Shared.NetworkController!.devs)
             {
-                var devNumber = new Label() { Content = dev, FontSize = 24 };
-                var isAllowed = new CheckBox() { IsChecked = entity.Restrictions.Contains(dev.ToString()), FontSize = 24 };
-                
+                var devNumber = new Label {Content = dev, FontSize = 24};
+                var isAllowed = new CheckBox {IsChecked = entity.Restrictions.Contains(dev.ToString()), FontSize = 24};
+
                 contents.RowDefinitions.Add(new RowDefinition());
 
                 contents.Children.Add(devNumber);
@@ -74,10 +76,9 @@ public partial class AdminSettingsTab : UserControl
                 Grid.SetRow(isAllowed, row);
                 Grid.SetRow(devNumber, row);
                 ++row;
-
             }
 
-            Expander expander = new Expander() { FontSize = 24, BorderThickness = Thickness.Parse("0") };
+            var expander = new Expander {FontSize = 24, BorderThickness = Thickness.Parse("0")};
             expander.Header = "Restrictions";
             expander.HorizontalAlignment = HorizontalAlignment.Center;
             expander.Content = contents;

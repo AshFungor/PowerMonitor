@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -10,13 +9,13 @@ namespace PowerMonitor.models;
 
 public class UserView : UserControl
 {
-    private readonly UserControl _plotControl;
-    protected readonly TabControl _tabControl;
-    private readonly DatePicker _startDatePicker;
     private readonly DatePicker _endDatePicker;
-    private readonly ComboBox _targetDevComboBox;
     private readonly Label _logLabel;
-    private bool _downloadingProcessOnline = false;
+    private readonly UserControl _plotControl;
+    private readonly DatePicker _startDatePicker;
+    protected readonly TabControl _tabControl;
+    private readonly ComboBox _targetDevComboBox;
+    private bool _downloadingProcessOnline;
 
     public UserView()
     {
@@ -31,14 +30,10 @@ public class UserView : UserControl
 
 #if DEBUG && !SERVER
         var list = new List<ComboBoxItem>();
-        list.Add(new ComboBoxItem()
-            {Content = "choose me"});
-        list.Add(new ComboBoxItem()
-            {Content = "choose me"});
-        list.Add(new ComboBoxItem()
-            {Content = "choose me"});
-        list.Add(new ComboBoxItem()
-            {Content = "choose me"});
+        list.Add(new ComboBoxItem {Content = "choose me"});
+        list.Add(new ComboBoxItem {Content = "choose me"});
+        list.Add(new ComboBoxItem {Content = "choose me"});
+        list.Add(new ComboBoxItem {Content = "choose me"});
         _targetDevComboBox.Items = list;
 #endif
     }

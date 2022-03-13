@@ -4,7 +4,7 @@ namespace PowerMonitor.models;
 
 public class AdminView : UserView
 {
-    public AdminView() : base()
+    public AdminView()
     {
         var enumerator = _tabControl.Items.GetEnumerator();
         // so nice...

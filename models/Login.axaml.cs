@@ -1,4 +1,3 @@
-using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -9,10 +8,10 @@ namespace PowerMonitor.models;
 public class Login : UserControl
 {
     private readonly TextBox _loginInput;
-    private readonly TextBox _passwordInput;
     private readonly Label _logLabel;
-    private string _password = string.Empty;
+    private readonly TextBox _passwordInput;
     private string _login = string.Empty;
+    private string _password = string.Empty;
 
     public Login()
     {

@@ -1,14 +1,12 @@
+using System;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using PowerMonitor.controllers;
-using PowerMonitor.models;
 using ExtremelySimpleLogger;
 using GemBox.Spreadsheet;
-
+using PowerMonitor.controllers;
+using PowerMonitor.models;
 
 namespace PowerMonitor;
 
@@ -43,8 +41,7 @@ public class App : Application
         AvaloniaXamlLoader.Load(this);
         File.WriteAllText(SettingsPath + "monitor.log", string.Empty);
 
-        Shared.Logger = new Logger()
-            {Sinks = {new FileSink(SettingsPath + "monitor.log", true)}};
+        Shared.Logger = new Logger {Sinks = {new FileSink(SettingsPath + "monitor.log", true)}};
         Shared.LoginController ??= new LoginController();
         Shared.DataController ??= new DataController();
         Shared.NetworkController ??= new NetworkController();

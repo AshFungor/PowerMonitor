@@ -4,12 +4,6 @@ namespace PowerMonitor.controllers;
 
 public class NetworkController
 {
-    public List<int> devs
-    {
-        private set;
-        get;
-    }
-        = new List<int>() {123, 111, 345}; 
+    public List<int> devs { get; } = new() {123, 111, 345};
     // example
-
 }
