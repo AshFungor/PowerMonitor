@@ -40,19 +40,20 @@ public class AdminSettingsTab : UserControl
             {
                 IsReadOnly = true, Height = 50, Text = entity.Password, FontSize = 24,
                 Margin = Thickness.Parse("10 0 10 0"), Background = Brushes.Transparent,
-                BorderThickness = Thickness.Parse("0"), Name = item.Name + "-password"
+                BorderThickness = Thickness.Parse("0"), Name = item.Name + "-password", 
+                HorizontalAlignment = HorizontalAlignment.Center
             };
             var isAdmin = new CheckBox()
             {
                 FontSize = 30,
                 Margin = Thickness.Parse("10 0 10 0"), Background = Brushes.Transparent,
-                Name = item.Name + "-isAdmin"
+                Name = item.Name + "-isAdmin", HorizontalAlignment = HorizontalAlignment.Center
             };
 
             item.ColumnDefinitions.Add(new ColumnDefinition());
             item.ColumnDefinitions.Add(new ColumnDefinition());
             item.ColumnDefinitions.Add(new ColumnDefinition());
-            item.ColumnDefinitions.Add(new ColumnDefinition(2, GridUnitType.Star));
+            item.ColumnDefinitions.Add(new ColumnDefinition());
             item.ColumnDefinitions.Add(new ColumnDefinition());
 
 

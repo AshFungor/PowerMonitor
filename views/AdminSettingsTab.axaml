@@ -35,12 +35,12 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" FontSize="24">User</Label>
-            <Label Grid.Column="1" FontSize="24" Margin="20 0 0 0">Password</Label>
-            <Label Grid.Column="2" FontSize="24">Admin Status</Label>
+            <Label Grid.Column="0" FontSize="24" HorizontalAlignment="Left">User</Label>
+            <Label Grid.Column="1" FontSize="24" HorizontalAlignment="Center">Password</Label>
+            <Label Grid.Column="2" FontSize="24" HorizontalAlignment="Center">Admin Status</Label>
             <Label Grid.Column="4" FontSize="24" HorizontalAlignment="Center">Restrictions</Label>
         </Grid>
         <ListBox Grid.Row="3" Grid.Column="1" x:Name="EntitiesListBox" />
