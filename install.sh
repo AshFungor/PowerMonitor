@@ -28,7 +28,7 @@ if [[ $SOURCE ]]; then
     printf "for source see: https://github.com/AshFungor/PowerMonitor\n"
 
 
-    if [[ "$(whereis dotnet)" = *"dotnet" && "$(dotnet --version)" = "5."* ]]; then
+    if [[ "$(whereis dotnet)" = *"dotnet" && "$(dotnet --version)" = "6."* ]]; then
 
         printf "dependencies are satisfied. proceeding with installation...\n"
         printf "where to install? dir: "
