@@ -33,7 +33,7 @@ if [[ $SOURCE ]]; then
             read -r SYSTEM
         done
         [[ "$SYSTEM" == "1" ]] && SYSTEM="linux" || SYSTEM="win"
-        dotnet build --output "$TARGET_DIR/build" -c "release_$SYSTEM"
+        dotnet publish --output "$TARGET_DIR/build" -c "release_$SYSTEM" -r "$SYSTEM-x64" -p:PublishSingleFile=true --self-contained
         mv "$TARGET_DIR/build" "$TARGET_DIR/PowerMonitor"
         printf "to run a project, use the command:\n"
         printf "dotnet $TARGET_DIR/PowerMonitor/PowerMonitor.dll\n"
