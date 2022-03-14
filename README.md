@@ -65,7 +65,7 @@ _(commented by Ash_Fungor)_
 ![](github/plot-view-screenshot.png "графики")
 ![](github/login-screenshot.png "вход")
 ![](github/admin-tab-screenshot.png "вкладка администратора")
-> возможны небольшие изменения в GUi клиента
+> возможны небольшие изменения в GUI клиента
 
 _(commented by Ash_Fungor)_
 ***
