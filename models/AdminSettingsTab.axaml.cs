@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
@@ -11,6 +12,8 @@ namespace PowerMonitor.models;
 public class AdminSettingsTab : UserControl
 {
     private readonly ListBox _entities;
+    private Grid? _editedItem = null;
+
     public AdminSettingsTab()
     {
         InitializeComponent();
@@ -19,35 +22,33 @@ public class AdminSettingsTab : UserControl
         _entities = entities;
         entities.SelectionMode = SelectionMode.Single;
         var items = new List<Grid>();
-        int index = 0;
         foreach (var entity in Shared.LoginController!.Users!.UserInfoList!)
         {
             if (entity.Restrictions is null) entity.Restrictions = new List<string>();
             var item = new Grid
             {
                 ColumnDefinitions = new ColumnDefinitions(),
-                RowDefinitions = new RowDefinitions(),
-                Name = $"item-{index++}"
+                RowDefinitions = new RowDefinitions()
             };
 
             var name = new TextBox
             {
                 IsReadOnly = true, Height = 50, Text = entity.Name, FontSize = 24,
                 Margin = Thickness.Parse("0 0 10 0"), Background = Brushes.Transparent,
-                BorderThickness = Thickness.Parse("0"), Name = item.Name + "-name"
+                BorderThickness = Thickness.Parse("0"), IsEnabled = false
             };
             var password = new TextBox
             {
                 IsReadOnly = true, Height = 50, Text = entity.Password, FontSize = 24,
                 Margin = Thickness.Parse("10 0 10 0"), Background = Brushes.Transparent,
-                BorderThickness = Thickness.Parse("0"), Name = item.Name + "-password", 
-                HorizontalAlignment = HorizontalAlignment.Center
+                BorderThickness = Thickness.Parse("0"),
+                HorizontalAlignment = HorizontalAlignment.Center, IsEnabled = false
             };
-            var isAdmin = new CheckBox()
+            var isAdmin = new CheckBox
             {
-                FontSize = 30,
+                FontSize = 30, IsEnabled = false, IsChecked = entity.IsAdmin,
                 Margin = Thickness.Parse("10 0 10 0"), Background = Brushes.Transparent,
-                Name = item.Name + "-isAdmin", HorizontalAlignment = HorizontalAlignment.Center
+                HorizontalAlignment = HorizontalAlignment.Center
             };
 
             item.ColumnDefinitions.Add(new ColumnDefinition());
@@ -79,7 +80,8 @@ public class AdminSettingsTab : UserControl
             foreach (var dev in Shared.NetworkController!.devs)
             {
                 var devNumber = new Label {Content = dev, FontSize = 24};
-                var isAllowed = new CheckBox {IsChecked = entity.Restrictions.Contains(dev.ToString()), FontSize = 24};
+                var isAllowed = new CheckBox
+                    {IsChecked = entity.Restrictions.Contains(dev.ToString()), FontSize = 24, IsEnabled = false};
 
                 contents.RowDefinitions.Add(new RowDefinition());
 
@@ -92,7 +94,7 @@ public class AdminSettingsTab : UserControl
                 ++row;
             }
 
-            var expander = new Expander {FontSize = 24, BorderThickness = Thickness.Parse("0"), Name = entities.Name + "-expander"};
+            var expander = new Expander {FontSize = 24, BorderThickness = Thickness.Parse("0")};
             expander.Header = "Restrictions";
             expander.HorizontalAlignment = HorizontalAlignment.Center;
             expander.Content = contents;
@@ -123,4 +125,19 @@ public class AdminSettingsTab : UserControl
         element!.Background = Brushes.Transparent;
     }
 
+    private void EnterEdit(object? sender, RoutedEventArgs args)
+    {
+        if (_entities.SelectedItem is not null) ChangeStateRec((_entities.SelectedItem as Grid)!);
+    }
+
+    private void ChangeStateRec(Control control)
+    {
+        if (control is Expander expander)
+            foreach (var child in (expander.Content as Grid)!.Children)
+                ChangeStateRec((child as Control)!);
+        else if (control is Panel panel)
+            foreach (var child in panel.Children)
+                ChangeStateRec((child as Control)!);
+        else if (control is not Expander or Label) control.IsEnabled = !control.IsEnabled;
+    }
 }

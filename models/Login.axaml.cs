@@ -41,7 +41,7 @@ public class Login : UserControl
             if (match.Password != null && match.Name != null && match.Name.Equals(_login) &&
                 match.Password.Equals(_password))
             {
-                Shared.MainWin!.Content = _login.Equals("admin") ? new AdminView() : new UserView();
+                Shared.MainWin!.Content = match.IsAdmin ? new AdminView() : new UserView();
                 Shared.Logger!.Log(LogLevel.Warn, "Attempt successful");
                 return;
             }

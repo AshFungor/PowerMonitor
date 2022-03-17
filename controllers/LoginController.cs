@@ -7,6 +7,7 @@ using ExtremelySimpleLogger;
 
 namespace PowerMonitor.controllers;
 
+// login controller
 public sealed class LoginController
 {
     private static readonly string logins_file = ".logins.xml";
@@ -86,7 +87,7 @@ public sealed class LoginController
     // not to break app on every parse fail, there always should be a way out
     private void EnterDefault()
     {
-        var admin = new UserInfo("admin", "password", new List<string>());
+        var admin = new UserInfo("admin", "password", new List<string>(), true);
         var userColl = new UserInfoCollection {UserInfoList = new[] {admin}};
         Users = userColl;
     }
@@ -104,11 +105,12 @@ public sealed class LoginController
     // classes for parsing
     public sealed class UserInfo
     {
-        public UserInfo(string name, string password, List<string> rests)
+        public UserInfo(string name, string password, List<string> rests, bool isAdmin)
         {
             Name = name;
             Password = password;
             Restrictions = rests;
+            IsAdmin = isAdmin;
         }
 
         public UserInfo()
@@ -116,13 +118,16 @@ public sealed class LoginController
             Name = null;
             Password = null;
             Restrictions = null;
+            IsAdmin = false;
         }
 
         [XmlArrayAttribute] public List<string>? Restrictions { get; set; }
         public string? Password { get; set; }
         public string? Name { get; set; }
+        public bool IsAdmin { get; set; }
     }
 
+    // collection of users
     public sealed class UserInfoCollection
     {
         [XmlArrayAttribute] public UserInfo[]? UserInfoList { get; set; }

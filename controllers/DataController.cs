@@ -14,7 +14,7 @@ namespace PowerMonitor.controllers;
 
 public sealed class DataController
 {
-    // this will change a lot in the future
+    // paths to spreadsheet and response from server files 
     private static readonly string ResponseDataFileLocation = App.SettingsPath + "response.csv";
     private static readonly string SpreadsheetFileBase = App.SettingsPath + "data";
 
@@ -33,6 +33,7 @@ public sealed class DataController
 
     private Task<IEnumerable<DevInfo>> ReadResponseAsync()
     {
+        // read response from server, mostly runs async
         var stream = new StreamReader(ResponseDataFileLocation);
         var csvReader = new CsvReader(stream, _csvConfig);
         var records = csvReader.GetRecords<DevInfo>();
@@ -44,7 +45,7 @@ public sealed class DataController
         var records = await ReadResponseAsync();
         var results = new List<(double, double)>();
 
-
+        // parsing response
         var enumerator = records.GetEnumerator();
         while (enumerator.MoveNext())
         {
@@ -91,6 +92,7 @@ public sealed class DataController
 
     public async Task<bool> LoadIntoSpreadsheetAsync()
     {
+        // save to *.odt file current data, actually it is just last response from server
         var data = await ReadResponseAsync();
 
         var workBook = new ExcelFile();
@@ -145,9 +147,11 @@ public sealed class DataController
 
     public bool CheckResponse()
     {
+        // check if server ever sent something and there is a file to work with
         return File.Exists(ResponseDataFileLocation);
     }
 
+    // hell called response from server file line
     public class DevInfo
     {
         [Index(0)] public string? Begin { get; set; }
