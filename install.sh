@@ -5,6 +5,14 @@
 # is project going to be build from source?
 SOURCE=true
 # in release versions it is set to false
+BUILD_FAIL=false
+
+
+on_buildfail() {
+    printf "build failed\n"
+    printf "something wrong with the sript?\n"
+    $BUILD_FAIL=true
+}
 
 if [[ $SOURCE ]]; then
 
@@ -33,7 +41,9 @@ if [[ $SOURCE ]]; then
             read -r SYSTEM
         done
         [[ "$SYSTEM" == "1" ]] && SYSTEM="linux" || SYSTEM="win"
-        dotnet build --output "$TARGET_DIR/build" -c "release_$SYSTEM"
+        dotnet publish --output "$TARGET_DIR/build" -c "release_$SYSTEM" -r "$SYSTEM-x64" -p:PublishSingleFile=true --self-contained || on_buildfail
+        if [[ $BUILD_FAIL ]]; then exit 1 
+        fi
         mv "$TARGET_DIR/build" "$TARGET_DIR/PowerMonitor"
         printf "to run a project, use the command:\n"
         printf "dotnet $TARGET_DIR/PowerMonitor/PowerMonitor.dll\n"

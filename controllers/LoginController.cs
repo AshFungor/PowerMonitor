@@ -1,44 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
 using System.IO;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using ExtremelySimpleLogger;
 
 namespace PowerMonitor.controllers;
 
+// login controller
 public sealed class LoginController
 {
-    private static string logins_file = ".logins.xml";
-
-    public UserInfoCollection? Users { get; set; }
-
-    // classes for parsing
-    public sealed class UserInfo
-    {
-        [XmlArrayAttribute] public List<string>? Restrictions { get; set; }
-        public string? Password { get; set; }
-        public string? Name { get; set; }
-
-        public UserInfo(string name, string password, List<string> rests)
-        {
-            Name = name;
-            Password = password;
-            Restrictions = rests;
-        }
-
-        public UserInfo()
-        {
-            Name = null;
-            Password = null;
-            Restrictions = null;
-        }
-    }
-
-    public sealed class UserInfoCollection
-    {
-        [XmlArrayAttribute] public UserInfo[]? UserInfoList { get; set; }
-    }
+    private static readonly string logins_file = ".logins.xml";
 
     public LoginController()
     {
@@ -63,6 +35,8 @@ public sealed class LoginController
         }
 #endif
     }
+
+    public UserInfoCollection? Users { get; set; }
 
     // handling for async parsing
     private async void ParseHandler(Stream callingStream, bool write)
@@ -90,17 +64,17 @@ public sealed class LoginController
         {
             if (!stream.CanRead)
                 return false;
-            try 
+            try
             {
                 var readTask = Task.Run(() => Users = xmlSerializer.Deserialize(stream) as UserInfoCollection);
                 await readTask;
-                return readTask.IsCompleted; 
+                return readTask.IsCompleted;
             }
             catch (Exception e)
             {
                 Shared.Logger!.Log(LogLevel.Error, e.Message);
                 return false;
-            } 
+            }
         }
 
         if (!stream.CanWrite)
@@ -113,8 +87,8 @@ public sealed class LoginController
     // not to break app on every parse fail, there always should be a way out
     private void EnterDefault()
     {
-        var admin = new UserInfo("admin", "password", new List<string>());
-        var userColl = new UserInfoCollection() {UserInfoList = new[] {admin}};
+        var admin = new UserInfo("admin", "password", new List<string>(), true);
+        var userColl = new UserInfoCollection {UserInfoList = new[] {admin}};
         Users = userColl;
     }
 
@@ -126,5 +100,36 @@ public sealed class LoginController
         File.WriteAllText(App.SettingsPath + logins_file, string.Empty);
         var stream = new StreamWriter(App.SettingsPath + logins_file);
         ParseHandler(stream.BaseStream, true);
+    }
+
+    // classes for parsing
+    public sealed class UserInfo
+    {
+        public UserInfo(string name, string password, List<string> rests, bool isAdmin)
+        {
+            Name = name;
+            Password = password;
+            Restrictions = rests;
+            IsAdmin = isAdmin;
+        }
+
+        public UserInfo()
+        {
+            Name = null;
+            Password = null;
+            Restrictions = null;
+            IsAdmin = false;
+        }
+
+        [XmlArrayAttribute] public List<string>? Restrictions { get; set; }
+        public string? Password { get; set; }
+        public string? Name { get; set; }
+        public bool IsAdmin { get; set; }
+    }
+
+    // collection of users
+    public sealed class UserInfoCollection
+    {
+        [XmlArrayAttribute] public UserInfo[]? UserInfoList { get; set; }
     }
 }

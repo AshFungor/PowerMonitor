@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using ExtremelySimpleLogger;
 using OxyPlot;
 using OxyPlot.Avalonia;
-using ExtremelySimpleLogger;
+using LineSeries = OxyPlot.Series.LineSeries;
 
 namespace PowerMonitor.models;
 
 public class Plot : UserControl
 {
-    private OxyPlot.Avalonia.Plot _plot;
+    private readonly OxyPlot.Avalonia.Plot _plot;
 
     public Plot()
     {
@@ -22,16 +23,16 @@ public class Plot : UserControl
         _plot = this.FindControl<OxyPlot.Avalonia.Plot>("Plot");
         _plot.Title = "Plot";
         var start = new DataPoint(0, 0);
-        _plot.Annotations.Add(new ArrowAnnotation()
+        _plot.Annotations.Add(new ArrowAnnotation
             {StartPoint = start, EndPoint = new DataPoint(0, 100), Color = new Color(255, 0, 0, 0)});
-        _plot.Annotations.Add(new ArrowAnnotation()
+        _plot.Annotations.Add(new ArrowAnnotation
             {StartPoint = start, EndPoint = new DataPoint(24, 0), Color = new Color(255, 0, 0, 0)});
         Shared.Plot ??= this;
 
 
 #if !SERVER && DEBUG
         var rand = new Random();
-        var line = new OxyPlot.Series.LineSeries();
+        var line = new LineSeries();
         for (var i = 0; i < 24; ++i)
             line.Points.Add(new DataPoint(i, rand.Next(0, 100)));
         _plot.ActualModel.Series.Add(line);
@@ -42,7 +43,7 @@ public class Plot : UserControl
     public void AddSeries(List<(double, double)> source)
     {
         Shared.Logger!.Log(LogLevel.Info, $"constructing series, source len is {source.Count}");
-        var line = new OxyPlot.Series.LineSeries();
+        var line = new LineSeries();
         foreach (var dot in source) line.Points.Add(new DataPoint(dot.Item2, dot.Item1));
         _plot.ActualModel.Series.Clear();
         _plot.ActualModel.Series.Add(line);
@@ -59,7 +60,7 @@ public class Plot : UserControl
 
         _plot.Axes[0].Maximum = newLimit;
         _plot.Annotations.RemoveAt(1);
-        _plot.Annotations.Add(new ArrowAnnotation()
+        _plot.Annotations.Add(new ArrowAnnotation
             {StartPoint = new DataPoint(0, 0), EndPoint = new DataPoint(newLimit, 0), Color = new Color(255, 0, 0, 0)});
     }
 

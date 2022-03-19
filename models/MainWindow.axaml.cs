@@ -7,7 +7,7 @@ using ExtremelySimpleLogger;
 
 namespace PowerMonitor.models;
 
-public partial class MainWindow : Window
+public class MainWindow : Window
 {
     public MainWindow()
     {

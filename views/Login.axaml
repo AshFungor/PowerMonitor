@@ -9,6 +9,7 @@
             <Setter Property="MinHeight" Value="26" />
             <Setter Property="MinWidth" Value="300" />
             <Setter Property="MaxHeight" Value="50" />
+            <Setter Property="VerticalAlignment" Value="Top" />
         </Style>
         <Style Selector="Label.label_base">
             <Setter Property="FontSize" Value="24" />
@@ -23,11 +24,11 @@
     </UserControl.Styles>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="4*" />
+            <RowDefinition Height="2*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="4*" />
+            <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
