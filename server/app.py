@@ -2,7 +2,7 @@ from flask import Flask, request, Response
 
 from data.config import NAME, USER, PASSWORD, HOST
 from utils.database_api.database import Database
-from utils.csv_api.csv_parser import parse_csv, create_csv
+from utils.csv_api.csv_converter import parse_csv, create_csv
 from utils.database_api.models import User, Telemetry, Complex
 from utils.date_parser import parse_date
 
