@@ -1,0 +1,13 @@
+click==8.0.4
+colorama==0.4.4
+Flask==2.0.3
+itsdangerous==2.1.0
+Jinja2==3.0.3
+MarkupSafe==2.1.0
+pip==20.1.1
+psycopg2==2.9.3
+pydantic==1.9.0
+python-dotenv==0.19.2
+setuptools==47.1.0
+typing-extensions==4.1.1
+Werkzeug==2.0.3
