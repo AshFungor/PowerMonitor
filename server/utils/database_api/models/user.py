@@ -1,17 +1,16 @@
-from dataclasses import dataclass
-
 from werkzeug.security import generate_password_hash, check_password_hash
+from pydantic import BaseModel
 
-from server.utils.database_api.database import Database
+from utils.database_api.database import Database
 
 
-@dataclass
-class User:
+class User(BaseModel):
     login: str
     password: str
     is_admin: bool = False
 
-    def __post_init__(self):
+    def __init__(self, **data):
+        super().__init__(**data)
         self.password = generate_password_hash(self.password)
 
     def verify_password(self, database: Database):
