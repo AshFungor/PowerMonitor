@@ -1,10 +1,11 @@
-from flask import Flask, make_response, request
+from flask import Flask, request, Response
 
 from data.config import NAME, USER, PASSWORD, HOST
 from utils.database_api.database import Database
-from utils.csv_api.csv_parser import parse_csv
-from utils.request_parser import parse_user_info
-from utils.database_api.tables import User, Telemetry, Complex
+from utils.csv_api.csv_parser import parse_csv, create_csv
+from utils.database_api.models import User, Telemetry, Complex
+from utils.date_parser import parse_date
+
 
 app = Flask(__name__)
 database = Database(NAME, USER, PASSWORD, HOST)
@@ -12,27 +13,24 @@ database = Database(NAME, USER, PASSWORD, HOST)
 
 @app.route('/get-data', methods=['GET'])
 def get_data():
-    ...
-    # json = request.json
-    # request_ = parse_user_info(json)
-    # user = User(*request_)
-    # response = make_response(send_file(''))
-    # response.headers["Content-type"] = "text/csv"
-    # response.status_code = 200
-    # return response
+    json = request.json
+    start = parse_date(json['start'])
+    end = parse_date(json['end'])
+    telemetry = database.select_telemetry_by_date(start, end)
+    csv_response = create_csv(telemetry)
+    print(csv_response)
+    return Response(csv_response, mimetype='text/csv', status=200)
 
 
 @app.route('/create-user', methods=['POST'])
 def create_user():
-    request_ = parse_user_info(request.json)
-    user = User(*request_['user'])
-    for serial_number in request_['complexes']:
-        complex = Complex(user.login, serial_number)
+    request_ = request.json
+    user = User.parse_obj(request_['user'])
+    for serial_number in request_['user']['complexes']:
+        complex = Complex(user_login=user.login, serial_number=serial_number)
         database.add_complex(complex)
     database.add_user(user)
-    response = make_response()
-    response.status_code = 200
-    return response
+    return Response(status=200)
 
 
 @app.route('/send-telemetry/<int:serial_number>', methods=['POST'])
@@ -43,7 +41,7 @@ def send_telemetry(serial_number: int):
     table = [Telemetry(serial_number, *measurements) for measurements in table]
     for telemetry in table:
         database.add_telemetry(telemetry)
-    return '200'
+    return Response(status=200)
 
 
 if __name__ == '__main__':
