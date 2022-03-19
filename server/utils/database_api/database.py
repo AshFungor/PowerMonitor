@@ -129,3 +129,10 @@ class Database:
     def select_all_users(self):
         sql = "SELECT * FROM users"
         return self.execute(sql, fetchall=True)
+
+    def select_telemetry_by_date(self, start, end):
+        sql = """
+        SELECT * FROM telemetry
+        WHERE start BETWEEN %s and %s
+        """
+        return self.execute(sql, parameters=(start, end), fetchall=True)
