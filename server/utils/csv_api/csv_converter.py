@@ -1,7 +1,7 @@
 import io
 import csv
 
-from server.utils.date_parser import parse_date, date_to_str
+from utils.date_parser import parse_date, date_to_str
 
 
 def parse_row(row):

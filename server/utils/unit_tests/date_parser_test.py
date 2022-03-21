@@ -1,5 +1,5 @@
 import unittest
-from server.utils.date_parser import parse_date, date_to_str
+from utils.date_parser import parse_date, date_to_str
 from datetime import datetime
 
 
