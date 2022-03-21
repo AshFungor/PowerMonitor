@@ -1,12 +1,12 @@
 {
     "admin": {
-        "login": "login",
-        "password": "kiki"
+        "login": "admin_login",
+        "password": "admin_password"
     }
     ,
     "user": {
-        "login": "meme",
-        "password": "cum",
+        "login": "user_login",
+        "password": "user_password",
         "is_admin": true,
         "complexes": [12345, 14241, 98002]
     }
