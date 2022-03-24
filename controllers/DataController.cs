@@ -10,13 +10,15 @@ using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
 using GemBox.Spreadsheet;
 
+using SPath = PowerMonitor.controllers.SettingsController.Settings;
+
 namespace PowerMonitor.controllers;
 
 public sealed class DataController
 {
     // paths to spreadsheet and response from server files 
-    private static readonly string ResponseDataFileLocation = App.SettingsPath + "response.csv";
-    private static readonly string SpreadsheetFileBase = App.SettingsPath + "data";
+    private static readonly string ResponseDataFileLocation = SPath.TempFolder + "response.csv";
+    private static readonly string SpreadsheetFileBase = SPath.DataFolder + "data";
 
     private static readonly List<PropertyInfo> SavingProperties =
         typeof(DevInfo).GetProperties().Where(el => !(el.Name.Contains("N") || el.Name.Contains("Voltage"))).ToList();
