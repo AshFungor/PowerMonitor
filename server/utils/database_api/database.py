@@ -104,7 +104,7 @@ class Database:
         sql = """
         INSERT INTO users(login, password, is_admin) VALUES(%s, %s, %s)
         """
-        self.execute(sql, parameters=(user.login, user.password, user.is_admin), commit=True)
+        self.execute(sql, parameters=(user.login, user.encrypted_password, user.is_admin), commit=True)
 
     def add_telemetry(self, telemetry):
         sql = f"""
@@ -127,8 +127,15 @@ class Database:
         return self.execute(sql, parameters=(login,), fetchone=True)
 
     def select_all_users(self):
-        sql = "SELECT * FROM users"
+        sql = "SELECT login, password, is_admin FROM users"
         return self.execute(sql, fetchall=True)
+
+    def select_complexes_by_user_login(self, login):
+        sql = """
+        SELECT serial_number FROM complexes
+        WHERE user_login = %s
+        """
+        return self.execute(sql, parameters=(login,), fetchall=True)
 
     def select_telemetry_by_date(self, start, end):
         sql = """
