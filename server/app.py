@@ -1,5 +1,3 @@
-import json
-
 from flask import Flask, request, Response
 
 from data.config import NAME, USER, PASSWORD, HOST
@@ -58,7 +56,7 @@ def get_all_users():
             complex_ids=complexes,
             decrypt_password=True
         )
-        users[f'user-{i}'] = json.loads(user.json(exclude={'decrypt_password'}))
+        users[f'user-{i}'] = user.request_json
     return users
 
 

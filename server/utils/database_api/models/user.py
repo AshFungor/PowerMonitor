@@ -29,3 +29,7 @@ class User(BaseModel):
     @property
     def encrypted_password(self):
         return encrypt_password(self.password)
+
+    @property
+    def request_json(self):
+        return self.dict(exclude={'decrypt_password'})
