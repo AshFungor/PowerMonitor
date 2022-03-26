@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, request, Response
 
 from data.config import NAME, USER, PASSWORD, HOST
@@ -18,7 +20,6 @@ def get_data():
     end = parse_date(json['end'])
     telemetry = database.select_telemetry_by_date(start, end)
     csv_response = create_csv(telemetry)
-    print(csv_response)
     return Response(csv_response, mimetype='text/csv', status=200)
 
 
@@ -42,6 +43,23 @@ def send_telemetry(serial_number: int):
     for telemetry in table:
         database.add_telemetry(telemetry)
     return Response(status=200)
+
+
+@app.route('/get-all-users', methods=['GET'])
+def get_all_users():
+    users = dict()
+    for i, record in enumerate(database.select_all_users(), start=1):
+        login, password, is_admin = record
+        complexes = tuple(map(lambda x: x[0], database.select_complexes_by_user_login(login)))
+        user = User(
+            login=login,
+            password=password,
+            is_admin=is_admin,
+            complex_ids=complexes,
+            decrypt_password=True
+        )
+        users[f'user-{i}'] = json.loads(user.json(exclude={'decrypt_password'}))
+    return users
 
 
 if __name__ == '__main__':
