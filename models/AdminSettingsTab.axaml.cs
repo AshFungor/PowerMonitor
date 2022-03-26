@@ -77,7 +77,7 @@ public class AdminSettingsTab : UserControl
             contents.ColumnDefinitions.Add(new ColumnDefinition());
             var row = 0;
 
-            foreach (var dev in Shared.NetworkController!.devs)
+            foreach (var dev in Shared.NetworkController!.Complexes)
             {
                 var devNumber = new Label {Content = dev, FontSize = 24};
                 var isAllowed = new CheckBox

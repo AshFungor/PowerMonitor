@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using ExtremelySimpleLogger;
 
+using SPath = PowerMonitor.controllers.SettingsController.Settings;
+
 namespace PowerMonitor.controllers;
 
 // login controller
 public sealed class LoginController
 {
-    private static readonly string logins_file = ".logins.xml";
+    private static readonly string LoginsFile = SPath.ConfigFolder + ".logins.xml";
 
     public LoginController()
     {
@@ -20,10 +22,10 @@ public sealed class LoginController
 #if !SERVER
         Shared.Logger!.Log(LogLevel.Info, "creating login controller instance, checking for logins file...");
 
-        if (File.Exists(App.SettingsPath + logins_file))
+        if (File.Exists(LoginsFile))
         {
             Shared.Logger!.Log(LogLevel.Info, "logins file found");
-            var stream = new StreamReader(App.SettingsPath + logins_file);
+            var stream = new StreamReader(LoginsFile);
 
             Shared.Logger!.Log(LogLevel.Info, "trying to parse logins file");
             ParseHandler(stream.BaseStream, false);
@@ -97,8 +99,8 @@ public sealed class LoginController
     {
         Shared.Logger!.Log(LogLevel.Info, "writing logins...");
 
-        File.WriteAllText(App.SettingsPath + logins_file, string.Empty);
-        var stream = new StreamWriter(App.SettingsPath + logins_file);
+        File.WriteAllText(LoginsFile, string.Empty);
+        var stream = new StreamWriter(LoginsFile);
         ParseHandler(stream.BaseStream, true);
     }
 

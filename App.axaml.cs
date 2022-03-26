@@ -8,6 +8,8 @@ using GemBox.Spreadsheet;
 using PowerMonitor.controllers;
 using PowerMonitor.models;
 
+using SPath = PowerMonitor.controllers.SettingsController.Settings;
+
 namespace PowerMonitor;
 
 public static class Shared
@@ -23,15 +25,10 @@ public static class Shared
 public class App : Application
 {
     public static string SettingsPath
-#if LINUX && !DEBUG
-        => $"/home/{Environment.UserName}/.config/PowerMonitor";
-#elif LINUX && DEBUG
-        // change path to your local resources
+#if LINUX
         => $"/home/{Environment.UserName}/Documents/";
-#elif WINDOWS && DEBUG
-        => $"C:/Users/Environment.UserName}/Documents/";
-#else
-        => string.Empty;
+#elif WINDOWS
+        => $"C:/Users/{Environment.UserName}/Documents/";
 #endif
 
 
@@ -39,9 +36,9 @@ public class App : Application
     {
         // method loads twice, careful adding init
         AvaloniaXamlLoader.Load(this);
-        File.WriteAllText(SettingsPath + "monitor.log", string.Empty);
+        File.WriteAllText(SPath.DataFolder + "monitor.log", string.Empty);
 
-        Shared.Logger = new Logger {Sinks = {new FileSink(SettingsPath + "monitor.log", true)}};
+        Shared.Logger = new Logger {Sinks = {new FileSink(SPath.DataFolder + "monitor.log", true)}};
         Shared.LoginController ??= new LoginController();
         Shared.DataController ??= new DataController();
         Shared.NetworkController ??= new NetworkController();
