@@ -1,22 +1,31 @@
-from werkzeug.security import generate_password_hash, check_password_hash
+from typing import Optional, List
+
 from pydantic import BaseModel
 
 from utils.database_api.database import Database
+from security.encryption import encrypt_password, check_password, decrypt_password
 
 
 class User(BaseModel):
     login: str
     password: str
     is_admin: bool = False
+    complex_ids: Optional[List[int]] = []
+    decrypt_password: bool = False
 
     def __init__(self, **data):
         super().__init__(**data)
-        self.password = generate_password_hash(self.password)
+        if self.decrypt_password:
+            self.password = decrypt_password(self.password)
 
     def verify_password(self, database: Database):
-        db_password_hash = database.select_user_by_login(self.login)[2]
-        return check_password_hash(db_password_hash, self.password)
+        db_encrypted_password = database.select_user_by_login(self.login)[2]
+        return check_password(db_encrypted_password, self.password)
 
     def verify_admin(self, database: Database):
         is_admin = database.select_user_by_login(self.login)[3]
         return is_admin
+    
+    @property
+    def encrypted_password(self):
+        return encrypt_password(self.password)
