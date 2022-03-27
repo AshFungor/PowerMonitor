@@ -2,7 +2,7 @@ from typing import Optional, List
 
 from pydantic import BaseModel
 
-from utils.database_api.database import Database
+from db_loader import database
 from security.encryption import encrypt_password, check_password, decrypt_password
 
 
@@ -18,11 +18,11 @@ class User(BaseModel):
         if self.decrypt_password:
             self.password = decrypt_password(self.password)
 
-    def verify_password(self, database: Database):
+    def verify_password(self):
         db_encrypted_password = database.select_user_by_login(self.login)[2]
         return check_password(db_encrypted_password, self.password)
 
-    def verify_admin(self, database: Database):
+    def verify_admin(self):
         is_admin = database.select_user_by_login(self.login)[3]
         return is_admin
     
