@@ -29,7 +29,7 @@ public static class SettingsController
                 var xmlParser = new XmlSerializer(typeof(SettingsFileXmlTemplate));
                 template = (SettingsFileXmlTemplate) xmlParser.Deserialize(iStream)!;
             }
-            else template = new SettingsFileXmlTemplate(false);
+            else template = new SettingsFileXmlTemplate();
 
             DataFolder = template.DataFolder;
             ConfigFolder = template.ConfigFolder;
@@ -59,16 +59,15 @@ public static class SettingsController
     public class SettingsFileXmlTemplate
     {
         [XmlElement(ElementName = "SpreadsheetUploadFolder")]
-        public string DataFolder { get; set; } = string.Empty;
+        public string DataFolder { get; set; }
         [XmlElement(ElementName = "ConfigurationFolder")]
-        public string ConfigFolder { get; set; } = string.Empty;
+        public string ConfigFolder { get; set; }
         [XmlElement(ElementName = "TemporaryDataFolder")]
-        public string TempFolder { get; set; } = string.Empty;
+        public string TempFolder { get; set; }
         
-        public SettingsFileXmlTemplate(bool @default = false)
+        public SettingsFileXmlTemplate()
         {
-            
-            if (@default) return;
+
 #if WINDOWS
             DataFolder = $"C:/Users/{Environment.UserName}/Documents/";
             ConfigFolder = $"C:/Users/{Environment.UserName}/AppData/PMConfig/";
@@ -81,8 +80,7 @@ public static class SettingsController
 #endif
 
         }
-
-        public SettingsFileXmlTemplate() { }
+        
 
     }
 
@@ -93,22 +91,8 @@ public static class SettingsController
 
     private static void CreatePath(string path)
     {
-        string pPath = "/";
-        foreach (var part in path.Split('/').Skip(1))
-        {
-            pPath += path;
-            if (Directory.Exists(pPath))
-            {
-                pPath += "/";
-                continue;
-            }
-            if (File.Exists(pPath))
-                return;
-            Directory.CreateDirectory(pPath);
-            pPath += "/";
-            
-
-        }
+        if (!Directory.Exists(path))
+            Directory.CreateDirectory(path);
     }
 
 
