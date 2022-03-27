@@ -13,22 +13,22 @@ namespace PowerMonitor.models;
 
 public class AdminSettingsTab : UserControl
 {
-    private RecordGrid? _editedItem;
+    private readonly List<RecordGrid> _records;
 
-    private int _editedItemIndex = -1;
     private readonly ListBox _userList;
+    private RecordGrid? _editedItem;
 
     public AdminSettingsTab()
     {
         InitializeComponent();
         var usersList = this.Find<ListBox>("EntitiesListBox");
+        var index = 0;
         _userList = usersList;
-        var users = new List<RecordGrid>();
+        _records = new List<RecordGrid>();
 
+        foreach (var user in Shared.LoginController.Users.UserInfoList) _records.Add(new RecordGrid(user, index++));
 
-        foreach (var user in Shared.LoginController.Users.UserInfoList) users.Add(new RecordGrid(user));
-
-        usersList.Items = users;
+        _userList.Items = _records;
     }
 
     private void InitializeComponent()
@@ -44,7 +44,27 @@ public class AdminSettingsTab : UserControl
                 ExitEdit();
             ChangeStateRec((_userList.SelectedItem as Grid)!);
             _editedItem = (RecordGrid) _userList.SelectedItem;
-            _editedItemIndex = _userList.SelectedIndex;
+        }
+    }
+
+    private void AddUser(object? sender, RoutedEventArgs args)
+    {
+        var newUser = new RecordGrid(new LoginController.UserInfo(), _records.Count);
+
+        Shared.LoginController.Users.UserInfoList =
+            Shared.LoginController.Users.UserInfoList.Append(new LoginController.UserInfo()).ToArray();
+
+        _records.Add(newUser);
+        _userList.Items = _records.ToArray();
+    }
+
+    private void DeleteUser(object? sender, RoutedEventArgs args)
+    {
+        if (_userList.SelectedItem is not null)
+        {
+            _records[_userList.SelectedIndex].IsVisible = false;
+            Shared.LoginController.Users.UserInfoList
+                [((RecordGrid) _userList.SelectedItem).OriginalIndex] = new LoginController.UserInfo();
         }
     }
 
@@ -67,24 +87,28 @@ public class AdminSettingsTab : UserControl
         infoSave.Name = target.UserName;
         infoSave.Password = target.UserPassword;
         infoSave.IsAdmin = target.UserIsAdmin;
+
+        if (infoSave.Name.Equals("empty") || infoSave.Password.Equals("empty") || !target.IsVisible)
+            return;
+
         infoSave.Restrictions = target.Restrictions
             .Where(item => item.Item2)
             .Select(item => item.Item1)
             .ToList();
 
-        Shared.LoginController.Users.UserInfoList[_editedItemIndex] = infoSave;
+        Shared.LoginController.Users.UserInfoList[target.OriginalIndex] = infoSave;
 
         _editedItem = null;
-        _editedItemIndex = -1;
     }
 
     public class RecordGrid : Grid
     {
-        public RecordGrid(LoginController.UserInfo user)
+        public RecordGrid(LoginController.UserInfo user, int originalIndex)
         {
             UserName = user.Name!;
             UserPassword = user.Password!;
             UserIsAdmin = user.IsAdmin;
+            OriginalIndex = originalIndex;
 
 
             ColumnDefinitions = new ColumnDefinitions();
@@ -106,8 +130,8 @@ public class AdminSettingsTab : UserControl
             name.Background = password.Background = isAdmin.Background = expander.Background = Brushes.Transparent;
 
             // events
-            name.KeyDown += NameInputChanged;
-            password.KeyDown += PasswordInputChanged;
+            name.LostFocus += NameInputChanged;
+            password.LostFocus += PasswordInputChanged;
             isAdmin.Checked += StatusChanged;
             isAdmin.Unchecked += StatusChanged;
 
@@ -140,6 +164,7 @@ public class AdminSettingsTab : UserControl
         public string UserPassword { get; set; }
         public bool UserIsAdmin { get; set; }
         public List<(string, bool)> Restrictions { get; set; } = new();
+        public int OriginalIndex { get; set; }
 
         private void GenerateRestsGrid(List<string> rests, out Grid result)
         {
