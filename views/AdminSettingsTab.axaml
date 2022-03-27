@@ -27,7 +27,7 @@
                 <Svg Path="../assets/remove.svg" />
             </Button>
             <Button Margin="10 0 10 0" x:Name="EditButton" MaxHeight="50" MaxWidth="50" CornerRadius="10"
-                    Click="EnterEdit">
+                    Click="TriggerEdit">
                 <Svg Path="../assets/edit.svg" />
             </Button>
         </DockPanel>

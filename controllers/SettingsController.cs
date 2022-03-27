@@ -53,6 +53,7 @@ public static class SettingsController
 
             Template = template;
         }
+
         // App settings, available to all app objects
         // all settings must be static and readonly,
         // hence only user is eligible to change them.
@@ -92,7 +93,7 @@ public static class SettingsController
             ServerOn = false;
             ServerAddress = string.Empty;
         }
-        
+
         // xml elements possess more 
         // understandable name than class
         // members.
@@ -104,13 +105,11 @@ public static class SettingsController
 
         [XmlElement(ElementName = "TemporaryDataFolder")]
         public string TempFolder { get; set; }
-        
+
         [XmlElement(ElementName = "ServerConnectionPossible")]
         public bool ServerOn { get; set; }
-        
+
         [XmlElement(ElementName = "ServerAddress")]
         public string ServerAddress { get; set; }
-        
-        
     }
 }
