@@ -44,6 +44,8 @@ public static class SettingsController
             DataFolder = template.DataFolder;
             ConfigFolder = template.ConfigFolder;
             TempFolder = template.TempFolder;
+            ServerOn = template.ServerOn;
+            ServerAddress = template.ServerAddress;
 
             CreatePath(DataFolder);
             CreatePath(ConfigFolder);
@@ -51,10 +53,14 @@ public static class SettingsController
 
             Template = template;
         }
-
+        // App settings, available to all app objects
+        // all settings must be static and readonly,
+        // hence only user is eligible to change them.
         public static string DataFolder { get; }
         public static string ConfigFolder { get; }
         public static string TempFolder { get; }
+        public static bool ServerOn { get; }
+        public static string ServerAddress { get; }
 
         public static void Save()
         {
@@ -71,6 +77,8 @@ public static class SettingsController
     {
         public SettingsFileXmlTemplate()
         {
+            // defaults may vary across build configurations,
+            // yet some are independent from platform.
 #if WINDOWS
             DataFolder = $"C:/Users/{Environment.UserName}/Documents/";
             ConfigFolder = $"C:/Users/{Environment.UserName}/AppData/PMConfig/";
@@ -81,8 +89,13 @@ public static class SettingsController
             ConfigFolder = $"/home/{Environment.UserName}/.config/PMConfig/";
             TempFolder = "/tmp/";
 #endif
+            ServerOn = false;
+            ServerAddress = string.Empty;
         }
-
+        
+        // xml elements possess more 
+        // understandable name than class
+        // members.
         [XmlElement(ElementName = "SpreadsheetUploadFolder")]
         public string DataFolder { get; set; }
 
@@ -91,5 +104,13 @@ public static class SettingsController
 
         [XmlElement(ElementName = "TemporaryDataFolder")]
         public string TempFolder { get; set; }
+        
+        [XmlElement(ElementName = "ServerConnectionPossible")]
+        public bool ServerOn { get; set; }
+        
+        [XmlElement(ElementName = "ServerAddress")]
+        public string ServerAddress { get; set; }
+        
+        
     }
 }
