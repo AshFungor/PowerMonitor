@@ -9,7 +9,6 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
 using GemBox.Spreadsheet;
-
 using SPath = PowerMonitor.controllers.SettingsController.Settings;
 
 namespace PowerMonitor.controllers;

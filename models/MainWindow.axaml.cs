@@ -4,7 +4,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using ExtremelySimpleLogger;
-
 using SPath = PowerMonitor.controllers.SettingsController.Settings;
 
 namespace PowerMonitor.models;

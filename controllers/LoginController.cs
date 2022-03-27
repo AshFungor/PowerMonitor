@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using ExtremelySimpleLogger;
-
 using SPath = PowerMonitor.controllers.SettingsController.Settings;
 
 namespace PowerMonitor.controllers;

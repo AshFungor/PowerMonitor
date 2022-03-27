@@ -7,7 +7,6 @@ using ExtremelySimpleLogger;
 using GemBox.Spreadsheet;
 using PowerMonitor.controllers;
 using PowerMonitor.models;
-
 using SPath = PowerMonitor.controllers.SettingsController.Settings;
 
 namespace PowerMonitor;

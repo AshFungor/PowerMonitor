@@ -1,8 +1,8 @@
 {
-    "user": {
-        "login": "user_login",
-        "password": "user_password"
-    },
-    "start": "10.12.2019  08:00:27",
-    "end": "27.10.2021"
+  "user": {
+    "login": "user_login",
+    "password": "user_password"
+  },
+  "start": "10.12.2019  08:00:27",
+  "end": "27.10.2021"
 }
