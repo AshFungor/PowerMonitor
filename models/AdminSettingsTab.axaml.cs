@@ -88,14 +88,14 @@ public class AdminSettingsTab : UserControl
             };
             var row = 0;
 
-            foreach (var dev in Shared.NetworkController!.Complexes)
+            foreach (int complex in Shared.NetworkController!.Complexes)
             {
                 result.RowDefinitions.Add(new RowDefinition());
                 
-                bool status = rests.Contains(dev.ToString());
-                ComplexRecordRest record = new ComplexRecordRest(row, dev.ToString(), status, this);
+                bool status = rests.Contains(complex.ToString());
+                ComplexRecordRest record = new ComplexRecordRest(row, complex.ToString(), status, this);
                 
-                Restrictions.Add((dev.ToString(), status));
+                Restrictions.Add((complex.ToString(), status));
 
                 result.Children.Add(record);
                 SetRow(record, row);
@@ -111,15 +111,26 @@ public class AdminSettingsTab : UserControl
 
             public ComplexRecordRest(int index, string complex, bool accessIsAllowed,  RecordGrid parent) : base()
             {
+                ColumnDefinitions = new ColumnDefinitions();
+                ColumnDefinitions.Add(new ColumnDefinition());
+                ColumnDefinitions.Add(new ColumnDefinition());
+                
                 Label complexNumber = new Label();
                 CheckBox isAllowed = new CheckBox();
 
                 complexNumber.FontSize = isAllowed.FontSize = 24;
                 complexNumber.Content = complex;
                 isAllowed.IsChecked = accessIsAllowed;
+                isAllowed.IsEnabled = false;
 
                 isAllowed.Unchecked += OnStatusChanged;
                 isAllowed.Checked += OnStatusChanged;
+                
+                Children.Add(complexNumber);
+                Children.Add(isAllowed);
+                
+                SetColumn(complexNumber, 0);
+                SetColumn(isAllowed, 1);
 
                 _comlexNum = complex;
                 _parent = parent;
