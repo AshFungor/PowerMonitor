@@ -50,7 +50,7 @@ class Database:
         CREATE TABLE IF NOT EXISTS
             complexes (
                 id SERIAL PRIMARY KEY,
-                serial_number INTEGER NOT NULL,
+                serial_number BIGINT NOT NULL,
                 user_login VARCHAR(255) NOT NULL
             )
         ;
@@ -62,7 +62,7 @@ class Database:
         CREATE TABLE IF NOT EXISTS
             telemetry(
                 id SERIAL PRIMARY KEY,
-                serial_number INTEGER,
+                serial_number BIGINT,
                 start timestamp without time zone NOT NULL,
                 finish timestamp without time zone NOT NULL,
                 reactive_power_by_phase_A FLOAT,
