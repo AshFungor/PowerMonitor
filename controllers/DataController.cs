@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
+using ExtremelySimpleLogger;
 using GemBox.Spreadsheet;
 using SPath = PowerMonitor.controllers.SettingsController.Settings;
 
@@ -26,9 +27,9 @@ public sealed class DataController
 
     public DataController()
     {
-        _csvConfig = new CsvConfiguration(CultureInfo.InstalledUICulture)
+        _csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
         {
-            HasHeaderRecord = false, NewLine = Environment.NewLine
+            HasHeaderRecord = false, NewLine = Environment.NewLine, Delimiter = ";"
         };
     }
 
@@ -47,12 +48,14 @@ public sealed class DataController
         var results = new List<(double, double)>();
 
         // parsing response
+        Shared.Logger.Log(LogLevel.Info, "beginning parsing response.csv...");
         var enumerator = records.GetEnumerator();
         while (enumerator.MoveNext())
         {
             var record = enumerator.Current;
             {
-                DateTime start = Convert.ToDateTime(record.Begin), finish = Convert.ToDateTime(record.End);
+                DateTime start = DateTime.ParseExact(record.Begin, "dd.MM.yyyy HH:mm:ss",CultureInfo.InvariantCulture), 
+                    finish = DateTime.ParseExact(record.End, "dd.MM.yyyy HH:mm:ss",CultureInfo.InvariantCulture);
                 day =
                     day.AddSeconds(start.Second - day.Second).AddMinutes(start.Minute - day.Minute)
                         .AddHours(start.Hour - day.Hour);
@@ -87,7 +90,8 @@ public sealed class DataController
         }
 
         enumerator.Dispose();
-
+        
+        Shared.Logger.Log(LogLevel.Info, "finished parse.");
         return results;
     }
 
@@ -95,6 +99,7 @@ public sealed class DataController
     {
         // save to *.odt file current data, actually it is just last response from server
         var data = await ReadResponseAsync();
+        Shared.Logger.Log(LogLevel.Info, "parsing response complete, beginning writing...");
 
         var workBook = new ExcelFile();
         var sheet = workBook.Worksheets.Add("parsed data");
@@ -135,6 +140,7 @@ public sealed class DataController
         }
 
         enumerator.Dispose();
+        Shared.Logger.Log(LogLevel.Info, "writing complete, saving...");
 
         var acceptableName = SpreadsheetFileBase;
         var fileIndex = 1;
@@ -142,7 +148,8 @@ public sealed class DataController
             ++fileIndex;
 
         workBook.Save(acceptableName + fileIndex + ".ods");
-
+        
+        Shared.Logger.Log(LogLevel.Info, "save complete.");
         return true;
     }
 

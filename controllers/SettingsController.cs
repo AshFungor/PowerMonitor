@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Xml.Serialization;
+using ExtremelySimpleLogger;
 
 namespace PowerMonitor.controllers;
 
@@ -30,11 +31,19 @@ public static class SettingsController
             SettingsFileXmlTemplate template;
             if (SettingsPresent())
             {
-                using var iStream = new StreamReader(SettingsFile);
-                var xmlParser = new XmlSerializer(typeof(SettingsFileXmlTemplate));
-                template = (SettingsFileXmlTemplate) xmlParser.Deserialize(iStream)!;
+                try
+                {
+                    using var iStream = new StreamReader(SettingsFile);
+                    var xmlParser = new XmlSerializer(typeof(SettingsFileXmlTemplate));
+                    template = (SettingsFileXmlTemplate) xmlParser.Deserialize(iStream)!;
 
-                iStream.Close();
+                    iStream.Close();
+                }
+                catch (Exception e)
+                {
+                    Shared.Logger.Log(LogLevel.Error, $"reading settings unsuccessful, ex raised: {e.Message}");
+                    template = new SettingsFileXmlTemplate();
+                }
             }
             else
             {
