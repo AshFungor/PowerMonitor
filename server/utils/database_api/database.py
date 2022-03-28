@@ -106,6 +106,12 @@ class Database:
         """
         self.execute(sql, parameters=(user.login, user.encrypted_password, user.is_admin), commit=True)
 
+    def delete_user_by_login(self, login):
+        sql = """
+        DELETE FROM users WHERE login = %s
+        """
+        self.execute(sql, parameters=(login,), commit=True)
+
     def add_telemetry(self, telemetry):
         sql = f"""
         INSERT INTO telemetry({', '.join(telemetry.parameter_names)})
