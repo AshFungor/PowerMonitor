@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using ExtremelySimpleLogger;
-
 using SPath = PowerMonitor.controllers.SettingsController.Settings;
 
 namespace PowerMonitor.controllers;
@@ -81,6 +81,9 @@ public sealed class LoginController
 
         if (!stream.CanWrite)
             return false;
+        Users.UserInfoList = Users.UserInfoList
+            .Where(el => !el.Name.Equals("empty") || !el.Password.Equals("empty"))
+            .ToArray();
         var writeTask = Task.Run(() => xmlSerializer.Serialize(stream, Users));
         await writeTask;
         return writeTask.IsCompleted;
@@ -117,9 +120,9 @@ public sealed class LoginController
 
         public UserInfo()
         {
-            Name = null;
-            Password = null;
-            Restrictions = null;
+            Name = "empty";
+            Password = "empty";
+            Restrictions = new List<string>();
             IsAdmin = false;
         }
 

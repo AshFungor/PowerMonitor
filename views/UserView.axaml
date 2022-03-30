@@ -29,7 +29,7 @@
                         <Label FontSize="24" MinHeight="26" x:Name="LogLabel"
                                HorizontalAlignment="Center" />
                     </DockPanel>
-                    <DockPanel Grid.Row="2" LastChildFill="True" MaxHeight="50">
+                    <DockPanel Grid.Row="2" LastChildFill="True" Height="50">
                         <DatePicker FontSize="24" YearVisible="False" HorizontalAlignment="Left"
                                     x:Name="StartDatePicker" Margin="0 0 20 0"
                                     MinHeight="50" />

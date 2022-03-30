@@ -7,7 +7,6 @@ using ExtremelySimpleLogger;
 using GemBox.Spreadsheet;
 using PowerMonitor.controllers;
 using PowerMonitor.models;
-
 using SPath = PowerMonitor.controllers.SettingsController.Settings;
 
 namespace PowerMonitor;
@@ -39,6 +38,7 @@ public class App : Application
         File.WriteAllText(SPath.DataFolder + "monitor.log", string.Empty);
 
         Shared.Logger = new Logger {Sinks = {new FileSink(SPath.DataFolder + "monitor.log", true)}};
+        Shared.Logger.Log(LogLevel.Info, $"beginning new session on {System.DateTime.Now}");
         Shared.LoginController ??= new LoginController();
         Shared.DataController ??= new DataController();
         Shared.NetworkController ??= new NetworkController();

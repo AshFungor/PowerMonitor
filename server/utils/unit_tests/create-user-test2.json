@@ -1,14 +1,16 @@
 {
-    "admin": {
-        "login": "admin",
-        "password": "yolepulke"
-    }
-    ,
-    "user": {
-        "login": "uuuuu",
-        "password": "notcum",
-        "is_admin": false,
-        "complexes": [12345, 14241, 98002]
-    }
-
+  "admin": {
+    "login": "admin",
+    "password": "yolepulke"
+  },
+  "user": {
+    "login": "uuuuu",
+    "password": "notcum",
+    "is_admin": false,
+    "complexes": [
+      12345,
+      14241,
+      98002
+    ]
+  }
 }

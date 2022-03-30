@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 
-printf "enter path: "
-read -r PATH
 
-cat "$PATH" | xmllint --format - > "$PATH"
+printf "enter path: "
+read -r RPATH
+
+# format file
+xmllint --format "$RPATH" --output "$RPATH"
+
 printf "your file: \n"
-cat "$PATH"
+# bat needs to be installed first
+bat "$RPATH"
