@@ -125,6 +125,12 @@ class Database:
         """
         self.execute(sql, parameters=(complex.serial_number, complex.user_login), commit=True)
 
+    def delete_complexes_by_user_login(self, login):
+        sql = """
+        DELETE FROM complexes WHERE user_login = %s
+        """
+        self.execute(sql, parameters=(login,), commit=True)
+
     def select_user_by_login(self, login):
         sql = """
         SELECT * FROM users
