@@ -1,6 +1,7 @@
 from typing import Optional, List
 
 from pydantic import BaseModel
+from werkzeug.exceptions import Forbidden
 
 from db_loader import database
 from security.encryption import encrypt_password, check_password, decrypt_password
@@ -18,14 +19,17 @@ class User(BaseModel):
         if self.decrypt_password:
             self.password = decrypt_password(self.password)
 
-    def verify_password(self):
-        db_encrypted_password = database.select_user_by_login(self.login)[2]
-        return check_password(db_encrypted_password, self.password)
+    def verify(self):
+        user_data = database.select_user_by_login(self.login)
+        if not user_data:
+            raise Forbidden('User not found')
+        db_encrypted_password = user_data[2]
+        db_admin_permission = user_data[3]
+        if not check_password(db_encrypted_password, self.password):
+            raise Forbidden('Incorrect password')
+        if isinstance(self, Admin) and not db_admin_permission:
+            raise Forbidden('Administrator rights required')
 
-    def verify_admin(self):
-        is_admin = database.select_user_by_login(self.login)[3]
-        return is_admin
-    
     @property
     def encrypted_password(self):
         return encrypt_password(self.password)
@@ -33,3 +37,7 @@ class User(BaseModel):
     @property
     def request_json(self):
         return self.dict(exclude={'decrypt_password'})
+
+
+class Admin(User):
+    pass
