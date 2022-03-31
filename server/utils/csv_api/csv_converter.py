@@ -18,7 +18,7 @@ def parse_csv(csv_file):
     return table
 
 
-def create_csv(rows):
+def create_csv(rows: list) -> io.StringIO:
     """generates a csv file based on database records"""
     records = [row[2:] for row in rows]
     converting_functions = [date_to_str] * 2 + [str] * 25
