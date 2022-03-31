@@ -41,7 +41,11 @@ public class AdminSettingsTab : UserControl
         if (_userList.SelectedItem is not null)
         {
             if (_editedItem is not null)
+            {
+                ChangeStateRec(_editedItem);
                 ExitEdit();
+            }
+
             ChangeStateRec((_userList.SelectedItem as Grid)!);
             _editedItem = (RecordGrid) _userList.SelectedItem;
         }
@@ -125,7 +129,7 @@ public class AdminSettingsTab : UserControl
             password.HorizontalAlignment =
                 isAdmin.HorizontalAlignment = expander.HorizontalAlignment = HorizontalAlignment.Center;
             name.BorderThickness = password.BorderThickness =
-                isAdmin.BorderThickness = expander.BorderThickness = Thickness.Parse("0");
+                expander.BorderThickness = Thickness.Parse("0");
             name.IsEnabled = password.IsEnabled = isAdmin.IsEnabled = false;
             name.Background = password.Background = isAdmin.Background = expander.Background = Brushes.Transparent;
 

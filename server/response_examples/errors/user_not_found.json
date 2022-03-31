@@ -1,5 +1,5 @@
 {
-  "code":403,
-  "description":"User not found",
-  "name":"Forbidden"
+  "code": 403,
+  "description": "User not found",
+  "name": "Forbidden"
 }

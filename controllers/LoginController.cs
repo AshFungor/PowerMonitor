@@ -38,6 +38,9 @@ public sealed class LoginController
 #endif
     }
 
+    public static string CurrentUser { get; private set; }
+    public static string CurrentPassword { get; private set; }
+
     public UserInfoCollection? Users { get; set; }
 
     // handling for async parsing

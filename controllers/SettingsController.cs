@@ -30,7 +30,6 @@ public static class SettingsController
         {
             SettingsFileXmlTemplate template;
             if (SettingsPresent())
-            {
                 try
                 {
                     using var iStream = new StreamReader(SettingsFile);
@@ -44,11 +43,8 @@ public static class SettingsController
                     Shared.Logger.Log(LogLevel.Error, $"reading settings unsuccessful, ex raised: {e.Message}");
                     template = new SettingsFileXmlTemplate();
                 }
-            }
             else
-            {
                 template = new SettingsFileXmlTemplate();
-            }
 
             DataFolder = template.DataFolder;
             ConfigFolder = template.ConfigFolder;

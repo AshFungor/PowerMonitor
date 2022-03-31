@@ -54,8 +54,8 @@ public sealed class DataController
         {
             var record = enumerator.Current;
             {
-                DateTime start = DateTime.ParseExact(record.Begin, "dd.MM.yyyy HH:mm:ss",CultureInfo.InvariantCulture), 
-                    finish = DateTime.ParseExact(record.End, "dd.MM.yyyy HH:mm:ss",CultureInfo.InvariantCulture);
+                DateTime start = DateTime.ParseExact(record.Begin, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture),
+                    finish = DateTime.ParseExact(record.End, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture);
                 day =
                     day.AddSeconds(start.Second - day.Second).AddMinutes(start.Minute - day.Minute)
                         .AddHours(start.Hour - day.Hour);
@@ -90,7 +90,7 @@ public sealed class DataController
         }
 
         enumerator.Dispose();
-        
+
         Shared.Logger.Log(LogLevel.Info, "finished parse.");
         return results;
     }
@@ -148,7 +148,7 @@ public sealed class DataController
             ++fileIndex;
 
         workBook.Save(acceptableName + fileIndex + ".ods");
-        
+
         Shared.Logger.Log(LogLevel.Info, "save complete.");
         return true;
     }
