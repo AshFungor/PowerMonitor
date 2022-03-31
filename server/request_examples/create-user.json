@@ -6,11 +6,12 @@
   "user": {
     "login": "user_login",
     "password": "user_password",
-    "is_admin": true,
+    "is_admin": false,
     "complexes": [
-      12345,
-      14241,
-      98002
+      321,
+      40,
+      234536,
+      837456378
     ]
   }
 }

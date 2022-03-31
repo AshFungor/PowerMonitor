@@ -1,0 +1,9 @@
+{
+    "admin": {
+        "login": "admin_login",
+        "password": "admin_password"
+    }
+    ,
+    "user_login": "user_login",
+    "complexes": [2345, 182734687, 128734, 1234]
+}
