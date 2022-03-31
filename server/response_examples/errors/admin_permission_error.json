@@ -1,0 +1,5 @@
+{
+  "code":403,
+  "description":"Administrator rights required",
+  "name":"Forbidden"
+}
