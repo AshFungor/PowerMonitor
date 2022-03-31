@@ -1,7 +1,7 @@
 from typing import Optional, List
 
-from pydantic import BaseModel
-from werkzeug.exceptions import Forbidden
+from pydantic import BaseModel, ValidationError
+from werkzeug.exceptions import Forbidden, BadRequest
 
 from db_loader import database
 from security.encryption import encrypt_password, check_password, decrypt_password
@@ -15,9 +15,17 @@ class User(BaseModel):
     decrypt_password: bool = False
 
     def __init__(self, **data):
-        super().__init__(**data)
-        if self.decrypt_password:
-            self.password = decrypt_password(self.password)
+        try:
+            super().__init__(**data)
+            if self.decrypt_password:
+                self.password = decrypt_password(self.password)
+        except ValidationError as e:
+            print(e.errors())
+            errors = ' // '.join(f"location: {', '.join(error['loc'])}; error: {error['msg']}"
+                               for error in e.errors())
+            print(errors)
+            raise BadRequest(f'VALIDATION ERROR // '
+                             f'{errors}')
 
     def verify(self):
         user_data = database.select_user_by_login(self.login)
