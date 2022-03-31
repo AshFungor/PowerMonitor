@@ -1,11 +1,10 @@
 from flask import Flask, request, Response, jsonify
-
 from werkzeug.exceptions import HTTPException
+
 from utils.csv_api.csv_converter import parse_csv, create_csv
 from utils.database_api.models import User, Telemetry, Complex, Admin
 from utils.date_parser import parse_date
 from db_loader import database
-
 
 app = Flask(__name__)
 
@@ -22,7 +21,7 @@ def get_data():
     user.verify()
     start = parse_date(request_['start'])
     end = parse_date(request_['end'])
-    telemetry = database.select_telemetry_by_date(start, end)
+    telemetry = database.select_telemetry(start, end, user)
     csv_response = create_csv(telemetry)
     return Response(csv_response, mimetype='text/csv', status=200)
 
@@ -34,8 +33,11 @@ def get_all_users():
 
     *Requires admin permission.*
     """
+    request_ = request.json
+    admin = Admin.parse_obj(request_['admin'])
+    admin.verify()
     users = []
-    for i, record in enumerate(database.select_all_users(), start=1):
+    for record in database.select_all_users():
         login, password, is_admin = record
         complexes = tuple(map(lambda x: x[0], database.select_complexes_by_user_login(login)))
         user = User(
@@ -92,8 +94,10 @@ def create_user():
     *Requires admin permission.*
     """
     request_ = request.json
+    admin = Admin.parse_obj(request_['admin'])
+    admin.verify()
     user = User.parse_obj(request_['user'])
-    for serial_number in request_['user']['complexes']:
+    for serial_number in request_['user'].get('complexes', []):
         complex_ = Complex(user_login=user.login, serial_number=serial_number)
         database.add_complex(complex_)
     database.add_user(user)
@@ -108,6 +112,8 @@ def bind_complex():
     *Requires admin permission.*
     """
     request_ = request.json
+    admin = Admin.parse_obj(request_['admin'])
+    admin.verify()
     serials = request_['complexes']
     user_login = request_['user_login']
     for serial in serials:
@@ -120,7 +126,7 @@ def bind_complex():
 
 
 @app.errorhandler(HTTPException)
-def handle_exception(e: HTTPException):
+def handle_http_exception(e: HTTPException):
     """Returns JSON response for HTTP errors"""
     response = e.get_response()
     response.data = jsonify({
