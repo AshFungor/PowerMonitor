@@ -1,4 +1,6 @@
 import psycopg2
+from psycopg2.errors import UniqueViolation
+from werkzeug.exceptions import Conflict
 
 
 class Database:
@@ -104,7 +106,10 @@ class Database:
         sql = """
         INSERT INTO users(login, password, is_admin) VALUES(%s, %s, %s)
         """
-        self.execute(sql, parameters=(user.login, user.encrypted_password, user.is_admin), commit=True)
+        try:
+            self.execute(sql, parameters=(user.login, user.encrypted_password, user.is_admin), commit=True)
+        except UniqueViolation:
+            raise Conflict('User with this login is already exists')
 
     def delete_user_by_login(self, login):
         sql = """
@@ -119,11 +124,11 @@ class Database:
         """
         self.execute(sql, parameters=telemetry.parameters, commit=True)
 
-    def add_complex(self, complex):
+    def add_complex(self, complex_):
         sql = """
         INSERT INTO complexes(serial_number, user_login) VALUES(%s, %s)
         """
-        self.execute(sql, parameters=(complex.serial_number, complex.user_login), commit=True)
+        self.execute(sql, parameters=(complex_.serial_number, complex_.user_login), commit=True)
 
     def delete_complexes_by_user_login(self, login):
         sql = """
@@ -149,9 +154,18 @@ class Database:
         """
         return self.execute(sql, parameters=(login,), fetchall=True)
 
-    def select_telemetry_by_date(self, start, end):
-        sql = """
+    def select_telemetry(self, start, end, user):
+        """
+        Returns telemetry available to user in time interval from "start" to "end".
+
+        :param start: start of measurements
+        :param end: end of measurements
+        :param user: user object (to get ids of complexes)
+        """
+        complexes = self.select_complexes_by_user_login(user.login)
+        serials = [complex_[0] for complex_ in complexes] if complexes else ['null']
+        sql = f"""
         SELECT * FROM telemetry
-        WHERE start BETWEEN %s and %s
+        WHERE start BETWEEN %s and %s AND serial_number IN ({', '.join(map(str, serials))})
         """
         return self.execute(sql, parameters=(start, end), fetchall=True)
