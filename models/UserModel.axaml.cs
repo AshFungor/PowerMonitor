@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using ExtremelySimpleLogger;
+using PowerMonitor.services;
 
 namespace PowerMonitor.models;
 
@@ -39,7 +40,7 @@ public class UserView : UserControl
     {
         _logLabel.Content = "preparing for download...";
         _downloadingProcessOnline = true;
-        var data = await Shared.DataController!.EvaluateDataAsync(new DateTime(2020, 1, 1, 0, 0, 0));
+        var data = await DataService.EvaluateDataAsync(new DateTime(2020, 1, 1, 0, 0, 0));
         Shared.Plot!.AddSeries(data);
         _downloadingProcessOnline = false;
         _logLabel.Content = "download complete.";
@@ -51,9 +52,9 @@ public class UserView : UserControl
 
         if (!_downloadingProcessOnline)
         {
-            if (Shared.DataController!.CheckResponse())
+            if (DataService.CheckResponse())
             {
-                await Shared.DataController!.LoadIntoSpreadsheetAsync();
+                await DataService.LoadIntoSpreadsheetAsync();
             }
             else
             {

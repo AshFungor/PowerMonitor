@@ -33,23 +33,23 @@
         <AvaloniaResource Include="assets\**"/>
     </ItemGroup>
     <ItemGroup>
-        <Compile Update="models\Login.axaml.cs">
+        <Compile Update="models\LoginModel.axaml.cs">
             <DependentUpon>Login.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="models\Plot.axaml.cs">
+        <Compile Update="models\PlotModel.axaml.cs">
             <DependentUpon>Plot.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="models\AdminView.cs">
+        <Compile Update="models\AdminModel.cs">
             <DependentUpon>AdminView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="models\UserView.axaml.cs">
+        <Compile Update="models\UserModel.axaml.cs">
             <DependentUpon>UserView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="models\AdminSettingsTab.axaml.cs">
+        <Compile Update="models\AdminSettingsModel.axaml.cs">
             <DependentUpon>AdminSettingsTab.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>

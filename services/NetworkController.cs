@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace PowerMonitor.controllers;
+namespace PowerMonitor.services;
 
 public class NetworkController
 {
@@ -13,14 +13,14 @@ public class NetworkController
     public string ServerUri { get; set; } = string.Empty;
     public List<int> Complexes { get; } = new() {123, 111, 345};
 
-    public async void CreateUserAsync(LoginController.UserInfo info)
+    public async void CreateUserAsync(LoginService.UserInfo info)
     {
         var content = new
         {
             admin = new
             {
-                login = LoginController.CurrentUser,
-                password = LoginController.CurrentPassword
+                login = LoginService.CurrentUser,
+                password = LoginService.CurrentPassword
             },
             user = new
             {
@@ -36,6 +36,6 @@ public class NetworkController
 
         var data = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync(ServerUri, data);
+        await _httpClient.PostAsync(ServerUri, data);
     }
 }

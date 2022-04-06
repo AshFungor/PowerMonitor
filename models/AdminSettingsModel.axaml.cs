@@ -5,9 +5,10 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using PowerMonitor.controllers;
+using PowerMonitor.services;
 
 namespace PowerMonitor.models;
 
@@ -26,7 +27,7 @@ public class AdminSettingsTab : UserControl
         _userList = usersList;
         _records = new List<RecordGrid>();
 
-        foreach (var user in Shared.LoginController.Users.UserInfoList) _records.Add(new RecordGrid(user, index++));
+        foreach (var user in LoginService.Users.UserInfoList) _records.Add(new RecordGrid(user, index++));
 
         _userList.Items = _records;
     }
@@ -36,27 +37,32 @@ public class AdminSettingsTab : UserControl
         AvaloniaXamlLoader.Load(this);
     }
 
+    public void OnClose(object? sender, LogicalTreeAttachmentEventArgs args)
+    {
+        if (_editedItem is not null)
+            ExitEdit();
+    }
+
+
     private void TriggerEdit(object? sender, RoutedEventArgs args)
     {
-        if (_userList.SelectedItem is not null)
+        if (_editedItem is not null)
         {
-            if (_editedItem is not null)
-            {
-                ChangeStateRec(_editedItem);
-                ExitEdit();
-            }
-
-            ChangeStateRec((_userList.SelectedItem as Grid)!);
-            _editedItem = (RecordGrid) _userList.SelectedItem;
+            ChangeStateRec(_editedItem);
+            ExitEdit();
         }
+
+        if (_userList.SelectedItem is null) return;
+        ChangeStateRec((_userList.SelectedItem as Grid)!);
+        _editedItem = (RecordGrid) _userList.SelectedItem;
     }
 
     private void AddUser(object? sender, RoutedEventArgs args)
     {
-        var newUser = new RecordGrid(new LoginController.UserInfo(), _records.Count);
+        var newUser = new RecordGrid(new LoginService.UserInfo(), _records.Count);
 
-        Shared.LoginController.Users.UserInfoList =
-            Shared.LoginController.Users.UserInfoList.Append(new LoginController.UserInfo()).ToArray();
+        LoginService.Users.UserInfoList =
+            LoginService.Users.UserInfoList.Append(new LoginService.UserInfo()).ToArray();
 
         _records.Add(newUser);
         _userList.Items = _records.ToArray();
@@ -67,8 +73,8 @@ public class AdminSettingsTab : UserControl
         if (_userList.SelectedItem is not null)
         {
             _records[_userList.SelectedIndex].IsVisible = false;
-            Shared.LoginController.Users.UserInfoList
-                [((RecordGrid) _userList.SelectedItem).OriginalIndex] = new LoginController.UserInfo();
+            LoginService.Users.UserInfoList
+                [((RecordGrid) _userList.SelectedItem).OriginalIndex] = new LoginService.UserInfo();
         }
     }
 
@@ -87,7 +93,7 @@ public class AdminSettingsTab : UserControl
     {
         var target = _editedItem!;
 
-        var infoSave = new LoginController.UserInfo();
+        var infoSave = new LoginService.UserInfo();
         infoSave.Name = target.UserName;
         infoSave.Password = target.UserPassword;
         infoSave.IsAdmin = target.UserIsAdmin;
@@ -100,14 +106,14 @@ public class AdminSettingsTab : UserControl
             .Select(item => item.Item1)
             .ToList();
 
-        Shared.LoginController.Users.UserInfoList[target.OriginalIndex] = infoSave;
+        LoginService.Users.UserInfoList[target.OriginalIndex] = infoSave;
 
         _editedItem = null;
     }
 
     public class RecordGrid : Grid
     {
-        public RecordGrid(LoginController.UserInfo user, int originalIndex)
+        public RecordGrid(LoginService.UserInfo user, int originalIndex)
         {
             UserName = user.Name!;
             UserPassword = user.Password!;

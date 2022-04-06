@@ -10,11 +10,11 @@ using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
 using ExtremelySimpleLogger;
 using GemBox.Spreadsheet;
-using SPath = PowerMonitor.controllers.SettingsController.Settings;
+using SPath = PowerMonitor.services.SettingsService.Settings;
 
-namespace PowerMonitor.controllers;
+namespace PowerMonitor.services;
 
-public sealed class DataController
+public static class DataService
 {
     // paths to spreadsheet and response from server files 
     private static readonly string ResponseDataFileLocation = SPath.TempFolder + "response.csv";
@@ -23,32 +23,32 @@ public sealed class DataController
     private static readonly List<PropertyInfo> SavingProperties =
         typeof(DevInfo).GetProperties().Where(el => !(el.Name.Contains("N") || el.Name.Contains("Voltage"))).ToList();
 
-    private readonly CsvConfiguration _csvConfig;
+    private static readonly CsvConfiguration CsvConfig;
 
-    public DataController()
+    static DataService()
     {
-        _csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
+        CsvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
         {
             HasHeaderRecord = false, NewLine = Environment.NewLine, Delimiter = ";"
         };
     }
 
-    private Task<IEnumerable<DevInfo>> ReadResponseAsync()
+    private static Task<IEnumerable<DevInfo>> ReadResponseAsync()
     {
         // read response from server, mostly runs async
         var stream = new StreamReader(ResponseDataFileLocation);
-        var csvReader = new CsvReader(stream, _csvConfig);
+        var csvReader = new CsvReader(stream, CsvConfig);
         var records = csvReader.GetRecords<DevInfo>();
         return Task.FromResult(records);
     }
 
-    public async Task<List<(double, double)>> EvaluateDataAsync(DateTime day)
+    public static async Task<List<(double, double)>> EvaluateDataAsync(DateTime day)
     {
         var records = await ReadResponseAsync();
         var results = new List<(double, double)>();
 
         // parsing response
-        Shared.Logger.Log(LogLevel.Info, "beginning parsing response.csv...");
+        Shared.Logger!.Log(LogLevel.Info, "beginning parsing response.csv...");
         var enumerator = records.GetEnumerator();
         while (enumerator.MoveNext())
         {
@@ -95,7 +95,7 @@ public sealed class DataController
         return results;
     }
 
-    public async Task<bool> LoadIntoSpreadsheetAsync()
+    public static async Task<bool> LoadIntoSpreadsheetAsync()
     {
         // save to *.odt file current data, actually it is just last response from server
         var data = await ReadResponseAsync();
@@ -153,7 +153,7 @@ public sealed class DataController
         return true;
     }
 
-    public bool CheckResponse()
+    public static bool CheckResponse()
     {
         // check if server ever sent something and there is a file to work with
         return File.Exists(ResponseDataFileLocation);

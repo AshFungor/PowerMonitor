@@ -4,7 +4,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using ExtremelySimpleLogger;
-using SPath = PowerMonitor.controllers.SettingsController.Settings;
+using PowerMonitor.services;
+using SPath = PowerMonitor.services.SettingsService.Settings;
 
 namespace PowerMonitor.models;
 
@@ -32,7 +33,7 @@ public class MainWindow : Window
     private void OnClose(object? sender, EventArgs args)
     {
         Shared.Logger!.Log(LogLevel.Info, "closing main window");
-        Shared.LoginController!.UpdateLogins();
+        LoginService.UpdateLogins();
         SPath.Save();
         Thread.Sleep(100);
     }
