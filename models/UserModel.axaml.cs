@@ -31,7 +31,7 @@ public class UserView : UserControl
 
 #if DEBUG && !SERVER
         var list = new List<ComboBoxItem>();
-        Shared.NetworkController!.Complexes.ForEach(complex => list.Add(new ComboBoxItem {Content = complex}));
+        NetworkService.Complexes.ForEach(complex => list.Add(new ComboBoxItem {Content = complex}));
         _targetDevComboBox.Items = list;
 #endif
     }

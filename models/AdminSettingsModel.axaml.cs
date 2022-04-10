@@ -50,6 +50,7 @@ public class AdminSettingsTab : UserControl
         {
             ChangeStateRec(_editedItem);
             ExitEdit();
+            return;
         }
 
         if (_userList.SelectedItem is null) return;
@@ -184,7 +185,7 @@ public class AdminSettingsTab : UserControl
             };
             var row = 0;
 
-            foreach (var complex in Shared.NetworkController!.Complexes)
+            foreach (var complex in NetworkService.Complexes)
             {
                 result.RowDefinitions.Add(new RowDefinition());
 

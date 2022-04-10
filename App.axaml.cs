@@ -13,7 +13,6 @@ namespace PowerMonitor;
 
 public static class Shared
 {
-    public static NetworkController? NetworkController;
     public static MainWindow? MainWin = null;
     public static Plot? Plot;
     public static Logger? Logger;
@@ -37,7 +36,6 @@ public class App : Application
 
         Shared.Logger = new Logger {Sinks = {new FileSink(SPath.DataFolder + "monitor.log", true)}};
         Shared.Logger.Log(LogLevel.Info, $"beginning new session on {DateTime.Now}");
-        Shared.NetworkController ??= new NetworkController();
 
         LoginService.InitLoginService();
 

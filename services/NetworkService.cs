@@ -6,14 +6,13 @@ using Newtonsoft.Json;
 
 namespace PowerMonitor.services;
 
-public class NetworkController
+public static class NetworkService
 {
-    // example
-    private readonly HttpClient _httpClient = new();
-    public string ServerUri { get; set; } = string.Empty;
-    public List<int> Complexes { get; } = new() {123, 111, 345};
+    private static readonly HttpClient _httpClient = new();
+    public static string ServerUri { get; set; } = string.Empty;
+    public static List<int> Complexes { get; } = new() {123, 111, 345};
 
-    public async void CreateUserAsync(LoginService.UserInfo info)
+    public static async void CreateUserAsync(LoginService.UserInfo info)
     {
         var content = new
         {
