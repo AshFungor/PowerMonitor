@@ -2,6 +2,9 @@ import psycopg2
 from psycopg2.errors import UniqueViolation
 from werkzeug.exceptions import Conflict
 
+from data.config import INIT_ADMIN_LOGIN,INIT_ADMIN_PASSWORD
+from security.encryption import encrypt_password
+
 
 class Database:
     def __init__(self, dbname, user, password, host):
@@ -97,10 +100,20 @@ class Database:
         """
         self.execute(sql, commit=True)
 
+    def _initiate_admin(self):
+        login = INIT_ADMIN_LOGIN
+        password = encrypt_password(INIT_ADMIN_PASSWORD)
+
+        sql = """
+        INSERT INTO users(id, login, password, is_admin) VALUES(%s, %s, %s, %s) ON CONFLICT DO NOTHING
+        """
+        self.execute(sql, parameters=(0, login, password, True), commit=True)
+
     def initiate(self):
         self._create_table_users()
         self._create_table_complexes()
         self._create_table_telemetry()
+        self._initiate_admin()
 
     def add_user(self, user):
         sql = """

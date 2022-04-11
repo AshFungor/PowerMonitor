@@ -12,3 +12,5 @@ if os.getenv('ENCRYPTION_KEY') is None:
     load_dotenv()
 
 ENCRYPTION_KEY, NAME, USER, PASSWORD, HOST = [str(os.getenv(key)) for key in keys]
+INIT_ADMIN_LOGIN = os.getenv('INIT_ADMIN_LOGIN') or 'admin_login'
+INIT_ADMIN_PASSWORD = os.getenv('INIT_ADMIN_PASSWORD') or 'admin_password'
