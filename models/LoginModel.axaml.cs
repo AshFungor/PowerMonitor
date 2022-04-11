@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using ExtremelySimpleLogger;
+using PowerMonitor.services;
 
 namespace PowerMonitor.models;
 
@@ -35,7 +36,7 @@ public class Login : UserControl
         _password = _passwordInput.Text;
         _login = _loginInput.Text;
         Shared.Logger!.Log(LogLevel.Info, $"Attempting to log with ps = {_password} and login = {_login}");
-        foreach (var match in Shared.LoginController!.Users!.UserInfoList!)
+        foreach (var match in LoginService.Users.UserInfoList!)
         {
             Shared.Logger!.Log(LogLevel.Info, $"checking {match.Name} with pas = {match.Password}");
             if (match.Password != null && match.Name != null && match.Name.Equals(_login) &&
@@ -43,6 +44,8 @@ public class Login : UserControl
             {
                 Shared.MainWin!.Content = match.IsAdmin ? new AdminView() : new UserView();
                 Shared.Logger!.Log(LogLevel.Warn, "Attempt successful");
+                LoginService.CurrentPassword = match.Password;
+                LoginService.CurrentUser = match.Name;
                 return;
             }
         }

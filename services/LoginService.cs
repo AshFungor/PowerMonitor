@@ -5,58 +5,48 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using ExtremelySimpleLogger;
-using SPath = PowerMonitor.controllers.SettingsController.Settings;
+using SPath = PowerMonitor.services.SettingsService.Settings;
 
-namespace PowerMonitor.controllers;
+namespace PowerMonitor.services;
 
 // login controller
-public sealed class LoginController
+public static class LoginService
 {
     private static readonly string LoginsFile = SPath.ConfigFolder + ".logins.xml";
 
-    public LoginController()
+    public static string CurrentUser { get; set; }
+    public static string CurrentPassword { get; set; }
+
+    public static UserInfoCollection Users { get; set; }
+
+    public static void InitLoginService()
     {
         // if no server validation is present.
         // this differs in build stage, so 
         // this is more like a debugging way
-#if !SERVER
-        Shared.Logger!.Log(LogLevel.Info, "creating login controller instance, checking for logins file...");
 
         if (File.Exists(LoginsFile))
         {
-            Shared.Logger!.Log(LogLevel.Info, "logins file found");
             var stream = new StreamReader(LoginsFile);
-
-            Shared.Logger!.Log(LogLevel.Info, "trying to parse logins file");
             ParseHandler(stream.BaseStream, false);
         }
         else
         {
-            Shared.Logger!.Log(LogLevel.Error, "could not find logins file, default session applied");
             EnterDefault();
         }
-#endif
     }
 
-    public UserInfoCollection? Users { get; set; }
-
     // handling for async parsing
-    private async void ParseHandler(Stream callingStream, bool write)
+    private static async void ParseHandler(Stream callingStream, bool write)
     {
         var res = await ParseLoginsAsync(callingStream, write);
-        if (res)
-        {
-            Shared.Logger!.Log(LogLevel.Info, "parse successful");
-            return;
-        }
+        if (res) return;
 
-        Shared.Logger!.Log(LogLevel.Warn, "parse unsuccessful");
-        Shared.Logger!.Log(LogLevel.Warn, "entering default session");
         EnterDefault();
     }
 
     // async parsing
-    private async Task<bool> ParseLoginsAsync(Stream stream, bool write = false)
+    private static async Task<bool> ParseLoginsAsync(Stream stream, bool write = false)
     {
         var xmlSerializer = new XmlSerializer(typeof(UserInfoCollection));
         // parsing is done in a separate thread in case of huge
@@ -81,8 +71,8 @@ public sealed class LoginController
 
         if (!stream.CanWrite)
             return false;
-        Users.UserInfoList = Users.UserInfoList
-            .Where(el => !el.Name.Equals("empty") || !el.Password.Equals("empty"))
+        Users!.UserInfoList = Users!.UserInfoList!
+            .Where(el => !el.Name!.Equals("empty") || !el.Password!.Equals("empty"))
             .ToArray();
         var writeTask = Task.Run(() => xmlSerializer.Serialize(stream, Users));
         await writeTask;
@@ -90,7 +80,7 @@ public sealed class LoginController
     }
 
     // not to break app on every parse fail, there always should be a way out
-    private void EnterDefault()
+    private static void EnterDefault()
     {
         var admin = new UserInfo("admin", "password", new List<string>(), true);
         var userColl = new UserInfoCollection {UserInfoList = new[] {admin}};
@@ -98,7 +88,7 @@ public sealed class LoginController
     }
 
     // update logins file
-    public void UpdateLogins()
+    public static void UpdateLogins()
     {
         Shared.Logger!.Log(LogLevel.Info, "writing logins...");
 
@@ -126,7 +116,7 @@ public sealed class LoginController
             IsAdmin = false;
         }
 
-        [XmlArrayAttribute] public List<string>? Restrictions { get; set; }
+        [XmlArray] public List<string>? Restrictions { get; set; }
         public string? Password { get; set; }
         public string? Name { get; set; }
         public bool IsAdmin { get; set; }
@@ -135,6 +125,6 @@ public sealed class LoginController
     // collection of users
     public sealed class UserInfoCollection
     {
-        [XmlArrayAttribute] public UserInfo[]? UserInfoList { get; set; }
+        [XmlArray] public UserInfo[] UserInfoList { get; set; }
     }
 }

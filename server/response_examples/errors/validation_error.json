@@ -1,5 +1,5 @@
 {
-  "code":400,
-  "description":"VALIDATION ERROR // location: {password | login}; error: field required",
-  "name":"Bad Request"
+  "code": 400,
+  "description": "VALIDATION ERROR // location: {password | login}; error: field required",
+  "name": "Bad Request"
 }

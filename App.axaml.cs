@@ -5,17 +5,14 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using ExtremelySimpleLogger;
 using GemBox.Spreadsheet;
-using PowerMonitor.controllers;
 using PowerMonitor.models;
-using SPath = PowerMonitor.controllers.SettingsController.Settings;
+using PowerMonitor.services;
+using SPath = PowerMonitor.services.SettingsService.Settings;
 
 namespace PowerMonitor;
 
 public static class Shared
 {
-    public static LoginController? LoginController;
-    public static DataController? DataController;
-    public static NetworkController? NetworkController;
     public static MainWindow? MainWin = null;
     public static Plot? Plot;
     public static Logger? Logger;
@@ -23,7 +20,7 @@ public static class Shared
 
 public class App : Application
 {
-    public static string SettingsPath
+    public static string Path
 #if LINUX
         => $"/home/{Environment.UserName}/Documents/";
 #elif WINDOWS
@@ -38,10 +35,9 @@ public class App : Application
         File.WriteAllText(SPath.DataFolder + "monitor.log", string.Empty);
 
         Shared.Logger = new Logger {Sinks = {new FileSink(SPath.DataFolder + "monitor.log", true)}};
-        Shared.Logger.Log(LogLevel.Info, $"beginning new session on {System.DateTime.Now}");
-        Shared.LoginController ??= new LoginController();
-        Shared.DataController ??= new DataController();
-        Shared.NetworkController ??= new NetworkController();
+        Shared.Logger.Log(LogLevel.Info, $"beginning new session on {DateTime.Now}");
+
+        LoginService.InitLoginService();
 
         SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
     }

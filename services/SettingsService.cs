@@ -3,11 +3,11 @@ using System.IO;
 using System.Xml.Serialization;
 using ExtremelySimpleLogger;
 
-namespace PowerMonitor.controllers;
+namespace PowerMonitor.services;
 
-public static class SettingsController
+public static class SettingsService
 {
-    private static readonly string SettingsFile = App.SettingsPath + "settings.xml";
+    private static readonly string SettingsFile = App.Path + "settings.xml";
 
     private static bool SettingsPresent()
     {
@@ -30,7 +30,6 @@ public static class SettingsController
         {
             SettingsFileXmlTemplate template;
             if (SettingsPresent())
-            {
                 try
                 {
                     using var iStream = new StreamReader(SettingsFile);
@@ -41,14 +40,11 @@ public static class SettingsController
                 }
                 catch (Exception e)
                 {
-                    Shared.Logger.Log(LogLevel.Error, $"reading settings unsuccessful, ex raised: {e.Message}");
+                    Shared.Logger!.Log(LogLevel.Error, $"reading settings unsuccessful, ex raised: {e.Message}");
                     template = new SettingsFileXmlTemplate();
                 }
-            }
             else
-            {
                 template = new SettingsFileXmlTemplate();
-            }
 
             DataFolder = template.DataFolder;
             ConfigFolder = template.ConfigFolder;
