@@ -9,6 +9,12 @@ from db_loader import database
 app = Flask(__name__)
 
 
+@app.route('/', methods=['GET'])
+def init_db():
+    database.initiate()
+    return Response(status=200)
+
+
 @app.route('/get-data', methods=['GET'])
 def get_data():
     """
@@ -59,7 +65,7 @@ def send_telemetry(serial_number: int):
 
     Requires a serial number in request url.
 
-    :param serial_number: int
+    param serial_number: int
     """
     request_ = request.files['table']
     csv_file = request_
@@ -139,5 +145,4 @@ def handle_http_exception(e: HTTPException):
 
 
 if __name__ == '__main__':
-    database.initiate()
     app.run()
