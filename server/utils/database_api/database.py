@@ -2,7 +2,7 @@ import psycopg2
 from psycopg2.errors import UniqueViolation
 from werkzeug.exceptions import Conflict
 
-from data.config import INIT_ADMIN_LOGIN,INIT_ADMIN_PASSWORD
+from data.config import INIT_ADMIN_LOGIN, INIT_ADMIN_PASSWORD
 from security.encryption import encrypt_password
 
 
