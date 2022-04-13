@@ -176,7 +176,7 @@ class Database:
         :param user: user object (to get ids of complexes)
         """
         complexes = self.select_complexes_by_user_login(user.login)
-        serials = [complex_[0] for complex_ in complexes] if complexes else ['null']
+        serials = complexes if complexes else ['null']
         sql = f"""
         SELECT * FROM telemetry
         WHERE start BETWEEN %s and %s AND serial_number IN ({', '.join(map(str, serials))})
