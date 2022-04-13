@@ -24,6 +24,8 @@ public static class LoginService
         // if no server validation is present.
         // this differs in build stage, so 
         // this is more like a debugging way
+        
+        if (SettingsService.Settings.ServerOn) return;
 
         if (File.Exists(LoginsFile))
         {
@@ -58,7 +60,7 @@ public static class LoginService
                 return false;
             try
             {
-                var readTask = Task.Run(() => Users = xmlSerializer.Deserialize(stream) as UserInfoCollection);
+                var readTask = Task.Run(() => Users = (xmlSerializer.Deserialize(stream) as UserInfoCollection)!);
                 await readTask;
                 return readTask.IsCompleted;
             }
@@ -90,11 +92,60 @@ public static class LoginService
     // update logins file
     public static void UpdateLogins()
     {
+        if (SettingsService.Settings.ServerOn) return;
+        
         Shared.Logger!.Log(LogLevel.Info, "writing logins...");
 
         File.WriteAllText(LoginsFile, string.Empty);
         var stream = new StreamWriter(LoginsFile);
         ParseHandler(stream.BaseStream, true);
+    }
+
+    public static void AddUser(UserInfo user)
+    {
+        if (SettingsService.Settings.ServerOn)
+        {
+            
+        }
+        else
+        {
+            Users.UserInfoList = Users.UserInfoList.Append(user).ToArray();
+        }
+    }
+
+    public static void UpdateUser(UserInfo user, int index)
+    {
+        if (SettingsService.Settings.ServerOn)
+        {
+            
+        }
+        else
+        {
+            var infoSave = new UserInfo
+            {
+                Name = user.Name,
+                Password = user.Password,
+                IsAdmin = user.IsAdmin
+            };
+
+            if (!infoSave.Name!.Equals("empty") && !infoSave.Password!.Equals("empty"))
+            {
+                infoSave.Restrictions = user.Restrictions;
+                Users.UserInfoList[index] = infoSave;
+            }
+        }
+    }
+
+    public static void DeleteUser(int index)
+    {
+        if (SettingsService.Settings.ServerOn)
+        {
+            
+        }
+        else
+        {
+            Users.UserInfoList[index] = new UserInfo();
+        }
     }
 
     // classes for parsing

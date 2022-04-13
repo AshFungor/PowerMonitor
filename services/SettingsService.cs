@@ -86,14 +86,14 @@ public static class SettingsService
             // defaults may vary across build configurations,
             // yet some are independent from platform.
 #if WINDOWS
-            DataFolder = $"C:/Users/{Environment.UserName}/Documents/";
-            ConfigFolder = $"C:/Users/{Environment.UserName}/AppData/PMConfig/";
-            TempFolder = $"C:/Users/{Environment.UserName}/AppData/Local/Temp/";
+            DataFolder = $"C:/Users/{Environment.UserName}/Documents/PM/";
+            ConfigFolder = $"C:/Users/{Environment.UserName}/Documents/PM/config/";
+            TempFolder = $"C:/Users/{Environment.UserName}/Documents/PM/tmp/";
 #endif
 #if LINUX
-            DataFolder = $"/home/{Environment.UserName}/Documents/";
-            ConfigFolder = $"/home/{Environment.UserName}/.config/PMConfig/";
-            TempFolder = "/tmp/";
+            DataFolder = $"/home/{Environment.UserName}/Documents/PM/";
+            ConfigFolder = $"/home/{Environment.UserName}/Documents/PM/config/";
+            TempFolder = $"/home/{Environment.UserName}/Documents/PM/tmp/";
 #endif
             ServerOn = false;
             ServerAddress = string.Empty;

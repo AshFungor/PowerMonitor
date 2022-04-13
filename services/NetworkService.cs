@@ -8,7 +8,7 @@ namespace PowerMonitor.services;
 
 public static class NetworkService
 {
-    private static readonly HttpClient _httpClient = new();
+    private static readonly HttpClient HttpClient = new();
     public static string ServerUri { get; set; } = string.Empty;
     public static List<int> Complexes { get; } = new() {123, 111, 345};
 
@@ -35,6 +35,6 @@ public static class NetworkService
 
         var data = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
-        await _httpClient.PostAsync(ServerUri, data);
+        await HttpClient.PostAsync(ServerUri, data);
     }
 }
