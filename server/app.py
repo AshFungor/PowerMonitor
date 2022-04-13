@@ -34,6 +34,9 @@ def get_data():
 
 @app.route('/get-user-info', methods=['GET'])
 def get_user_info():
+    """
+    Returns information about user (is_admin, available complexes)
+    """
     request_ = request.json
     user = User.parse_obj(request_['user'])
     user.verify()
@@ -159,4 +162,5 @@ def handle_http_exception(e: HTTPException):
 
 
 if __name__ == '__main__':
+    database.initiate()
     app.run()
