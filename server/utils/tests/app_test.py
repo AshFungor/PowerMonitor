@@ -22,10 +22,13 @@ class TestApp(unittest.TestCase):
         response = self.app.get('/', content_type="html/text")
         self.assertEqual(response.status_code, 200)
 
-    # def test_send_telemetry(self):   ВОЗВРАЩАЕТ 400 (некорректный запрос)
-    #     with open('examples/1607582294.csv') as file:
-    #         request = self.tester.post('/send-telemetry/12345', content_type="application/csv", data=file)
-    #         self.assertEqual(request.status_code, 200)
+    def test_send_telemetry(self):
+        with open('examples/1607582294.csv', 'rb') as file:
+            file = {
+                'table': file
+            }
+            request = self.tester.post('/send-telemetry/1232134', content_type="multipart/form-data", data=file)
+            self.assertEqual(request.status_code, 200)
 
     def test_create_user(self):
         with open("examples/create-user.json") as file:
