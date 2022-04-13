@@ -5,7 +5,8 @@ from app import app
 from db_loader import database
 
 """
-test_send_telemetry()
+TEST MUST BE STARTED ONE BY ONE!
+NOT THE WHOLE CLASS!!!
 """
 
 

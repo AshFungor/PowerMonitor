@@ -82,7 +82,7 @@ def send_telemetry(serial_number: int):
 
     Requires a serial number in request url.
 
-    param serial_number: int
+    :param serial_number: int
     """
     request_ = request.files['table']
     csv_file = request_
