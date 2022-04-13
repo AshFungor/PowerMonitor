@@ -165,7 +165,7 @@ class Database:
         SELECT serial_number FROM complexes
         WHERE user_login = %s
         """
-        return self.execute(sql, parameters=(login,), fetchall=True)
+        return [complex_[0] for complex_ in self.execute(sql, parameters=(login,), fetchall=True)]
 
     def select_telemetry(self, start, end, user):
         """
