@@ -13,9 +13,11 @@
 
 Для реализации клиента используется [AvaloniaUI](https://avaloniaui.net/) из-за широкой поддержки платформ, скорости
 разработки и возможности использования широких возможностей [.NET 6](https://dotnet.microsoft.com/en-us/) и C#
-> Avalonia is a cross-platform UI framework for dotnet, providing a flexible styling system and supporting a wide range of Operating Systems such as Windows, Linux, MacOs. Avalonia is mature and production ready. We also have in beta release support for iOS, Android and in early stages support for browser via WASM.
+> Avalonia is a cross-platform UI framework for dotnet, providing a flexible styling system and supporting a wide range 
+> of Operating Systems such as Windows, Linux, MacOs. Avalonia is mature and production ready. We also have in beta 
+> release support for iOS, Android and in early stages support for browser via WASM.
 
-(цитата взята из официального репозитория AvaloniaUI)
+_(цитата взята из официального репозитория AvaloniaUI)_
 
 Также были использованы пакеты [NuGet](https://www.nuget.org/) для реализации отдельных модулей клиента, их полный
 список приведен ниже:
@@ -32,10 +34,29 @@
 Ассеты для GUI клиентской части были взяты
 из [Tela circle icon theme](https://github.com/vinceliuice/Tela-circle-icon-theme).
 
-В основу серверной части лёг язык [Python](https://www.python.org) и
-микрофреймворк [Flask](https://flask.palletsprojects.com/en/2.0.x/).
+Сервер был реализован на языке [Python](https://www.python.org) с использованием микрофреймворка 
+[Flask](https://flask.palletsprojects.com/en/2.1.x/), предоставляющего широкий набор инструментов для обработки 
+запросов, тестирования и реализации интерфейса взаимодействия, а также обеспечивающего высокую скорость разработки.
+> Flask is a lightweight WSGI web application framework. It is designed to make getting started quick and easy, with the 
+> ability to scale up to complex applications. It began as a simple wrapper around Werkzeug and Jinja and has become 
+> one of the most popular Python web application frameworks.
 
-В качестве СУБД использовалась [SQLite](https://www.sqlite.org/index.html).
+_(цитата взята из официального репозитория Flask)_
+
+Помимо основного фреймворка в реализации серверной части были использованы такие модули, как:
+
+- [psycopg2](https://www.psycopg.org/docs/) (работа с СУБД)
+- [pydantic](https://pydantic-docs.helpmanual.io) (валидация данных и работа с json)
+- [python-dotenv](https://pypi.org/project/python-dotenv/) (работа с переменными окружения)
+- [cryptography](https://pypi.org/project/cryptography/) (шифрование паролей)
+
+В качестве системы управления базами данных была выбрана [PostgreSQL](https://www.postgresql.org), как одна из наиболее
+мощных и широко используемых реляционных СУБД.
+
+> PostgreSQL is a powerful, open source object-relational database system with over 30 years of active development that 
+> has earned it a strong reputation for reliability, feature robustness, and performance.
+
+_(цитата взята из официального сайта PostgreSQL)_
 
 ***
 
