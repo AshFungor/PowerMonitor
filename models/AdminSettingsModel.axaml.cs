@@ -48,22 +48,42 @@ public class AdminSettingsTab : UserControl
     {
         if (_editedItem is not null)
         {
-            ChangeStateRec(_editedItem);
-            ExitEdit();
-            return;
+            
+            if (_userList.SelectedItem is not null)
+            {
+                if (_editedItem.Equals((RecordGrid) _userList.SelectedItem))
+                {
+                    ChangeStateRec(_editedItem);
+                    ExitEdit();
+                }
+                else
+                {
+                    ChangeStateRec(_editedItem);
+                    ExitEdit();
+                    ChangeStateRec((_userList.SelectedItem as Grid)!);
+                    _editedItem = (RecordGrid) _userList.SelectedItem;
+                }
+            }
+            
+            
+            
+            
         }
+        else if (_userList.SelectedItem is not null)
+        {
+            ChangeStateRec((_userList.SelectedItem as Grid)!);
+            _editedItem = (RecordGrid) _userList.SelectedItem;
+        }
+        
 
-        if (_userList.SelectedItem is null) return;
-        ChangeStateRec((_userList.SelectedItem as Grid)!);
-        _editedItem = (RecordGrid) _userList.SelectedItem;
+
     }
 
     private void AddUser(object? sender, RoutedEventArgs args)
     {
         var newUser = new RecordGrid(new LoginService.UserInfo(), _records.Count);
 
-        LoginService.Users.UserInfoList =
-            LoginService.Users.UserInfoList.Append(new LoginService.UserInfo()).ToArray();
+        LoginService.AddUser(new LoginService.UserInfo());
 
         _records.Add(newUser);
         _userList.Items = _records.ToArray();
@@ -74,8 +94,7 @@ public class AdminSettingsTab : UserControl
         if (_userList.SelectedItem is not null)
         {
             _records[_userList.SelectedIndex].IsVisible = false;
-            LoginService.Users.UserInfoList
-                [((RecordGrid) _userList.SelectedItem).OriginalIndex] = new LoginService.UserInfo();
+            LoginService.DeleteUser(_userList.SelectedIndex);
         }
     }
 
@@ -94,20 +113,14 @@ public class AdminSettingsTab : UserControl
     {
         var target = _editedItem!;
 
-        var infoSave = new LoginService.UserInfo();
-        infoSave.Name = target.UserName;
-        infoSave.Password = target.UserPassword;
-        infoSave.IsAdmin = target.UserIsAdmin;
-
-        if (infoSave.Name.Equals("empty") || infoSave.Password.Equals("empty") || !target.IsVisible)
-            return;
-
-        infoSave.Restrictions = target.Restrictions
-            .Where(item => item.Item2)
-            .Select(item => item.Item1)
-            .ToList();
-
-        LoginService.Users.UserInfoList[target.OriginalIndex] = infoSave;
+        if (target.IsVisible)
+        {
+            LoginService.UpdateUser(new LoginService.UserInfo()
+            {
+                Name = target.UserName, Password = target.UserPassword, IsAdmin = target.UserIsAdmin,
+                Restrictions = target.Restrictions.Where(rest => !rest.Item2).Select(rest => rest.Item1).ToList()
+            }, target.OriginalIndex);
+        }
 
         _editedItem = null;
     }

@@ -6,20 +6,20 @@ import json
 username -> any
 password -> any
 is_admin -> bool
-complexes -> [int, int, int] always???
+complexes -> [n*int] 
 """
 
 
 class TestRequestParser(unittest.TestCase):
     def test_parse_user_info(self):
-        with open("create-user-test.json", "r") as read_file:
+        with open("examples/create-user-test.json", "r") as read_file:
             data = json.load(read_file)
             user = data['user']
             complexes = user['complexes']
             indications = (user['login'], user['password'], user['is_admin'])
             self.assertEqual(parse_user_info(data), {'user': indications, 'complexes': complexes})
 
-        with open("create-user-test2.json", "r") as read_file:
+        with open("examples/create-user-test2.json", "r") as read_file:
             data = json.load(read_file)
             user = data['user']
             complexes = user['complexes']
@@ -27,12 +27,12 @@ class TestRequestParser(unittest.TestCase):
             self.assertEqual(parse_user_info(data), {'user': indications, 'complexes': complexes})
 
     def test_parse_admin_info(self):
-        with open("create-user-test.json", "r") as read_file:
+        with open("examples/create-user-test.json", "r") as read_file:
             data = json.load(read_file)
             admin = data['admin']
             self.assertEqual(parse_admin_info(data), (admin['login'], admin['password']))
 
-        with open("create-user-test2.json", "r") as read_file:
+        with open("examples/create-user-test2.json", "r") as read_file:
             data = json.load(read_file)
             admin = data['admin']
             self.assertEqual(parse_admin_info(data), (admin['login'], admin['password']))

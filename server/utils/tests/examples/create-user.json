@@ -1,0 +1,17 @@
+{
+  "admin": {
+    "login": "admin_login",
+    "password": "admin_password"
+  },
+  "user": {
+    "login": "user_login",
+    "password": "user_password",
+    "is_admin": true,
+    "complexes": [
+      321,
+      40,
+      234536,
+      837456378
+    ]
+  }
+}

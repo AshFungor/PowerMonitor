@@ -1,0 +1,7 @@
+{
+  "admin": {
+    "login": "admin_login",
+    "password": "admin_password"
+  },
+  "user_login": "user_login"
+}
