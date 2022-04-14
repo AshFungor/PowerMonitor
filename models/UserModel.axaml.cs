@@ -38,12 +38,16 @@ public class UserView : UserControl
 
     private async void Call(object? sender, RoutedEventArgs args)
     {
+        Shared.Logger!.Log(LogLevel.Info, $"downloading data...");
+
         _logLabel.Content = "preparing for download...";
         _downloadingProcessOnline = true;
         var data = await DataService.EvaluateDataAsync(new DateTime(2020, 1, 1, 0, 0, 0));
         Shared.Plot!.AddSeries(data);
         _downloadingProcessOnline = false;
         _logLabel.Content = "download complete.";
+
+        Shared.Logger!.Log(LogLevel.Info, $"download complete.");
     }
 
     private async void LoadToSpreadsheet(object? sender, RoutedEventArgs args)
@@ -64,6 +68,7 @@ public class UserView : UserControl
         }
 
         _logLabel.Content = "data uploaded. check your file.";
+        Shared.Logger!.Log(LogLevel.Info, $"data was sended to spreadsheet.");
     }
 
     private void InitializeComponent()

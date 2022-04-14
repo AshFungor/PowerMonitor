@@ -7,7 +7,7 @@ namespace PowerMonitor.services;
 
 public static class SettingsService
 {
-    private static readonly string SettingsFile = App.Path + "/PM/settings.xml";
+    private static readonly string SettingsFile = App.Path + "settings.xml";
 
     private static bool SettingsPresent()
     {
@@ -31,7 +31,9 @@ public static class SettingsService
             SettingsFileXmlTemplate template;
             if (SettingsPresent())
                 try
-                {
+                {   
+                    Shared.Logger!.Log(LogLevel.Info, $"reading settings...");
+
                     using var iStream = new StreamReader(SettingsFile);
                     var xmlParser = new XmlSerializer(typeof(SettingsFileXmlTemplate));
                     template = (SettingsFileXmlTemplate) xmlParser.Deserialize(iStream)!;
@@ -40,11 +42,19 @@ public static class SettingsService
                 }
                 catch (Exception e)
                 {
-                    // Shared.Logger!.Log(LogLevel.Error, $"reading settings unsuccessful, ex raised: {e.Message}");
+                    Shared.Logger!.Log(LogLevel.Error, $"reading settings unsuccessful, ex raised: {e.Message}");
+                    Shared.Logger!.Log(LogLevel.Info, $"creating settings file");
+
                     template = new SettingsFileXmlTemplate();
                 }
             else
+            {
+                Shared.Logger!.Log(LogLevel.Info, $"creating settings file");
+
                 template = new SettingsFileXmlTemplate();
+
+                Shared.Logger!.Log(LogLevel.Info, $"setting were created.");
+            }
 
             DataFolder = template.DataFolder;
             ConfigFolder = template.ConfigFolder;
@@ -70,12 +80,25 @@ public static class SettingsService
 
         public static void Save()
         {
-            using var oStream = new StreamWriter(SettingsFile);
-            File.WriteAllText(SettingsFile, string.Empty);
-            var xmlParser = new XmlSerializer(typeof(SettingsFileXmlTemplate));
-            xmlParser.Serialize(oStream, Template);
+            try
+            {
+                Shared.Logger!.Log(LogLevel.Info, $"saving settings file...");
 
-            oStream.Close();
+                using var oStream = new StreamWriter(SettingsFile);
+                File.WriteAllText(SettingsFile, string.Empty);
+                var xmlParser = new XmlSerializer(typeof(SettingsFileXmlTemplate));
+                xmlParser.Serialize(oStream, Template);
+
+                oStream.Close();
+
+                Shared.Logger!.Log(LogLevel.Info, $"settings were saved.");
+            }
+            catch(Exception e)
+            {
+                Shared.Logger!.Log(LogLevel.Error, $"saving settings unsuccesful, ex raised: {e.Message}");
+            }
+
+            
         }
     }
 

@@ -20,7 +20,7 @@ public static class Shared
 
 public class App : Application
 {
-    public static string Path
+    public static string Path;
 #if LINUX
         => $"/home/{Environment.UserName}/Documents/";
 #elif WINDOWS
