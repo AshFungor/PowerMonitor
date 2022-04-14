@@ -105,7 +105,7 @@ public static class LoginService
     {
         if (SettingsService.Settings.ServerOn)
         {
-            
+            NetworkService.CreateUserAsync(user);
         }
         else
         {
