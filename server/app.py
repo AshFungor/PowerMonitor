@@ -32,6 +32,23 @@ def get_data():
     return Response(csv_response, mimetype='text/csv', status=200)
 
 
+@app.route('/get-user-info', methods=['GET'])
+def get_user_info():
+    """
+    Returns information about user (is_admin, available complexes)
+    """
+    request_ = request.json
+    user = User.parse_obj(request_['user'])
+    user.verify()
+    complexes = database.select_complexes_by_user_login(user.login)
+    is_admin = database.select_user_by_login(user.login)[3]
+    user_info = jsonify({
+        'is_admin': is_admin,
+        'complexes': complexes,
+    })
+    return user_info
+
+
 @app.route('/get-all-users', methods=['GET'])
 def get_all_users():
     """
@@ -45,7 +62,7 @@ def get_all_users():
     users = []
     for record in database.select_all_users():
         login, password, is_admin = record
-        complexes = tuple(map(lambda x: x[0], database.select_complexes_by_user_login(login)))
+        complexes = database.select_complexes_by_user_login(login)
         user = User(
             login=login,
             password=password,
@@ -65,7 +82,7 @@ def send_telemetry(serial_number: int):
 
     Requires a serial number in request url.
 
-    param serial_number: int
+    :param serial_number: int
     """
     request_ = request.files['table']
     csv_file = request_
@@ -145,4 +162,5 @@ def handle_http_exception(e: HTTPException):
 
 
 if __name__ == '__main__':
+    database.initiate()
     app.run()

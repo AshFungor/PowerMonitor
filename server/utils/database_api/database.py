@@ -2,7 +2,7 @@ import psycopg2
 from psycopg2.errors import UniqueViolation
 from werkzeug.exceptions import Conflict
 
-from data.config import INIT_ADMIN_LOGIN,INIT_ADMIN_PASSWORD
+from data.config import INIT_ADMIN_LOGIN, INIT_ADMIN_PASSWORD
 from security.encryption import encrypt_password
 
 
@@ -165,7 +165,7 @@ class Database:
         SELECT serial_number FROM complexes
         WHERE user_login = %s
         """
-        return self.execute(sql, parameters=(login,), fetchall=True)
+        return [complex_[0] for complex_ in self.execute(sql, parameters=(login,), fetchall=True)]
 
     def select_telemetry(self, start, end, user):
         """
@@ -176,7 +176,7 @@ class Database:
         :param user: user object (to get ids of complexes)
         """
         complexes = self.select_complexes_by_user_login(user.login)
-        serials = [complex_[0] for complex_ in complexes] if complexes else ['null']
+        serials = complexes if complexes else ['null']
         sql = f"""
         SELECT * FROM telemetry
         WHERE start BETWEEN %s and %s AND serial_number IN ({', '.join(map(str, serials))})
