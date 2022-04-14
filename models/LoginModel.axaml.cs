@@ -1,3 +1,4 @@
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -32,27 +33,49 @@ public class Login : UserControl
 
     private void TryLogin(object? sender, RoutedEventArgs args)
     {
-#if !SERVER
         _password = _passwordInput.Text;
         _login = _loginInput.Text;
         Shared.Logger!.Log(LogLevel.Info, $"Attempting to log with ps = {_password} and login = {_login}");
-        foreach (var match in LoginService.Users.UserInfoList!)
+
+        if (SettingsService.Settings.ServerOn)
         {
-            Shared.Logger!.Log(LogLevel.Info, $"checking {match.Name} with pas = {match.Password}");
-            if (match.Password != null && match.Name != null && match.Name.Equals(_login) &&
-                match.Password.Equals(_password))
+            var res = NetworkService.LogIn(_login, _password).Result;
+            if (res is null)
             {
-                Shared.MainWin!.Content = match.IsAdmin ? new AdminView() : new UserView();
+                _logLabel.Content = "try again";
+            }
+            else
+            {
+                NetworkService.Complexes = res.Complexes.ToList();
+                Shared.MainWin!.Content = res.IsAdmin ? new AdminView() : new UserView();
                 Shared.Logger!.Log(LogLevel.Warn, "Attempt successful");
-                LoginService.CurrentPassword = match.Password;
-                LoginService.CurrentUser = match.Name;
-                return;
+
+                LoginService.CurrentUser = _login;
+                LoginService.CurrentPassword = _password;
             }
         }
+        else
+        {
+            foreach (var match in LoginService.Users.UserInfoList!)
+            {
+                Shared.Logger!.Log(LogLevel.Info, $"checking {match.Name} with pas = {match.Password}");
+                if (match.Password != null && match.Name != null && match.Name.Equals(_login) &&
+                    match.Password.Equals(_password))
+                {
+                    Shared.MainWin!.Content = match.IsAdmin ? new AdminView() : new UserView();
+                    Shared.Logger!.Log(LogLevel.Warn, "Attempt successful");
+                    LoginService.CurrentPassword = match.Password;
+                    LoginService.CurrentUser = match.Name;
+                    return;
+                }
+            }
+            
+            Shared.Logger!.Log(LogLevel.Error, "Attempt unsuccessful");
+            _logLabel.Content = "try again";
+        }
 
-        Shared.Logger!.Log(LogLevel.Error, "Attempt unsuccessful");
-        _logLabel.Content = "try again";
-#endif
+        
+        
     }
 
 

@@ -7,7 +7,7 @@ namespace PowerMonitor.services;
 
 public static class SettingsService
 {
-    private static readonly string SettingsFile = App.Path + "settings.xml";
+    private static readonly string SettingsFile = App.Path + "/PM/settings.xml";
 
     private static bool SettingsPresent()
     {
@@ -40,7 +40,7 @@ public static class SettingsService
                 }
                 catch (Exception e)
                 {
-                    Shared.Logger!.Log(LogLevel.Error, $"reading settings unsuccessful, ex raised: {e.Message}");
+                    // Shared.Logger!.Log(LogLevel.Error, $"reading settings unsuccessful, ex raised: {e.Message}");
                     template = new SettingsFileXmlTemplate();
                 }
             else

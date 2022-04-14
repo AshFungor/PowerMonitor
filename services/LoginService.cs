@@ -24,8 +24,12 @@ public static class LoginService
         // if no server validation is present.
         // this differs in build stage, so 
         // this is more like a debugging way
-        
-        if (SettingsService.Settings.ServerOn) return;
+
+        if (SettingsService.Settings.ServerOn)
+        {
+            Users = new UserInfoCollection();
+            return;
+        }
 
         if (File.Exists(LoginsFile))
         {
@@ -117,7 +121,7 @@ public static class LoginService
     {
         if (SettingsService.Settings.ServerOn)
         {
-            
+            NetworkService.UpdateUserAsync(Users.UserInfoList[index], user);
         }
         else
         {
@@ -140,7 +144,7 @@ public static class LoginService
     {
         if (SettingsService.Settings.ServerOn)
         {
-            
+            NetworkService.DeleteUserAsync(Users.UserInfoList[index]);
         }
         else
         {
