@@ -9,12 +9,6 @@ from db_loader import database
 app = Flask(__name__)
 
 
-@app.route('/', methods=['GET'])
-def init_db():
-    database.initiate()
-    return Response(status=200)
-
-
 @app.route('/get-data', methods=['GET'])
 def get_data():
     """
