@@ -28,6 +28,7 @@ _(цитата взята из официального репозитория A
 - [ExtremelySimpleLogger](https://www.nuget.org/packages/ExtremelySimpleLogger) (логирование)
 - [GemBox.Spreadsheet](https://www.nuget.org/packages/GemBox.Spreadsheet) (выгрузка данных в таблицу)
 - [Avalonia.Svg.Skia](https://www.nuget.org/packages/Avalonia.Svg) (отображение .svg изображений)
+- [Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json/) (обработка JSON)
 
 Выбор на эти пакеты пал в основном благодаря простоте работы с ними и их популярности.
 

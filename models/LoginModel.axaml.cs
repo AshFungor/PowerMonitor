@@ -22,11 +22,6 @@ public class Login : UserControl
         _passwordInput = this.FindControl<TextBox>("PasswordInput");
         _logLabel = this.FindControl<Label>("LogLabel");
 
-#if DEBUG && !SERVER
-        _passwordInput.Text = "password";
-        _loginInput.Text = "admin";
-#endif
-
         Shared.Logger!.Log(LogLevel.Info, "built login view");
     }
 

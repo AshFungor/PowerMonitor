@@ -109,7 +109,7 @@ public class AdminSettingsTab : UserControl
             LoginService.UpdateUser(new LoginService.UserInfo
             {
                 Name = target.UserName, Password = target.UserPassword, IsAdmin = target.UserIsAdmin,
-                Restrictions = target.Restrictions.Where(rest => !rest.Item2).Select(rest => rest.Item1).ToList()
+                Restrictions = target.Restrictions.Where(rest => rest.Item2).Select(rest => rest.Item1).ToList()
             }, target.OriginalIndex);
 
         _editedItem = null;
