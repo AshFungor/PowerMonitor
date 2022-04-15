@@ -15,6 +15,28 @@ public static class NetworkService
     private static readonly HttpClient HttpClient = new();
     public static string ServerUri { get; } = SettingsService.Settings.ServerAddress;
 
+    public static async void BindComplexes(LoginService.UserInfo user)
+    {
+        var content = new
+        {
+            admin = new
+            {
+                login = LoginService.CurrentUser,
+                password = LoginService.CurrentPassword
+            },
+            user_login = user.Name,
+            complexes = user.Restrictions
+        };
+        
+        var jsonString = JsonConvert.SerializeObject(content);
+        Shared.Logger!.Log(LogLevel.Info, $"preparing to send a request with body: {jsonString}");
+
+        var data = new StringContent(jsonString, Encoding.UTF8, "application/json");
+
+        var responseMessage = await HttpClient.PostAsync(ServerUri + "/bind-complex", data);
+        Shared.Logger!.Log(LogLevel.Info, $"response: {responseMessage.Content.ReadAsStringAsync()}");
+    }
+
     public static async void CreateUserAsync(LoginService.UserInfo info)
     {
         var content = new
@@ -40,6 +62,8 @@ public static class NetworkService
 
         var responseMessage = await HttpClient.PostAsync(ServerUri + "/create-user", data);
         Shared.Logger!.Log(LogLevel.Info, $"response: {responseMessage.Content.ReadAsStringAsync()}");
+        
+        BindComplexes(info);
     }
 
     public static async void DeleteUserAsync(LoginService.UserInfo info)

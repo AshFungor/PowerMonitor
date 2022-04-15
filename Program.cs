@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Threading;
 using Avalonia;
 using ExtremelySimpleLogger;
 
@@ -12,6 +14,7 @@ internal class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US", false);
         Shared.Logger.Log(LogLevel.Info, $"beginning new session on {DateTime.Now}");
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
