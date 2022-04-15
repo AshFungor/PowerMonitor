@@ -24,16 +24,22 @@ public static class LoginService
         // if no server validation is present.
         // this differs in build stage, so 
         // this is more like a debugging way
-        
-        if (SettingsService.Settings.ServerOn) return;
+
+        if (SettingsService.Settings.ServerOn)
+        {
+            Users = new UserInfoCollection();
+            return;
+        }
 
         if (File.Exists(LoginsFile))
         {
+            Shared.Logger!.Log(LogLevel.Info, $"initiated login service succesfully");
             var stream = new StreamReader(LoginsFile);
             ParseHandler(stream.BaseStream, false);
         }
         else
         {
+            Shared.Logger!.Log(LogLevel.Info, $"login service not initiated");
             EnterDefault();
         }
     }
@@ -41,15 +47,18 @@ public static class LoginService
     // handling for async parsing
     private static async void ParseHandler(Stream callingStream, bool write)
     {
+        
         var res = await ParseLoginsAsync(callingStream, write);
         if (res) return;
-
+        Shared.Logger!.Log(LogLevel.Info, $"parse handler initiated");
         EnterDefault();
     }
 
     // async parsing
     private static async Task<bool> ParseLoginsAsync(Stream stream, bool write = false)
     {
+        Shared.Logger!.Log(LogLevel.Info, $"acync parcing of logins...");
+
         var xmlSerializer = new XmlSerializer(typeof(UserInfoCollection));
         // parsing is done in a separate thread in case of huge
         // logins.xml file size, though in normal use this
@@ -84,6 +93,8 @@ public static class LoginService
     // not to break app on every parse fail, there always should be a way out
     private static void EnterDefault()
     {
+        Shared.Logger!.Log(LogLevel.Info, $"entering default...");
+
         var admin = new UserInfo("admin", "password", new List<string>(), true);
         var userColl = new UserInfoCollection {UserInfoList = new[] {admin}};
         Users = userColl;
@@ -103,9 +114,11 @@ public static class LoginService
 
     public static void AddUser(UserInfo user)
     {
+        Shared.Logger!.Log(LogLevel.Info, $"adding user...");
+
         if (SettingsService.Settings.ServerOn)
         {
-            
+            NetworkService.CreateUserAsync(user);
         }
         else
         {
@@ -115,9 +128,11 @@ public static class LoginService
 
     public static void UpdateUser(UserInfo user, int index)
     {
+        Shared.Logger!.Log(LogLevel.Info, $"updating user...");
+
         if (SettingsService.Settings.ServerOn)
         {
-            
+            NetworkService.UpdateUserAsync(Users.UserInfoList[index], user);
         }
         else
         {
@@ -138,9 +153,10 @@ public static class LoginService
 
     public static void DeleteUser(int index)
     {
+        Shared.Logger!.Log(LogLevel.Info, $"deleting user...");
         if (SettingsService.Settings.ServerOn)
         {
-            
+            NetworkService.DeleteUserAsync(Users.UserInfoList[index]);
         }
         else
         {
