@@ -17,7 +17,7 @@ public class Plot : UserControl
     {
         InitializeComponent();
         Shared.Logger!.Log(LogLevel.Info, "beginning building plot...");
-
+        
 
         _plot = this.FindControl<OxyPlot.Avalonia.Plot>("Plot");
         _plot.Title = "Plot";
@@ -37,7 +37,7 @@ public class Plot : UserControl
         _plot.ActualModel.Series.Clear();
         _plot.ActualModel.Series.Add(line);
 
-
+        
         _plot.InvalidatePlot();
         Shared.Logger!.Log(LogLevel.Info, "rendering plot");
     }
