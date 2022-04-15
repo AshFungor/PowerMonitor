@@ -19,10 +19,6 @@ class TestApp(unittest.TestCase):
         self.app = app.test_client()
         database.initiate()
 
-    def test_empty_db(self):
-        response = self.app.get('/', content_type="html/text")
-        self.assertEqual(response.status_code, 200)
-
     def test_send_telemetry(self):
         with open('examples/1607582294.csv', 'rb') as file:
             file = {
