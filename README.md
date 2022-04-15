@@ -106,7 +106,7 @@ _(commented by Ash_Fungor)_
 
 ## - Описание проведенных испытаний -
 
-https://user-images.githubusercontent.com/77846294/163652726-f3f1955c-6b96-46db-b43d-77e324952d03.mov
+https://user-images.githubusercontent.com/77846294/163652814-ac5af331-6def-4b40-b3d7-e04d50186fd2.mp4
 
 ***
 
