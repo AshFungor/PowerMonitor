@@ -77,6 +77,9 @@ _(цитата взята из официального сайта PostgreSQL)_
 _(commented by Ash_Fungor)_
 ***
 
+## - Блок-схема работы основного алгоритма
+![](github/image.png "блок-схема")
+
 ## - Схема базы данных -
 
 ![](github/database-schema.png "база данных")
