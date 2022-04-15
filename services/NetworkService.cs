@@ -39,7 +39,7 @@ public static class NetworkService
         var data = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
         var responseMessage = await HttpClient.PostAsync(ServerUri + "/create-user", data);
-        Shared.Logger!.Log(LogLevel.Info, $"response: {responseMessage.Content.Headers}");
+        Shared.Logger!.Log(LogLevel.Info, $"response: {responseMessage.Content.ReadAsStringAsync()}");
     }
 
     public static async void DeleteUserAsync(LoginService.UserInfo info)
@@ -60,7 +60,7 @@ public static class NetworkService
         var data = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
         var responseMessage = await HttpClient.PostAsync(ServerUri + "/delete-user", data);
-        Shared.Logger!.Log(LogLevel.Info, $"response: {responseMessage.Content.Headers}");
+        Shared.Logger!.Log(LogLevel.Info, $"response: {responseMessage.Content.ReadAsStringAsync()}");
     }
 
     public static void UpdateUserAsync(LoginService.UserInfo prevUser, LoginService.UserInfo newUser)
@@ -101,6 +101,7 @@ public static class NetworkService
         }
 
         var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        Shared.Logger.Log(LogLevel.Info, $"received message: {responseBody}");
 
         var aResponse = new
         {
@@ -196,6 +197,7 @@ public static class NetworkService
         }
 
         var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        
         await File.WriteAllTextAsync(SettingsService.Settings.TempFolder + "response.csv", responseBody);
 
         return true;

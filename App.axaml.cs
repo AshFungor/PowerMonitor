@@ -32,7 +32,6 @@ public class App : Application
     {
         // method loads twice, careful adding init
         AvaloniaXamlLoader.Load(this);
-        File.WriteAllText(SPath.DataFolder + "monitor.log", string.Empty);
 
         LoginService.InitLoginService();
 

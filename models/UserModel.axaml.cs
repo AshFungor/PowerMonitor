@@ -37,7 +37,7 @@ public class UserView : UserControl
         Shared.Logger!.Log(LogLevel.Info, "downloading data...");
         if (!Check())
         {
-            _logLabel.Content = "Fill all data first";
+            _logLabel.Content = "Check your input first";
             return;
         }
 
@@ -45,12 +45,17 @@ public class UserView : UserControl
 
         _logLabel.Content = "preparing for download...";
         _downloadingProcessOnline = true;
-        var res = NetworkService.GetData(_startDatePicker.SelectedDate.Value.DateTime,
-                _endDatePicker.SelectedDate.Value.DateTime, LoginService.Complexes[_targetDevComboBox.SelectedIndex])
+        var res = NetworkService.GetData(_startDatePicker.SelectedDate!.Value.DateTime,
+                _endDatePicker.SelectedDate!.Value.DateTime, LoginService.Complexes[_targetDevComboBox.SelectedIndex])
             .Result;
 
-        if (!res) return;
+        if (!res)
+        {
+            _logLabel.Content = "Error occured";
+            return;
+        }
         var data = await DataService.EvaluateDataAsync(_startDatePicker.SelectedDate.Value.DateTime);
+        Shared.Plot!.ShapeLowAnnotation((_endDatePicker.SelectedDate!.Value - _startDatePicker.SelectedDate!.Value).Days * 24 + 24);
         Shared.Plot!.AddSeries(data);
         _downloadingProcessOnline = false;
         _logLabel.Content = "download complete.";
@@ -61,7 +66,7 @@ public class UserView : UserControl
     private bool Check()
     {
         if (_endDatePicker.SelectedDate is not null && _startDatePicker.SelectedDate is not null)
-            if (_targetDevComboBox.SelectedItem != null)
+            if (_targetDevComboBox.SelectedItem != null && _endDatePicker.SelectedDate >= _startDatePicker.SelectedDate)
                 return true;
 
         return false;
