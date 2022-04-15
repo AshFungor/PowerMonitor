@@ -29,7 +29,7 @@ public static class NetworkService
                 login = info.Name,
                 password = info.Password,
                 is_admin = info.IsAdmin,
-                Complexes = info.Restrictions!.ToArray()
+                Complexes = info.Restrictions!.Select(int.Parse).ToArray()
             }
         };
 

@@ -24,7 +24,7 @@ public class App : Application
 #if LINUX
         => $"/home/{Environment.UserName}/Documents/PM/";
 #elif WINDOWS
-        => $"C:/Users/{Environment.UserName}/Documents/";
+        => $"C:/Users/{Environment.UserName}/Documents/PM/";
 #endif
 
 
