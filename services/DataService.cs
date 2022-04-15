@@ -46,26 +46,25 @@ public static class DataService
 
     private static void FormatResponse()
     {
-        using (StreamReader istream = new StreamReader(ResponseDataFileLocation))
+        StreamReader istream = new StreamReader(ResponseDataFileLocation);
+        List<string[]> lines = new List<string[]>();
+        while (!istream.EndOfStream)
         {
-            List<string[]> lines = new List<string[]>();
-            while (!istream.EndOfStream)
+            var line = istream.ReadLine().Split(';');
+            for (int i = 0; i < line.Length; ++i)
             {
-                var line = istream.ReadLine().Split(';');
-                for (int i = 0; i < line.Length; ++i)
-                {
-                    line[i] = (line[i].Equals(string.Empty)) ? "0" : line[i];
-                }
-                lines.Add(line);
+                line[i] = (line[i].Equals(string.Empty)) ? "0" : line[i];
             }
-            File.WriteAllText(ResponseDataFileLocation, "");
-            string text = string.Empty;
-            foreach (var line in lines)
-            {
-                text += string.Join(';', line) + "\n";
-            }
-            File.WriteAllText(ResponseDataFileLocation, text);
+            lines.Add(line);
         }
+        istream.Close();
+        File.WriteAllText(ResponseDataFileLocation, "");
+        string text = string.Empty;
+        foreach (var line in lines)
+        {
+            text += string.Join(';', line) + "\n";
+        }
+        File.WriteAllText(ResponseDataFileLocation, text);
     }
 
     public static async Task<List<(double, double)>> EvaluateDataAsync(DateTime day)
