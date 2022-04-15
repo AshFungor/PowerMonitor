@@ -76,27 +76,26 @@ public static class DataService
         // parsing response
         Shared.Logger!.Log(LogLevel.Info, "beginning parsing response.csv...");
         var enumerator = records.GetEnumerator();
+        int hour = day.Hour;
+        
         while (enumerator.MoveNext())
         {
             var record = enumerator.Current;
             {
                 DateTime start = DateTime.ParseExact(record.Begin, "dd.MM.yyyy  HH:mm:ss", CultureInfo.InvariantCulture),
                     finish = DateTime.ParseExact(record.End, "dd.MM.yyyy  HH:mm:ss", CultureInfo.InvariantCulture);
-                day =
-                    day.AddSeconds(start.Second - day.Second).AddMinutes(start.Minute - day.Minute)
-                        .AddHours(start.Hour - day.Hour);
+                hour += (finish.Hour - start.Hour) + (finish.Second - start.Second);
+                    
 
 
                 var sumUPower = record.UActivePowerA + record.UActivePowerB + record.UActivePowerC;
                 if (sumUPower == 0)
                 {
-                    results.Add((100, (day.Hour * 60 + day.Minute) / 60));
+                    results.Add((100, hour));
                     if (start != finish)
                     {
-                        day =
-                            day.AddSeconds(finish.Second - day.Second).AddMinutes(finish.Minute - day.Minute)
-                                .AddHours(finish.Hour - day.Hour);
-                        results.Add((100, (day.Hour * 60 + day.Minute) / 60));
+                        hour += (finish.Hour - start.Hour) + (finish.Second - start.Second);
+                        results.Add((100, hour));
                     }
 
                     continue;
@@ -104,13 +103,11 @@ public static class DataService
 
                 var effectiveness =
                     (sumUPower - (record.ActivePowerA + record.ActivePowerB + record.ActivePowerC)) / sumUPower * 100;
-                results.Add((effectiveness, (day.Hour * 60 + day.Minute) / 60));
+                results.Add((effectiveness, hour));
                 if (start != finish)
                 {
-                    day =
-                        day.AddSeconds(finish.Second - day.Second).AddMinutes(finish.Minute - day.Minute)
-                            .AddHours(finish.Hour - day.Hour);
-                    results.Add((effectiveness, (day.Hour * 60 + day.Minute) / 60));
+                    hour += (finish.Hour - start.Hour) + (finish.Second - start.Second);
+                    results.Add((effectiveness, hour));
                 }
             }
         }

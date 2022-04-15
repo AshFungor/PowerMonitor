@@ -1,7 +1,12 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="PowerMonitor.models.UserView">
-
+    
+    <UserControl.Styles>
+        <Style Selector="Expander /template/ ToggleButton#PART_toggle /template/ Border">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+    </UserControl.Styles>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
