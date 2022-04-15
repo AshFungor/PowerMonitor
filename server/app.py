@@ -21,7 +21,8 @@ def get_data():
     user.verify()
     start = parse_date(request_['start'])
     end = parse_date(request_['end'])
-    telemetry = database.select_telemetry(start, end, user)
+    complex_id = request_['complex_id']
+    telemetry = database.select_telemetry(start, end, user, complex_id)
     csv_response = create_csv(telemetry)
     return Response(csv_response, mimetype='text/csv', status=200)
 

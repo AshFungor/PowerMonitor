@@ -1,6 +1,6 @@
 import psycopg2
-from psycopg2.errors import UniqueViolation
-from werkzeug.exceptions import Conflict
+from psycopg2.errors import UniqueViolation, InvalidTextRepresentation
+from werkzeug.exceptions import Conflict, BadRequest
 
 from data.config import INIT_ADMIN_LOGIN, INIT_ADMIN_PASSWORD
 from security.encryption import encrypt_password
@@ -167,7 +167,7 @@ class Database:
         """
         return [complex_[0] for complex_ in self.execute(sql, parameters=(login,), fetchall=True)]
 
-    def select_telemetry(self, start, end, user):
+    def select_telemetry(self, start, end, user, complex_id):
         """
         Returns telemetry available to user in time interval from "start" to "end".
 
@@ -179,6 +179,9 @@ class Database:
         serials = complexes if complexes else ['null']
         sql = f"""
         SELECT * FROM telemetry
-        WHERE start BETWEEN %s and %s AND serial_number IN ({', '.join(map(str, serials))})
+        WHERE start BETWEEN %s and %s AND serial_number IN ({', '.join(map(str, serials))}) AND serial_number = %s
         """
-        return self.execute(sql, parameters=(start, end), fetchall=True)
+        try:
+            return self.execute(sql, parameters=(start, end, complex_id), fetchall=True)
+        except InvalidTextRepresentation:
+            raise BadRequest('Request must contain only digits')
