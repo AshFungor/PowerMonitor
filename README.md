@@ -13,8 +13,8 @@
 
 Для реализации клиента используется [AvaloniaUI](https://avaloniaui.net/) из-за широкой поддержки платформ, скорости
 разработки и возможности использования широких возможностей [.NET 6](https://dotnet.microsoft.com/en-us/) и C#
-> Avalonia is a cross-platform UI framework for dotnet, providing a flexible styling system and supporting a wide range 
-> of Operating Systems such as Windows, Linux, MacOs. Avalonia is mature and production ready. We also have in beta 
+> Avalonia is a cross-platform UI framework for dotnet, providing a flexible styling system and supporting a wide range
+> of Operating Systems such as Windows, Linux, MacOs. Avalonia is mature and production ready. We also have in beta
 > release support for iOS, Android and in early stages support for browser via WASM.
 
 _(цитата взята из официального репозитория AvaloniaUI)_
@@ -34,11 +34,11 @@ _(цитата взята из официального репозитория A
 Ассеты для GUI клиентской части были взяты
 из [Tela circle icon theme](https://github.com/vinceliuice/Tela-circle-icon-theme).
 
-Сервер был реализован на языке [Python](https://www.python.org) с использованием микрофреймворка 
-[Flask](https://flask.palletsprojects.com/en/2.1.x/), предоставляющего широкий набор инструментов для обработки 
+Сервер был реализован на языке [Python](https://www.python.org) с использованием микрофреймворка
+[Flask](https://flask.palletsprojects.com/en/2.1.x/), предоставляющего широкий набор инструментов для обработки
 запросов, тестирования и реализации интерфейса взаимодействия, а также обеспечивающего высокую скорость разработки.
-> Flask is a lightweight WSGI web application framework. It is designed to make getting started quick and easy, with the 
-> ability to scale up to complex applications. It began as a simple wrapper around Werkzeug and Jinja and has become 
+> Flask is a lightweight WSGI web application framework. It is designed to make getting started quick and easy, with the
+> ability to scale up to complex applications. It began as a simple wrapper around Werkzeug and Jinja and has become
 > one of the most popular Python web application frameworks.
 
 _(цитата взята из официального репозитория Flask)_
@@ -53,7 +53,7 @@ _(цитата взята из официального репозитория F
 В качестве системы управления базами данных была выбрана [PostgreSQL](https://www.postgresql.org), как одна из наиболее
 мощных и широко используемых реляционных СУБД.
 
-> PostgreSQL is a powerful, open source object-relational database system with over 30 years of active development that 
+> PostgreSQL is a powerful, open source object-relational database system with over 30 years of active development that
 > has earned it a strong reputation for reliability, feature robustness, and performance.
 
 _(цитата взята из официального сайта PostgreSQL)_

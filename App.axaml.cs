@@ -15,14 +15,14 @@ public static class Shared
 {
     public static MainWindow? MainWin = null;
     public static Plot? Plot;
-    public static Logger Logger = new() {Sinks = {new FileSink(SPath.DataFolder + "monitor.log", true)}};
+    public static Logger Logger = new() {Sinks = {new FileSink(App.Path + "monitor.log", true)}};
 }
 
 public class App : Application
 {
-    public static string Path;
+    public static string Path
 #if LINUX
-        => $"/home/{Environment.UserName}/Documents/";
+        => $"/home/{Environment.UserName}/Documents/PM/";
 #elif WINDOWS
         => $"C:/Users/{Environment.UserName}/Documents/";
 #endif
@@ -33,8 +33,6 @@ public class App : Application
         // method loads twice, careful adding init
         AvaloniaXamlLoader.Load(this);
         File.WriteAllText(SPath.DataFolder + "monitor.log", string.Empty);
-
-        Shared.Logger.Log(LogLevel.Info, $"beginning new session on {DateTime.Now}");
 
         LoginService.InitLoginService();
 

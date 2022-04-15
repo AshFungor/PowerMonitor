@@ -35,7 +35,7 @@ public static class DataService
 
     private static Task<IEnumerable<DevInfo>> ReadResponseAsync()
     {
-        Shared.Logger!.Log(LogLevel.Info, $"async reading of responce");
+        Shared.Logger!.Log(LogLevel.Info, "async reading of responce");
 
         // read response from server, mostly runs async
         var stream = new StreamReader(ResponseDataFileLocation);
@@ -157,7 +157,7 @@ public static class DataService
 
     public static bool CheckResponse()
     {
-        Shared.Logger!.Log(LogLevel.Info, $"checking response...");
+        Shared.Logger!.Log(LogLevel.Info, "checking response...");
 
         // check if server ever sent something and there is a file to work with
         return File.Exists(ResponseDataFileLocation);

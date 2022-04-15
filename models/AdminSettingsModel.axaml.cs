@@ -48,7 +48,6 @@ public class AdminSettingsTab : UserControl
     {
         if (_editedItem is not null)
         {
-            
             if (_userList.SelectedItem is not null)
             {
                 if (_editedItem.Equals((RecordGrid) _userList.SelectedItem))
@@ -64,19 +63,12 @@ public class AdminSettingsTab : UserControl
                     _editedItem = (RecordGrid) _userList.SelectedItem;
                 }
             }
-            
-            
-            
-            
         }
         else if (_userList.SelectedItem is not null)
         {
             ChangeStateRec((_userList.SelectedItem as Grid)!);
             _editedItem = (RecordGrid) _userList.SelectedItem;
         }
-        
-
-
     }
 
     private void AddUser(object? sender, RoutedEventArgs args)
@@ -114,13 +106,11 @@ public class AdminSettingsTab : UserControl
         var target = _editedItem!;
 
         if (target.IsVisible)
-        {
-            LoginService.UpdateUser(new LoginService.UserInfo()
+            LoginService.UpdateUser(new LoginService.UserInfo
             {
                 Name = target.UserName, Password = target.UserPassword, IsAdmin = target.UserIsAdmin,
                 Restrictions = target.Restrictions.Where(rest => !rest.Item2).Select(rest => rest.Item1).ToList()
             }, target.OriginalIndex);
-        }
 
         _editedItem = null;
     }
@@ -198,7 +188,7 @@ public class AdminSettingsTab : UserControl
             };
             var row = 0;
 
-            foreach (var complex in NetworkService.Complexes)
+            foreach (var complex in LoginService.Complexes)
             {
                 result.RowDefinitions.Add(new RowDefinition());
 

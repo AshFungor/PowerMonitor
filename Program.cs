@@ -1,5 +1,6 @@
 ﻿using System;
 using Avalonia;
+using ExtremelySimpleLogger;
 
 namespace PowerMonitor;
 
@@ -11,6 +12,7 @@ internal class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        Shared.Logger.Log(LogLevel.Info, $"beginning new session on {DateTime.Now}");
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
     }

@@ -30,9 +30,10 @@ public static class SettingsService
         {
             SettingsFileXmlTemplate template;
             if (SettingsPresent())
+            {
                 try
-                {   
-                    Shared.Logger!.Log(LogLevel.Info, $"reading settings...");
+                {
+                    Shared.Logger!.Log(LogLevel.Info, "reading settings...");
 
                     using var iStream = new StreamReader(SettingsFile);
                     var xmlParser = new XmlSerializer(typeof(SettingsFileXmlTemplate));
@@ -43,17 +44,18 @@ public static class SettingsService
                 catch (Exception e)
                 {
                     Shared.Logger!.Log(LogLevel.Error, $"reading settings unsuccessful, ex raised: {e.Message}");
-                    Shared.Logger!.Log(LogLevel.Info, $"creating settings file");
+                    Shared.Logger!.Log(LogLevel.Info, "creating settings file");
 
                     template = new SettingsFileXmlTemplate();
                 }
+            }
             else
             {
-                Shared.Logger!.Log(LogLevel.Info, $"creating settings file");
+                Shared.Logger!.Log(LogLevel.Info, "creating settings file");
 
                 template = new SettingsFileXmlTemplate();
 
-                Shared.Logger!.Log(LogLevel.Info, $"setting were created.");
+                Shared.Logger!.Log(LogLevel.Info, "setting were created.");
             }
 
             DataFolder = template.DataFolder;
@@ -82,7 +84,7 @@ public static class SettingsService
         {
             try
             {
-                Shared.Logger!.Log(LogLevel.Info, $"saving settings file...");
+                Shared.Logger!.Log(LogLevel.Info, "saving settings file...");
 
                 using var oStream = new StreamWriter(SettingsFile);
                 File.WriteAllText(SettingsFile, string.Empty);
@@ -91,14 +93,12 @@ public static class SettingsService
 
                 oStream.Close();
 
-                Shared.Logger!.Log(LogLevel.Info, $"settings were saved.");
+                Shared.Logger!.Log(LogLevel.Info, "settings were saved.");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Shared.Logger!.Log(LogLevel.Error, $"saving settings unsuccesful, ex raised: {e.Message}");
             }
-
-            
         }
     }
 

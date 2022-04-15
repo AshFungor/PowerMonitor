@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
@@ -28,16 +27,6 @@ public class Plot : UserControl
         _plot.Annotations.Add(new ArrowAnnotation
             {StartPoint = start, EndPoint = new DataPoint(24, 0), Color = new Color(255, 0, 0, 0)});
         Shared.Plot ??= this;
-
-
-#if !SERVER && DEBUG
-        var rand = new Random();
-        var line = new LineSeries();
-        for (var i = 0; i < 24; ++i)
-            line.Points.Add(new DataPoint(i, rand.Next(0, 100)));
-        _plot.ActualModel.Series.Add(line);
-        _plot.InvalidatePlot();
-#endif
     }
 
     public void AddSeries(List<(double, double)> source)

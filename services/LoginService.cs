@@ -16,6 +16,9 @@ public static class LoginService
 
     public static string CurrentUser { get; set; }
     public static string CurrentPassword { get; set; }
+    public static List<int> Complexes { get; set; }
+
+    public static bool AdminStatus { get; set; }
 
     public static UserInfoCollection Users { get; set; }
 
@@ -25,7 +28,7 @@ public static class LoginService
         // this differs in build stage, so 
         // this is more like a debugging way
 
-        if (SettingsService.Settings.ServerOn)
+        if (SPath.ServerOn)
         {
             Users = new UserInfoCollection();
             return;
@@ -33,31 +36,68 @@ public static class LoginService
 
         if (File.Exists(LoginsFile))
         {
-            Shared.Logger!.Log(LogLevel.Info, $"initiated login service succesfully");
+            Shared.Logger!.Log(LogLevel.Info, "initiated login service succesfully");
             var stream = new StreamReader(LoginsFile);
             ParseHandler(stream.BaseStream, false);
         }
         else
         {
-            Shared.Logger!.Log(LogLevel.Info, $"login service not initiated");
+            Shared.Logger!.Log(LogLevel.Info, "login service not initiated");
             EnterDefault();
         }
+    }
+
+    public static bool LogIn(string login, string password)
+    {
+        if (SPath.ServerOn)
+        {
+            var res = NetworkService.LogIn(login, password).Result;
+            if (res is null) return false;
+
+            Complexes = res.Complexes.ToList();
+
+            CurrentUser = login;
+            CurrentPassword = password;
+            AdminStatus = res.IsAdmin;
+
+            UpdateUserList();
+
+
+            return true;
+        }
+
+        foreach (var match in Users.UserInfoList!)
+        {
+            Shared.Logger!.Log(LogLevel.Info, $"checking {match.Name} with pas = {match.Password}");
+            if (match.Password != null && match.Name != null && match.Name.Equals(login) &&
+                match.Password.Equals(password))
+            {
+                CurrentPassword = match.Password;
+                CurrentUser = match.Name;
+                AdminStatus = match.IsAdmin;
+
+                Complexes = match.Restrictions!.Select(int.Parse).ToList();
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // handling for async parsing
     private static async void ParseHandler(Stream callingStream, bool write)
     {
-        
         var res = await ParseLoginsAsync(callingStream, write);
         if (res) return;
-        Shared.Logger!.Log(LogLevel.Info, $"parse handler initiated");
+        Shared.Logger!.Log(LogLevel.Info, "parse handler initiated");
         EnterDefault();
     }
 
     // async parsing
     private static async Task<bool> ParseLoginsAsync(Stream stream, bool write = false)
     {
-        Shared.Logger!.Log(LogLevel.Info, $"acync parcing of logins...");
+        Shared.Logger!.Log(LogLevel.Info, "acync parcing of logins...");
 
         var xmlSerializer = new XmlSerializer(typeof(UserInfoCollection));
         // parsing is done in a separate thread in case of huge
@@ -93,7 +133,7 @@ public static class LoginService
     // not to break app on every parse fail, there always should be a way out
     private static void EnterDefault()
     {
-        Shared.Logger!.Log(LogLevel.Info, $"entering default...");
+        Shared.Logger!.Log(LogLevel.Info, "entering default...");
 
         var admin = new UserInfo("admin", "password", new List<string>(), true);
         var userColl = new UserInfoCollection {UserInfoList = new[] {admin}};
@@ -103,8 +143,8 @@ public static class LoginService
     // update logins file
     public static void UpdateLogins()
     {
-        if (SettingsService.Settings.ServerOn) return;
-        
+        if (SPath.ServerOn) return;
+
         Shared.Logger!.Log(LogLevel.Info, "writing logins...");
 
         File.WriteAllText(LoginsFile, string.Empty);
@@ -112,56 +152,48 @@ public static class LoginService
         ParseHandler(stream.BaseStream, true);
     }
 
+    public static void UpdateUserList()
+    {
+        if (AdminStatus)
+        {
+            var result = NetworkService.GetUsers().Result;
+            Shared.Logger.Log(LogLevel.Info, $"Getting users finished with {result} status");
+        }
+    }
+
     public static void AddUser(UserInfo user)
     {
-        Shared.Logger!.Log(LogLevel.Info, $"adding user...");
+        Shared.Logger!.Log(LogLevel.Info, "adding user...");
 
-        if (SettingsService.Settings.ServerOn)
-        {
-            NetworkService.CreateUserAsync(user);
-        }
-        else
-        {
-            Users.UserInfoList = Users.UserInfoList.Append(user).ToArray();
-        }
+        if (SPath.ServerOn) NetworkService.CreateUserAsync(user);
+        Users.UserInfoList = Users.UserInfoList.Append(user).ToArray();
     }
 
     public static void UpdateUser(UserInfo user, int index)
     {
-        Shared.Logger!.Log(LogLevel.Info, $"updating user...");
+        Shared.Logger!.Log(LogLevel.Info, "updating user...");
 
-        if (SettingsService.Settings.ServerOn)
+        if (!user.Name!.Equals("empty") && !user.Password!.Equals("empty"))
         {
-            NetworkService.UpdateUserAsync(Users.UserInfoList[index], user);
-        }
-        else
-        {
+            if (SPath.ServerOn) NetworkService.UpdateUserAsync(Users.UserInfoList[index], user);
+
             var infoSave = new UserInfo
             {
                 Name = user.Name,
                 Password = user.Password,
-                IsAdmin = user.IsAdmin
+                IsAdmin = user.IsAdmin,
+                Restrictions = user.Restrictions
             };
 
-            if (!infoSave.Name!.Equals("empty") && !infoSave.Password!.Equals("empty"))
-            {
-                infoSave.Restrictions = user.Restrictions;
-                Users.UserInfoList[index] = infoSave;
-            }
+            Users.UserInfoList[index] = infoSave;
         }
     }
 
     public static void DeleteUser(int index)
     {
-        Shared.Logger!.Log(LogLevel.Info, $"deleting user...");
-        if (SettingsService.Settings.ServerOn)
-        {
-            NetworkService.DeleteUserAsync(Users.UserInfoList[index]);
-        }
-        else
-        {
-            Users.UserInfoList[index] = new UserInfo();
-        }
+        Shared.Logger!.Log(LogLevel.Info, "deleting user...");
+        if (SPath.ServerOn) NetworkService.DeleteUserAsync(Users.UserInfoList[index]);
+        Users.UserInfoList[index] = new UserInfo();
     }
 
     // classes for parsing
