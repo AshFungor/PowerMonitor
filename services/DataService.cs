@@ -35,7 +35,7 @@ public static class DataService
 
     private static Task<IEnumerable<DevInfo>> ReadResponseAsync()
     {
-        Shared.Logger!.Log(LogLevel.Info, "async reading of responce");
+        Shared.Logger!.Log(LogLevel.Info, "async reading of response");
 
         // read response from server, mostly runs async
         var stream = new StreamReader(ResponseDataFileLocation);
@@ -44,8 +44,33 @@ public static class DataService
         return Task.FromResult(records);
     }
 
+    private static void FormatResponse()
+    {
+        using (StreamReader istream = new StreamReader(ResponseDataFileLocation))
+        {
+            List<string[]> lines = new List<string[]>();
+            while (!istream.EndOfStream)
+            {
+                var line = istream.ReadLine().Split(';');
+                for (int i = 0; i < line.Length; ++i)
+                {
+                    line[i] = (line[i].Equals(string.Empty)) ? "0" : line[i];
+                }
+                lines.Add(line);
+            }
+            File.WriteAllText(ResponseDataFileLocation, "");
+            string text = string.Empty;
+            foreach (var line in lines)
+            {
+                text += string.Join(';', line) + "\n";
+            }
+            File.WriteAllText(ResponseDataFileLocation, text);
+        }
+    }
+
     public static async Task<List<(double, double)>> EvaluateDataAsync(DateTime day)
     {
+        FormatResponse();
         var records = await ReadResponseAsync();
         var results = new List<(double, double)>();
 
@@ -56,8 +81,8 @@ public static class DataService
         {
             var record = enumerator.Current;
             {
-                DateTime start = DateTime.ParseExact(record.Begin, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture),
-                    finish = DateTime.ParseExact(record.End, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                DateTime start = DateTime.ParseExact(record.Begin, "dd.MM.yyyy  HH:mm:ss", CultureInfo.InvariantCulture),
+                    finish = DateTime.ParseExact(record.End, "dd.MM.yyyy  HH:mm:ss", CultureInfo.InvariantCulture);
                 day =
                     day.AddSeconds(start.Second - day.Second).AddMinutes(start.Minute - day.Minute)
                         .AddHours(start.Hour - day.Hour);

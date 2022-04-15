@@ -30,10 +30,10 @@
                                HorizontalAlignment="Center" />
                     </DockPanel>
                     <DockPanel Grid.Row="2" LastChildFill="True" Height="50">
-                        <DatePicker FontSize="24" YearVisible="False" HorizontalAlignment="Left"
+                        <DatePicker FontSize="24" HorizontalAlignment="Left"
                                     x:Name="StartDatePicker" Margin="0 0 20 0"
                                     MinHeight="50" />
-                        <DatePicker FontSize="24" YearVisible="False" HorizontalAlignment="Left"
+                        <DatePicker FontSize="24" HorizontalAlignment="Left"
                                     x:Name="EndDatePicker" Margin="20 0 20 0"
                                     MinHeight="50" />
                         <Button Classes="base" HorizontalAlignment="Left" Margin="20 0 20 0" Click="LoadToSpreadsheet">to spreadsheet</Button>
