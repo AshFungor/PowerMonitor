@@ -89,6 +89,7 @@ public static class LoginService
     private static async void ParseHandler(Stream callingStream, bool write)
     {
         var res = await ParseLoginsAsync(callingStream, write);
+        callingStream.Close();
         if (res) return;
         Shared.Logger!.Log(LogLevel.Info, "parse handler initiated");
         EnterDefault();

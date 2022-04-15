@@ -85,9 +85,8 @@ public static class SettingsService
             try
             {
                 Shared.Logger!.Log(LogLevel.Info, "saving settings file...");
-
-                using var oStream = new StreamWriter(SettingsFile);
                 File.WriteAllText(SettingsFile, string.Empty);
+                using var oStream = new StreamWriter(SettingsFile);
                 var xmlParser = new XmlSerializer(typeof(SettingsFileXmlTemplate));
                 xmlParser.Serialize(oStream, Template);
 
